@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
-class News extends StatelessWidget {
+class Forum extends StatelessWidget {
   final String title;
 
-  News(this.title);
+  Forum(this.title);
 
   Widget build(BuildContext context) {
     return Container(

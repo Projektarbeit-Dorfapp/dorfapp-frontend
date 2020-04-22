@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dorf_app/screens/news/news.dart';
+import 'package:dorf_app/screens/home/home.dart';
 
 void main() => runApp(MyApp());
 
