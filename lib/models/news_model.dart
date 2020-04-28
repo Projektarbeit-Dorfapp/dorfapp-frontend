@@ -1,17 +1,18 @@
+import 'package:dorf_app/models/address_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class NewsModel{
 
+  //no need for zip code ?
   final String title;
   final String description;
-  final String beginning;
-  final String end; //missing in data model
-  final String date;
-  final String zipCode;
-  final String district;
-  final String houseNumber;
-  final String buildingId;
+  final String startTime;
+  final String endTime; //missing in data model
+  final String startDate;
+  final String endDate;
+  final Address address;
+  final String imagePath;
 
-  NewsModel(this.title, this.description, this.beginning, this.end, this.date, this.zipCode, this.district, this.houseNumber, this.buildingId);
+  NewsModel(this.title, this.description, this.startTime, this.endTime, this.startDate, this.endDate, this.address, this.imagePath);
 
 }
