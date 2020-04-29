@@ -14,15 +14,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 1;
   final List<Widget> _children = [
-    Calendar('Calendar'),
-    News('News'),
-    Forum('Forum'),
+    Calendar(),
+    News(),
+    Forum(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-//        leading: Icon(Icons.location_city),
         title: Text('Dorf App'),
         centerTitle: true,
       ),
