@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 
 
 
-class MyApp {
+class Application {
 
   final routes = <String, WidgetBuilder> {
+    '/': (BuildContext context) => new Home(),
     '/news': (BuildContext context) => new News(),
     '/calendar': (BuildContext context) => new Calendar(),
     '/forum': (BuildContext context) => new Forum(),
@@ -17,7 +18,6 @@ class MyApp {
 
   void main() {
     runApp(MaterialApp(
-      initialRoute: '/home',
       routes: routes,
     ));
   }
