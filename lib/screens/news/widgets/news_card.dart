@@ -15,13 +15,13 @@ class NewsCard extends StatelessWidget {
 
 
   NewsModel newsModel = NewsModel("72. Fränkisches Weinfest Volkach",
-                                "Frankens größtes Weinfest - Zum 72. Mal feiert Volkach das Weingenießer-Spektakel der Region. Über 120 Frankenweine der Weinlagen rundum die Volkacher Mainschleife stehen während der Festtage zur Auswahl.",
+                                "Frankens größtes Weinfest - Zum 72. Mal feiert Volkach das Weingenießer-Spektakel der Region. Über 120 Frankenweine der Weinlagen rundum die Volkacher Mainschleife stehen während der Festtage zur Auswahl.\n\nTageskarte: 2,00 Euro pro Person\nDauerkarte: 5,50 Euro pro Person (Vorverkauf: 4,50 Euro)\nJugendliche ab 16 Jahren sind Eintrittspflichtig!\nDienstag, 17.08. (Weinfest-Zugabe) = Eintritt frei!\n\n(Preisänderungen bleiben vorbehalten!)",
                                 "12:00",
                                 "00:00",
                                 "13.08.2021",
                                 "21.08.2021",
                                 Address(street: 'An der Allee', houseNumber: '1', zipCode: '97332', district: 'Volkach'),
-                                "assets/weinfest.jpg");
+                                "assets/weinfest2.jpg");
 
   @override
   Widget build(BuildContext context) {

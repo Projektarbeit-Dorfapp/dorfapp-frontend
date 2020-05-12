@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 
 class NewsModel{
 
-  //no need for zip code ?
   final String title;
   final String description;
   final String startTime;
-  final String endTime; //missing in data model
+  final String endTime;
   final String startDate;
   final String endDate;
   final Address address;
