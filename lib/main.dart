@@ -1,3 +1,4 @@
+import 'package:dorf_app/basic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/screens/home/home.dart';
 
@@ -8,9 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: basicTheme,
       home: Home(),
     );
   }
