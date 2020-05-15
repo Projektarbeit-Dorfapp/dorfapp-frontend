@@ -1,5 +1,7 @@
 import 'package:dorf_app/screens/news/widgets/news_card.dart';
+import 'package:dorf_app/screens/news_edit/news_edit.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class News extends StatelessWidget {
   final String title;
@@ -11,11 +13,20 @@ class News extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
        children: <Widget>[
-         NewsCard('News 1', 'Example description','assets/australian-shepherd-2208371_1920.jpg'),
-         NewsCard('News 2', 'Example description', 'assets/azalea-5012549_1920.jpg'),
-         NewsCard('News 3', 'Example description', 'assets/church-4911852_1920.jpg'),
-         NewsCard('News 4', 'Example description', 'assets/australian-shepherd-2208371_1920.jpg'),
-         NewsCard('News 5', 'Example description', 'assets/azalea-5012549_1920.jpg'),
+         Center(
+           child: RaisedButton(
+             child: Text(
+               "Go to News edit"
+             ),
+             onPressed: () {
+               Navigator.push(context, MaterialPageRoute<void>(
+                 builder: (BuildContext context) {
+                   return NewsEdit();
+                 }
+               ));
+             },
+           ),
+         )
        ],
       ),
     );

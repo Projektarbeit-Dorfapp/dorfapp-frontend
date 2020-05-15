@@ -7,8 +7,9 @@ final ThemeData basicTheme = new ThemeData(
   primarySwatch: Colors.blue,
   fontFamily: 'Georgia',
   textTheme: TextTheme(
-    headline: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
-    body1: TextStyle(fontSize: 40, fontStyle: FontStyle.italic),
-    body2: TextStyle(fontSize: 60, fontFamily: 'Hind'),
+    headline1: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+    headline2: TextStyle(fontSize: 30),
+    bodyText1: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+    bodyText2: TextStyle(fontSize: 10, fontFamily: 'Hind'),
   ),
 );
