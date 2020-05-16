@@ -11,18 +11,50 @@ class NewsEdit extends StatefulWidget {
 }
 
 class _NewsEditState extends State<NewsEdit> {
-  File _image;
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
+  File _image;
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay time;
+
+  Future _pickImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image;
     });
   }
 
-  final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  Future<Null> _pickDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
+  _pickTime(BuildContext context) async {
+    final TimeOfDay t = await showTimePicker(
+      initialTime: time,
+      context: context,
+    );
+    if (t != null)
+      setState(() {
+        time = t;
+      });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    time = TimeOfDay.now();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +79,7 @@ class _NewsEditState extends State<NewsEdit> {
                         child: Text('Select an Image ',
                             style: Theme.of(context).textTheme.headline2),
                         onPressed: () {
-                          getImage();
+                          _pickImage();
                         },
                       ),
                     )
@@ -56,7 +88,29 @@ class _NewsEditState extends State<NewsEdit> {
                     ),
             ),
             Container(
-                padding: const EdgeInsets.all(20),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text(
+                        "Date: ${selectedDate.year}, ${selectedDate.month}, ${selectedDate.day}"),
+                    trailing: Icon(Icons.keyboard_arrow_down),
+                    onTap: () {
+                      _pickDate(context);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                        "Time:  ${time.hour}:${time.minute}"),
+                    trailing: Icon(Icons.keyboard_arrow_down),
+                    onTap: () {
+                      _pickTime(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(20),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -64,9 +118,7 @@ class _NewsEditState extends State<NewsEdit> {
                     TextFormField(
                       controller: _titleController,
                       decoration: const InputDecoration(
-                        hintText: 'Titel eingeben',
-                        labelText: 'Titel'
-                      ),
+                          hintText: 'Titel eingeben', labelText: 'Titel'),
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Bitte einen Titel eingeben';
@@ -76,10 +128,10 @@ class _NewsEditState extends State<NewsEdit> {
                     ),
                     TextFormField(
                       controller: _descriptionController,
+                      maxLines: null,
                       decoration: const InputDecoration(
                           hintText: 'Beschreibung eingeben',
-                          labelText: 'Beschreibung'
-                      ),
+                          labelText: 'Beschreibung'),
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Beschreibung eingeben';
@@ -90,11 +142,13 @@ class _NewsEditState extends State<NewsEdit> {
                     RaisedButton(
                       child: Text('Erstellen'),
                       onPressed: () {
-                        if(_formKey.currentState.validate())
-                          {
-                            print("Working");
-                          }
-                        print('Titel: ' + _titleController.text + ' Beschreibung: ' +_descriptionController.text);
+                        if (_formKey.currentState.validate()) {
+                          print("Working");
+                        }
+                        print('Titel: ' +
+                            _titleController.text +
+                            ' Beschreibung: ' +
+                            _descriptionController.text);
                       },
                     )
                   ],
