@@ -1,4 +1,5 @@
 import 'package:dorf_app/models/address_model.dart';
+import 'package:dorf_app/models/comment_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class NewsModel{
@@ -11,7 +12,9 @@ class NewsModel{
   final String endDate;
   final Address address;
   final String imagePath;
+  final List<int> like;
+  final List<Comment> comments;
 
-  NewsModel(this.title, this.description, this.startTime, this.endTime, this.startDate, this.endDate, this.address, this.imagePath);
+  NewsModel(this.title, this.description, this.startTime, this.endTime, this.startDate, this.endDate, this.address, this.imagePath, this.like, this.comments);
 
 }

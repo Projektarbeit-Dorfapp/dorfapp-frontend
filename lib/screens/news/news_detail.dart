@@ -1,6 +1,7 @@
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/screens/news/widgets/comment_card.dart';
+import 'package:dorf_app/screens/news/widgets/comment_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -10,10 +11,7 @@ class NewsDetail extends StatelessWidget {
   final NewsModel newsModel;
 
   NewsDetail(this.newsModel);
-
-  //only for testing
-  Comment comment1 = Comment(id: 0, content: "Wow, da freue ich mich schon voll drauf!!!11elf Das wird spitzenmäßig", authorName: "Melinda Schubert");
-  Comment comment2 = Comment(id: 0, content: "Subbaaa", authorName: "Christian Bieber");
+  //function missing to change Timestamp to Minutes..
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +53,40 @@ class NewsDetail extends StatelessWidget {
                 ),
               )
             ),
-            Container(
-              color: Color(0xFFE6E6E6),
-              padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+            Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+              child: Row(
                 children: <Widget>[
-                  CommentCard(comment: comment1),
-                  CommentCard(comment: comment1),
-                  CommentCard(comment: comment1),
-                  CommentCard(comment: comment1),
-                  CommentCard(comment: comment2)
+                  Icon(
+                      Icons.thumb_up,
+                      color: Color(0xFF141e3e),
+                      size: 22.0
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "Gefällt " + newsModel.like.length.toString(),
+                          style: TextStyle(
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 12.0
+                  ),
                 ],
               ),
+            ),
+            Container(
+              child: CommentSection(newsModel.comments)
             )
           ],
         )

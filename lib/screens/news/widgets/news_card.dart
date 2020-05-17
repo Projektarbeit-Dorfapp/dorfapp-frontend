@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dorf_app/models/address_model.dart';
+import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,6 @@ class NewsCard extends StatelessWidget {
 
   NewsCard(this.title, this.description, this.imagePath);
 
-
   NewsModel newsModel = NewsModel("72. Fränkisches Weinfest Volkach",
                                 "Frankens größtes Weinfest - Zum 72. Mal feiert Volkach das Weingenießer-Spektakel der Region. Über 120 Frankenweine der Weinlagen rundum die Volkacher Mainschleife stehen während der Festtage zur Auswahl.\n\nTageskarte: 2,00 Euro pro Person\nDauerkarte: 5,50 Euro pro Person (Vorverkauf: 4,50 Euro)\nJugendliche ab 16 Jahren sind Eintrittspflichtig!\nDienstag, 17.08. (Weinfest-Zugabe) = Eintritt frei!\n\n(Preisänderungen bleiben vorbehalten!)",
                                 "12:00",
@@ -21,7 +21,9 @@ class NewsCard extends StatelessWidget {
                                 "13.08.2021",
                                 "21.08.2021",
                                 Address(street: 'An der Allee', houseNumber: '1', zipCode: '97332', district: 'Volkach'),
-                                "assets/weinfest2.jpg");
+                                "assets/weinfest2.jpg",
+                                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+                                List<Comment>());
 
   @override
   Widget build(BuildContext context) {
