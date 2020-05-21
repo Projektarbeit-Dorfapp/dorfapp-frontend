@@ -1,6 +1,7 @@
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/news/news.dart';
+import 'package:dorf_app/screens/news/newsPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,17 +16,12 @@ class _HomeState extends State<Home> {
   int _currentIndex = 1;
   final List<Widget> _children = [
     Calendar('Calendar'),
-    News('News'),
+    NewsPage(),
     Forum('Forum'),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-//        leading: Icon(Icons.location_city),
-        title: Text('Dorf App'),
-        centerTitle: true,
-      ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
