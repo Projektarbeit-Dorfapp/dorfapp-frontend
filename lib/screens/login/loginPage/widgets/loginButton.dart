@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {
+  final VoidCallback loginCallback;
+  LoginButton({@required this.loginCallback});
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
@@ -9,7 +11,6 @@ class LoginButton extends StatelessWidget {
       ),
       color: Colors.blueGrey,
       onPressed: (){
-
       },
       child: Padding(
         padding: EdgeInsets.all(5),
