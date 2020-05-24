@@ -1,20 +1,21 @@
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dorf_app/models/user_model.dart';
 
+//Meike Nedwidek
 class NewsModel{
 
-  final String title;
-  final String description;
-  final String startTime;
-  final String endTime;
-  final String startDate;
-  final String endDate;
-  final Address address;
-  final String imagePath;
-  final List<int> like;
-  final List<Comment> comments;
+  String title;
+  String description;
+  String startTime;
+  String endTime;
+  String startDate;
+  String endDate;
+  Address address;
+  String imagePath;
+  List<User> likes;
+  List<Comment> comments;
 
-  NewsModel(this.title, this.description, this.startTime, this.endTime, this.startDate, this.endDate, this.address, this.imagePath, this.like, this.comments);
+  NewsModel({this.title, this.description, this.startTime, this.endTime, this.startDate, this.endDate, this.address, this.imagePath, this.likes, this.comments});
 
 }

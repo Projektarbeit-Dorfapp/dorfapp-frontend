@@ -2,6 +2,8 @@ import 'package:dorf_app/models/comment_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
+//Meike Nedwidek
 class CommentCard extends StatelessWidget{
 
   final Comment comment;
@@ -28,7 +30,7 @@ class CommentCard extends StatelessWidget{
               Column(
                 children: <Widget>[
                   Text(
-                    comment.authorName,
+                    comment.user.firstName + " " + comment.user.lastName,
                     style: TextStyle(
                         fontFamily: 'Raleway',
                         fontWeight: FontWeight.bold,

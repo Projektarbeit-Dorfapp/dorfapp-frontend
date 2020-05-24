@@ -1,11 +1,12 @@
-import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
-import 'package:dorf_app/screens/news/widgets/comment_card.dart';
 import 'package:dorf_app/screens/news/widgets/comment_section.dart';
+import 'package:dorf_app/screens/news/widgets/like_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+
+//Meike Nedwidek
 class NewsDetail extends StatelessWidget {
 
   final NewsModel newsModel;
@@ -26,7 +27,6 @@ class NewsDetail extends StatelessWidget {
           shrinkWrap: true,
           children: <Widget>[
             getImageStack(),
-
             Container(
               padding: EdgeInsets.all(15.0),
               margin: EdgeInsets.all(20.0),
@@ -43,7 +43,7 @@ class NewsDetail extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 20.0),
+              padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
               child: Text(
                 newsModel.description,
                 style: TextStyle(
@@ -53,37 +53,8 @@ class NewsDetail extends StatelessWidget {
                 ),
               )
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                      Icons.thumb_up,
-                      color: Color(0xFF141e3e),
-                      size: 22.0
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          "Gefällt " + newsModel.like.length.toString(),
-                          style: TextStyle(
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.grey,
-                      size: 12.0
-                  ),
-                ],
-              ),
+            Container(
+              child: LikeSection(newsModel.likes)
             ),
             Container(
               child: CommentSection(newsModel.comments)
@@ -112,12 +83,11 @@ class NewsDetail extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.transparent, Colors.white],
-
+              colors: [Colors.transparent, Colors.white]
             ),
           ),
           child: Container(
-            margin: EdgeInsets.only(top: 50.0),
+            margin: EdgeInsets.only(top: 70.0),
               child: Center(
                   child: Text(
                       newsModel.title,

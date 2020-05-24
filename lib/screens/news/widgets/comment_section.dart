@@ -1,9 +1,11 @@
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/screens/news/widgets/comment_card.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+//Meike Nedwidek
 class CommentSection extends StatefulWidget {
 
   List<Comment> commentList;
@@ -22,7 +24,12 @@ class _CommentSectionState extends State<CommentSection> {
   _CommentSectionState(this.commentList);
 
   void _addComment(String val) {
-    Comment newComment = Comment(id: 1, authorName: "Anonym", content: val, creationDate: "2020-05-17");
+    Comment newComment = Comment(
+        id: 1,
+        user: User(firstName: "Peter", lastName: "Müller", userName: "test123", email: "test"),
+        content: val,
+        creationDate: "2020-05-17");
+
     setState(() {
       commentList.add(newComment);
     });

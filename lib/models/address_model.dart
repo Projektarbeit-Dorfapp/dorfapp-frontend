@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 
+//Meike Nedwidek
 class Address{
 
-  final String street;
-  final String houseNumber;
-  final String zipCode;
-  final String district;
+  String street;
+  String houseNumber;
+  String zipCode;
+  String district;
 
   Address({this.street, this.houseNumber, this.zipCode, this.district});
 
