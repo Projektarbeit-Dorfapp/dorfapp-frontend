@@ -1,4 +1,3 @@
-import 'package:dorf_app/screens/news/widgets/news_card.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

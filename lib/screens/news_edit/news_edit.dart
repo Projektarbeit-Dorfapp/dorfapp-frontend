@@ -1,9 +1,13 @@
 import 'dart:io';
 
-import 'package:dorf_app/basic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/services/news_service.dart';
+import 'package:dorf_app/models/news_model.dart';
+
+//Hannes Hauenstein
 
 class NewsEdit extends StatefulWidget {
   @override
@@ -14,6 +18,9 @@ class _NewsEditState extends State<NewsEdit> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _newsService = NewsService();
+
+  NewsModel news;
 
   File _image;
   DateTime selectedDate = DateTime.now();
@@ -68,95 +75,99 @@ class _NewsEditState extends State<NewsEdit> {
         ),
         title: Text('Edit News'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 200,
-              child: _image == null
-                  ? Center(
-                      child: RaisedButton(
-                        child: Text('Select an Image ',
-                            style: Theme.of(context).textTheme.headline2),
-                        onPressed: () {
-                          _pickImage();
+      body: StreamBuilder<Object>(
+        stream: Firestore.instance.collection("Veranstaltung").snapshots(),
+        builder: (context, snapshot) {
+          return SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 200,
+                  child: _image == null
+                      ? Center(
+                          child: RaisedButton(
+                            child: Text('Select an Image ',
+                                style: Theme.of(context).textTheme.headline2),
+                            onPressed: () {
+                              _pickImage();
+                            },
+                          ),
+                        )
+                      : Center(
+                          child: Image.file(_image, fit: BoxFit.cover),
+                        ),
+                ),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: Text(
+                            "Date: ${selectedDate.day}, ${selectedDate.month}, ${selectedDate.year}"),
+                        trailing: Icon(Icons.keyboard_arrow_down),
+                        onTap: () {
+                          _pickDate(context);
                         },
                       ),
-                    )
-                  : Center(
-                      child: Image.file(_image, fit: BoxFit.cover),
-                    ),
-            ),
-            Container(
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text(
-                        "Date: ${selectedDate.year}, ${selectedDate.month}, ${selectedDate.day}"),
-                    trailing: Icon(Icons.keyboard_arrow_down),
-                    onTap: () {
-                      _pickDate(context);
-                    },
+                      ListTile(
+                        title: Text(
+                            "Time:  ${time.hour}:${time.minute}"),
+                        trailing: Icon(Icons.keyboard_arrow_down),
+                        onTap: () {
+                          _pickTime(context);
+                        },
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    title: Text(
-                        "Time:  ${time.hour}:${time.minute}"),
-                    trailing: Icon(Icons.keyboard_arrow_down),
-                    onTap: () {
-                      _pickTime(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(
-                          hintText: 'Titel eingeben', labelText: 'Titel'),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Bitte einen Titel eingeben';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _descriptionController,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                          hintText: 'Beschreibung eingeben',
-                          labelText: 'Beschreibung'),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Beschreibung eingeben';
-                        }
-                        return null;
-                      },
-                    ),
-                    RaisedButton(
-                      child: Text('Erstellen'),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          print("Working");
-                        }
-                        print('Titel: ' +
-                            _titleController.text +
-                            ' Beschreibung: ' +
-                            _descriptionController.text);
-                      },
-                    )
-                  ],
                 ),
-              ),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          controller: _titleController,
+                          decoration: const InputDecoration(
+                              hintText: 'Titel eingeben', labelText: 'Titel'),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Bitte einen Titel eingeben';
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          controller: _descriptionController,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                              hintText: 'Beschreibung eingeben',
+                              labelText: 'Beschreibung'),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Beschreibung eingeben';
+                            }
+                            return null;
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text('Erstellen'),
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              news.title = _titleController.text;
+                              news.description = _descriptionController.text;
+                              news.startTime = new DateTime(selectedDate.year, selectedDate.month, selectedDate.day, time.hour, time.minute);
+                              _newsService.insertNews(news);
+                            }
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }
       ),
     );
   }
