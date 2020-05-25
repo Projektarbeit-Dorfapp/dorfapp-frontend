@@ -2,7 +2,6 @@
 import 'package:dorf_app/screens/login/loginPage/widgets/loginButton.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/loginPicture.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/registrationTextNavi.dart';
-import 'package:dorf_app/screens/login/widgets/customFormField.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -17,6 +16,7 @@ class LoginPage extends StatelessWidget {
             Column(
               children: <Widget>[
                 LoginPicture(),
+                /*
                 CustomFormField(
                   icon: Icons.email,
                   type: FormFieldType.loginEmail,
@@ -30,6 +30,8 @@ class LoginPage extends StatelessWidget {
                   validation: "",
                   obscureText: true,
                 ),
+
+                 */
                 Align(
                   alignment: Alignment.centerRight,
                   child: Padding(

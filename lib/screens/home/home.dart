@@ -5,7 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-
+  final VoidCallback logOutCallback;
+  Home(this.logOutCallback);
   State<StatefulWidget> createState() {
     return _HomeState();
   }
@@ -19,9 +20,24 @@ class _HomeState extends State<Home> {
     Forum(),
   ];
   @override
+  void initState() {
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          GestureDetector(
+            onTap: widget.logOutCallback,
+            child: Text(
+              "Ausloggen",
+              style: TextStyle(
+                color: Colors.white
+              ),
+            ),
+          ),
+        ],
         title: Text('Dorf App'),
         centerTitle: true,
       ),

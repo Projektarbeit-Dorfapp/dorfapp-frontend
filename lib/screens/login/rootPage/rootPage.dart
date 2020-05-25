@@ -44,6 +44,7 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       _currentStatus = AuthStatus.NOT_LOGGED_IN;
       _userID = "";
+      _auth.userSignOut();
     });
   }
   @override
@@ -56,7 +57,8 @@ class _RootPageState extends State<RootPage> {
       );
     } else if (_currentStatus == AuthStatus.LOGGED_IN){
       if(_userID.length > 0 && _userID != null){
-        return Home();
+        print(_userID);
+        return Home(logoutCallback);
       } else {
         return _getLoadingIndicator();
       }

@@ -48,6 +48,7 @@ class RegistrationButton extends StatelessWidget {
       });
       if (uid != "") {
         validator.createUser(uid);
+        validator.clean();
         Navigator.pop(context, "sucess");
       }
     }

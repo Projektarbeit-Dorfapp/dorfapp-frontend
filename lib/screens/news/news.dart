@@ -1,8 +1,8 @@
 import 'package:dorf_app/screens/news/widgets/news_card.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class News extends StatelessWidget {
-
 
 
   Widget build(BuildContext context) {

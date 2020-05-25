@@ -17,7 +17,7 @@ class Application {
 
   final routes = <String, WidgetBuilder> {
     '/': (BuildContext context) => RootPage(),
-    '/news': (BuildContext context) => new News(),
+    //'/news': (BuildContext context) => new News(),
     '/calendar': (BuildContext context) => new Calendar(),
     '/forum': (BuildContext context) => new Forum(),
     '/registration' : (BuildContext context) => RegistrationPage(),
