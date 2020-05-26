@@ -4,11 +4,13 @@ import 'package:dorf_app/screens/home/home.dart';
 
 void main() => runApp(MyApp());
 
+// Hannes Hauenstein
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Dorf App',
       theme: basicTheme,
       home: Home(),
     );

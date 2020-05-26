@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//Hannes Hauenstein
+
 final ThemeData basicTheme = new ThemeData(
   brightness: Brightness.dark,
   primaryColor: Colors.lightBlue[800],

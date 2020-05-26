@@ -25,6 +25,10 @@ class _NewsEditState extends State<NewsEdit> {
   File _image;
   DateTime selectedDate = DateTime.now();
   TimeOfDay time;
+  TimeOfDay startTime;
+  TimeOfDay endTime;
+  DateTime startDate;
+  DateTime endDate;
 
   Future _pickImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -102,18 +106,38 @@ class _NewsEditState extends State<NewsEdit> {
                     children: <Widget>[
                       ListTile(
                         title: Text(
-                            "Date: ${selectedDate.day}, ${selectedDate.month}, ${selectedDate.year}"),
+                            "Beginn Datum: ${selectedDate.day}, ${selectedDate.month}, ${selectedDate.year}"),
                         trailing: Icon(Icons.keyboard_arrow_down),
                         onTap: () {
                           _pickDate(context);
+                          startDate = selectedDate;
                         },
                       ),
                       ListTile(
                         title: Text(
-                            "Time:  ${time.hour}:${time.minute}"),
+                            "Beginn Uhrzeit:  ${time.hour}:${time.minute}"),
                         trailing: Icon(Icons.keyboard_arrow_down),
                         onTap: () {
                           _pickTime(context);
+                          startTime = time;
+                        },
+                      ),
+                      ListTile(
+                        title: Text(
+                            "Ende Datum: ${selectedDate.day}, ${selectedDate.month}, ${selectedDate.year}"),
+                        trailing: Icon(Icons.keyboard_arrow_down),
+                        onTap: () {
+                          _pickDate(context);
+                          endDate = selectedDate;
+                        },
+                      ),
+                      ListTile(
+                        title: Text(
+                            "Ende Uhrzeit:  ${time.hour}:${time.minute}"),
+                        trailing: Icon(Icons.keyboard_arrow_down),
+                        onTap: () {
+                          _pickTime(context);
+                          endTime = time;
                         },
                       ),
                     ],
@@ -155,7 +179,7 @@ class _NewsEditState extends State<NewsEdit> {
                             if (_formKey.currentState.validate()) {
                               news.title = _titleController.text;
                               news.description = _descriptionController.text;
-                              news.startTime = new DateTime(selectedDate.year, selectedDate.month, selectedDate.day, time.hour, time.minute);
+                              news.startTime = new DateTime(startDate.year, selectedDate.month, selectedDate.day, time.hour, time.minute);
                               _newsService.insertNews(news);
                             }
                           },
