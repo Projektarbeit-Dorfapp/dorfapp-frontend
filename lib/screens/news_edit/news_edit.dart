@@ -20,7 +20,7 @@ class _NewsEditState extends State<NewsEdit> {
   final _descriptionController = TextEditingController();
   final _newsService = NewsService();
 
-  NewsModel news;
+  NewsModel news = new NewsModel();
 
   File _image;
   DateTime selectedDate = DateTime.now();
