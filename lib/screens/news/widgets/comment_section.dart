@@ -9,7 +9,6 @@ import 'package:flutter/rendering.dart';
 class CommentSection extends StatefulWidget {
 
   List<Comment> commentList;
-
   CommentSection(this.commentList);
 
   @override
@@ -20,8 +19,18 @@ class CommentSection extends StatefulWidget {
 class _CommentSectionState extends State<CommentSection> {
 
   List<Comment> commentList;
-
+  TextEditingController _controller;
   _CommentSectionState(this.commentList);
+
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void _addComment(String val) {
     Comment newComment = Comment(
@@ -31,7 +40,7 @@ class _CommentSectionState extends State<CommentSection> {
         creationDate: DateTime.now());
 
     setState(() {
-      commentList.add(newComment);
+      commentList.insert(0, newComment);
     });
   }
 
@@ -51,12 +60,23 @@ class _CommentSectionState extends State<CommentSection> {
       child: Column(
         children: <Widget>[
           TextField(
+            //keyboardType: TextInputType.multiline,
+            //maxLines: null,
+            controller: _controller,
             onSubmitted: (String submittedStr) {
               _addComment(submittedStr);
+              _controller.clear();
             },
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(20.0),
               hintText: "Schreibe einen Kommentar...",
+              /*suffixIcon: IconButton(
+                icon: Icon(Icons.send),
+                color: Color(0xFF141e3e),
+                iconSize: 28.0,
+                onPressed: () {
+                },
+              ) */
             ),
           ),
           Container(

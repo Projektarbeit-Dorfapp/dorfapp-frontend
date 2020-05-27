@@ -17,7 +17,7 @@ class NewsCard extends StatelessWidget {
                                 description: "Frankens größtes Weinfest - Zum 72. Mal feiert Volkach das Weingenießer-Spektakel der Region. Über 120 Frankenweine der Weinlagen rundum die Volkacher Mainschleife stehen während der Festtage zur Auswahl.\n\nTageskarte: 2,00 Euro pro Person\nDauerkarte: 5,50 Euro pro Person (Vorverkauf: 4,50 Euro)\nJugendliche ab 16 Jahren sind Eintrittspflichtig!\nDienstag, 17.08. (Weinfest-Zugabe) = Eintritt frei!\n\n(Preisänderungen bleiben vorbehalten!)",
                                 start: DateTime(2020, 8, 13, 12, 0, 0),
                                 end: DateTime(2020, 8, 16, 20, 0, 0),
-                                address: Address(street: 'An der Allee', houseNumber: '1', zipCode: '97332', district: 'Volkach'),
+                                address: Address(street: 'An der Alalalalallallee', houseNumber: '1', zipCode: '97332', district: 'Volkach'),
                                 imagePath: "assets/weinfest2.jpg",
                                 likes: List<User>(),
                                 comments: List<Comment>());

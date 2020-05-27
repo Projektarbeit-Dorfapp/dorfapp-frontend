@@ -1,8 +1,9 @@
 import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
 import 'package:dorf_app/screens/news/widgets/comment_section.dart';
-import 'package:dorf_app/screens/news/widgets/dateDetailView.dart';
+import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
 import 'package:dorf_app/screens/news/widgets/like_section.dart';
-import 'package:dorf_app/screens/news/widgets/timeDetailView.dart';
+import 'package:dorf_app/screens/news/widgets/time_detailview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -27,7 +28,7 @@ class NewsDetail extends StatelessWidget {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            getImageStack(),
+            _getImageStack(),
             Container(
               padding: EdgeInsets.all(15.0),
               margin: EdgeInsets.all(20.0),
@@ -39,7 +40,7 @@ class NewsDetail extends StatelessWidget {
                 children: <Widget>[
                   DateDetailView(newsModel.start, newsModel.end),
                   TimeDetailView(newsModel.start, newsModel.end),
-                  getAddressRow()
+                  AddressDetailView(newsModel.address)
                 ],
               ),
             ),
@@ -67,11 +68,10 @@ class NewsDetail extends StatelessWidget {
     );
   }
 
-  getImageStack() {
+  _getImageStack() {
     if (newsModel.imagePath == ''){
       return Container();
     }
-
     return Stack(
       children: <Widget>[
         Container(
@@ -105,34 +105,6 @@ class NewsDetail extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-
-  getAddressRow() {
-    if(newsModel.address == null){
-      return Row();
-    }
-
-    return Row(
-        children: <Widget>[
-          Icon(
-            Icons.location_on,
-            color: Colors.white,
-            size: 22.0
-          ),
-          Container(
-              margin: EdgeInsets.only(left: 10.0),
-              child: Text(
-                newsModel.address.getAddressFormat(),
-                style: TextStyle(
-                    fontFamily: 'Raleway',
-                    fontWeight: FontWeight.normal,
-                    fontSize: 20,
-                    color: Colors.white
-                ),
-              )
-          )
-        ]
     );
   }
 }

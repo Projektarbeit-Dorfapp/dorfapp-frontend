@@ -20,7 +20,7 @@ class _LikeSectionState extends State<LikeSection> {
 
   List<User> likeList;
   Color iconColor = Color(0xFF141e3e);
-  final User user = User(firstName: "Peter", lastName: "Müller", userName: "Peter123", email: "test", imagePath: "assets/avatar.png");
+  final User user = User(firstName: "Peter", lastName: "Müller", userName: "Peter123", email: "test");
 
   _LikeSectionState(this.likeList);
 

@@ -2,6 +2,7 @@ import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/screens/news/widgets/dateComment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 //Meike Nedwidek
@@ -26,37 +27,41 @@ class CommentCard extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:<Widget>[
-              Column(
-                children: <Widget>[
-                  Text(
-                    comment.user.firstName + " " + comment.user.lastName,
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16
-                    ),
-                  ),
-                ],
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(bottom: 5.0, right: 10.0),
+                  width: 50.0,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage(comment.user.imagePath != null ? comment.user.imagePath : "assets/avatar.png")
+                      )
+                  )
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                 DateComment(comment.creationDate)
-                ],
-              )
-            ]
-          ),
-          Container(
-              child: Text(
-                comment.content,
+              Text(
+                comment.user.firstName + " " + comment.user.lastName,
                 style: TextStyle(
                     fontFamily: 'Raleway',
-                    fontWeight: FontWeight.normal,
+                    fontWeight: FontWeight.bold,
                     fontSize: 16
                 ),
-              )
+              ),
+              DateComment(comment.creationDate)
+            ],
+          ),
+          Column(
+              children: <Widget>[
+                Text(
+                  comment.content,
+                  style: TextStyle(
+                      fontFamily: 'Raleway',
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16
+                  ),
+                )
+              ],
           )
         ]
       )
