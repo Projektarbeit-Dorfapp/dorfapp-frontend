@@ -1,4 +1,5 @@
 import 'package:dorf_app/models/comment_model.dart';
+import 'package:dorf_app/screens/news/widgets/dateComment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,14 +43,7 @@ class CommentCard extends StatelessWidget{
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(
-                    comment.creationDate,
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12
-                    ) ,
-                  )
+                 DateComment(comment.creationDate)
                 ],
               )
             ]

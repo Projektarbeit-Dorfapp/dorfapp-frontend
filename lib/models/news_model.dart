@@ -7,15 +7,13 @@ class NewsModel{
 
   String title;
   String description;
-  String startTime;
-  String endTime;
-  String startDate;
-  String endDate;
+  DateTime start;
+  DateTime end;
   Address address;
   String imagePath;
   List<User> likes;
   List<Comment> comments;
 
-  NewsModel({this.title, this.description, this.startTime, this.endTime, this.startDate, this.endDate, this.address, this.imagePath, this.likes, this.comments});
+  NewsModel({this.title, this.description, this.start, this.end, this.address, this.imagePath, this.likes, this.comments});
 
 }

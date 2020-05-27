@@ -1,6 +1,8 @@
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/screens/news/widgets/comment_section.dart';
+import 'package:dorf_app/screens/news/widgets/dateDetailView.dart';
 import 'package:dorf_app/screens/news/widgets/like_section.dart';
+import 'package:dorf_app/screens/news/widgets/timeDetailView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,7 +14,6 @@ class NewsDetail extends StatelessWidget {
   final NewsModel newsModel;
 
   NewsDetail(this.newsModel);
-  //function missing to change Timestamp to Minutes..
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +37,8 @@ class NewsDetail extends StatelessWidget {
               ),
               child: Column(
                 children: <Widget>[
-                  getDateRow(),
-                  getTimeRow(),
+                  DateDetailView(newsModel.start, newsModel.end),
+                  TimeDetailView(newsModel.start, newsModel.end),
                   getAddressRow()
                 ],
               ),
@@ -49,7 +50,8 @@ class NewsDetail extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Raleway',
                   fontWeight: FontWeight.normal,
-                  fontSize: 16
+                  fontSize: 16,
+                  color: Colors.black
                 ),
               )
             ),
@@ -99,137 +101,6 @@ class NewsDetail extends StatelessWidget {
                           color: Colors.black54
                       )
                   )
-              )
-          ),
-        )
-      ],
-    );
-  }
-
-  getDateRow() {
-    if (newsModel.startDate == '') {
-      return Row();
-    }
-
-    return Row(
-        children: getDateColumns()
-    );
-  }
-
-  getDateColumns() {
-    if(newsModel.startDate != '' && newsModel.endDate == '') {
-      return <Widget>[
-        getStartDateRow()
-      ];
-    }
-
-    return <Widget>[
-      getStartDateRow(),
-      getEndDateColumn()
-    ];
-  }
-
-  getStartDateRow() {
-    return Row(
-      children: <Widget>[
-        Icon(
-            Icons.calendar_today,
-            color: Colors.white,
-            size: 22.0
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 10.0),
-          child: Text(
-              newsModel.startDate,
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  color: Colors.white
-              )
-          ),
-        )
-      ],
-    );
-  }
-
-  getEndDateColumn() {
-    return Column(
-      children: <Widget>[
-        Container(
-          child: Text(
-              ' - ' + newsModel.endDate,
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  color: Colors.white
-              )
-          ),
-        )
-      ],
-    );
-  }
-
-  getTimeRow() {
-    if(newsModel.startTime == '') {
-      return Row();
-    }
-
-    return Row(
-        children: getTimeColumns()
-    );
-  }
-
-  getTimeColumns() {
-    if(newsModel.startTime != '' && newsModel.endTime == '') {
-      return <Widget>[
-        getStartTimeRow()
-      ];
-    }
-
-    return <Widget>[
-      getStartTimeRow(),
-      getEndTimeColumn()
-    ];
-  }
-
-  getStartTimeRow() {
-    return Row(
-      children: <Widget>[
-        Icon(
-          Icons.access_time,
-          color: Colors.white,
-          size: 22.0
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 10.0),
-          child: Text(
-              newsModel.startTime,
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  color: Colors.white
-              )
-          ),
-        )
-      ],
-    );
-  }
-
-  getEndTimeColumn() {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 0.0, top: 10.0, right: 20.0, bottom: 10.0),
-          child: Text(
-              ' bis ' + newsModel.endTime,
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  color: Colors.white
               )
           ),
         )

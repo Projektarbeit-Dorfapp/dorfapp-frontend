@@ -28,7 +28,7 @@ class _CommentSectionState extends State<CommentSection> {
         id: 1,
         user: User(firstName: "Peter", lastName: "Müller", userName: "test123", email: "test"),
         content: val,
-        creationDate: "2020-05-17");
+        creationDate: DateTime.now());
 
     setState(() {
       commentList.add(newComment);
