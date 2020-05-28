@@ -2,7 +2,7 @@ import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:dorf_app/screens/news/like_detail.dart';
+import 'package:dorf_app/screens/general/like_detail.dart';
 
 //Meike Nedwidek
 class LikeSection extends StatefulWidget {

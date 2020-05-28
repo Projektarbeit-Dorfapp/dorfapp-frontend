@@ -1,5 +1,5 @@
 import 'package:dorf_app/models/comment_model.dart';
-import 'package:dorf_app/screens/news/widgets/comment_card.dart';
+import 'package:dorf_app/widgets/comment_card.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,8 +1,8 @@
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
-import 'package:dorf_app/screens/news/widgets/comment_section.dart';
+import 'package:dorf_app/widgets/comment_section.dart';
 import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
-import 'package:dorf_app/screens/news/widgets/like_section.dart';
+import 'package:dorf_app/widgets/like_section.dart';
 import 'package:dorf_app/screens/news/widgets/time_detailview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
