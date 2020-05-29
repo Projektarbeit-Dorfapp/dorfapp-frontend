@@ -5,22 +5,18 @@ import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/services/news_service.dart';
 
 class NewsCard extends StatelessWidget {
   final String title;
   final String description;
   final String imagePath;
-
+  final _newsService = NewsService();
+  
   NewsCard(this.title, this.description, this.imagePath);
 
-  NewsModel newsModel = NewsModel(title: "72. Fränkisches Weinfest Volkach",
-                                description: "Frankens größtes Weinfest - Zum 72. Mal feiert Volkach das Weingenießer-Spektakel der Region. Über 120 Frankenweine der Weinlagen rundum die Volkacher Mainschleife stehen während der Festtage zur Auswahl.\n\nTageskarte: 2,00 Euro pro Person\nDauerkarte: 5,50 Euro pro Person (Vorverkauf: 4,50 Euro)\nJugendliche ab 16 Jahren sind Eintrittspflichtig!\nDienstag, 17.08. (Weinfest-Zugabe) = Eintritt frei!\n\n(Preisänderungen bleiben vorbehalten!)",
-                                start: DateTime(2020, 8, 13, 12, 0, 0),
-                                end: DateTime(2020, 8, 16, 20, 0, 0),
-                                address: Address(street: 'An der Alalalalallallee', houseNumber: '1', zipCode: '97332', district: 'Volkach'),
-                                imagePath: "assets/weinfest2.jpg",
-                                likes: List<User>(),
-                                comments: List<Comment>());
+  String newsID;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +40,7 @@ class NewsCard extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NewsDetail(newsModel)));
+                            MaterialPageRoute(builder: (context) => NewsDetail('Nui3l9g46jgYxt8jXrmY')));
                       },
                       child: Text(
                         title,
