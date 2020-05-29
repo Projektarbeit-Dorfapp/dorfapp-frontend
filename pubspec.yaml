@@ -18,6 +18,9 @@ environment:
 
 dependencies:
   intl: ^0.15.7
+
+  cloud_firestore:
+
   flutter:
     sdk: flutter
 
