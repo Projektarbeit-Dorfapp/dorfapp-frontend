@@ -7,6 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/services/news_service.dart';
 import 'package:dorf_app/models/news_model.dart';
 
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
+
 //Hannes Hauenstein
 
 class NewsEdit extends StatefulWidget {
@@ -23,48 +26,10 @@ class _NewsEditState extends State<NewsEdit> {
   NewsModel news = new NewsModel();
 
   File _image;
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay time;
-  TimeOfDay startTime;
-  TimeOfDay endTime;
-  DateTime startDate;
-  DateTime endDate;
+  final f = new DateFormat('dd.MM.yyyy HH:mm');
+  DateTime startDateTime = DateTime.now();
+  DateTime endDateTime = DateTime.now();
 
-  Future _pickImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-    });
-  }
-
-  Future<Null> _pickDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
-  }
-
-  _pickTime(BuildContext context) async {
-    final TimeOfDay t = await showTimePicker(
-      initialTime: time,
-      context: context,
-    );
-    if (t != null)
-      setState(() {
-        time = t;
-      });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    time = TimeOfDay.now();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,44 +70,40 @@ class _NewsEditState extends State<NewsEdit> {
                   child: Column(
                     children: <Widget>[
                       ListTile(
-                        title: Text(
-                            "Beginn Datum: ${selectedDate.day}, ${selectedDate.month}, ${selectedDate.year}"),
+                        title: Text('Start: ' + f.format(startDateTime)),
+                        onTap:  () {
+                          DatePicker.showDateTimePicker(context,
+                            showTitleActions: true,
+                            minTime: DateTime.now(),
+                            maxTime: DateTime(2022, 6, 7), onChanged: (date) {
+                            }, onConfirm: (date) {
+                            setState(() {
+                              startDateTime = date;
+                            });
+                            }, currentTime: DateTime.now(), locale: LocaleType.de);
+                          },
                         trailing: Icon(Icons.keyboard_arrow_down),
-                        onTap: () {
-                          _pickDate(context);
-                          startDate = selectedDate;
-                        },
                       ),
                       ListTile(
-                        title: Text(
-                            "Beginn Uhrzeit:  ${time.hour}:${time.minute}"),
-                        trailing: Icon(Icons.keyboard_arrow_down),
-                        onTap: () {
-                          _pickTime(context);
-                          startTime = time;
+                        title: Text('Ende: ' +  f.format(endDateTime)),
+                        onTap:  () {
+                          DatePicker.showDateTimePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime.now(),
+                              maxTime: DateTime(2022, 6, 7), onChanged: (date) {
+                              }, onConfirm: (date) {
+                                setState(() {
+                                  endDateTime = date;
+                                });
+                              }, currentTime: DateTime.now(), locale: LocaleType.de);
                         },
-                      ),
-                      ListTile(
-                        title: Text(
-                            "Ende Datum: ${selectedDate.day}, ${selectedDate.month}, ${selectedDate.year}"),
                         trailing: Icon(Icons.keyboard_arrow_down),
-                        onTap: () {
-                          _pickDate(context);
-                          endDate = selectedDate;
-                        },
                       ),
-                      ListTile(
-                        title: Text(
-                            "Ende Uhrzeit:  ${time.hour}:${time.minute}"),
-                        trailing: Icon(Icons.keyboard_arrow_down),
-                        onTap: () {
-                          _pickTime(context);
-                          endTime = time;
-                        },
-                      ),
+
                     ],
                   ),
                 ),
+//
                 Container(
                   padding: const EdgeInsets.all(20),
                   child: Form(
@@ -179,7 +140,8 @@ class _NewsEditState extends State<NewsEdit> {
                             if (_formKey.currentState.validate()) {
                               news.title = _titleController.text;
                               news.description = _descriptionController.text;
-                              news.startTime = new DateTime(startDate.year, selectedDate.month, selectedDate.day, time.hour, time.minute);
+                              news.startDateTime = new DateTime(startDateTime.year, startDateTime.month, startDateTime.day, startDateTime.hour, startDateTime.minute);
+                              news.endDateTime = new DateTime(endDateTime.year, endDateTime.month, endDateTime.day, endDateTime.hour, endDateTime.minute);
                               _newsService.insertNews(news);
                             }
                           },
@@ -195,4 +157,12 @@ class _NewsEditState extends State<NewsEdit> {
       ),
     );
   }
+  Future _pickImage() async {
+    final image = await ImagePicker().getImage(source: ImageSource.gallery);
+    setState(() {
+      _image = File(image.path);
+    });
+  }
+
+
 }

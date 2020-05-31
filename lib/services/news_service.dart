@@ -10,8 +10,8 @@ class NewsService {
         .add({
       'title': news.title,
       'description': news.description,
-      'startTime': news.startTime,
-      'endTime': news.endTime,
+      'startTime': news.startDateTime,
+      'endTime': news.endDateTime,
       'createdAt': DateTime.now(),
       'address': news.address,
     });

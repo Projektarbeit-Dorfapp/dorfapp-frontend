@@ -5,8 +5,8 @@ class NewsModel{
 
   String title;
   String description;
-  DateTime startTime;
-  DateTime endTime;
+  DateTime startDateTime;
+  DateTime endDateTime;
   DateTime createdAt;
   DateTime modifiedAt;
   Address address;
@@ -14,6 +14,6 @@ class NewsModel{
   List<int> like;
   List<Comment> comments;
 
-  NewsModel({this.title, this.description, this.startTime, this.endTime, this.createdAt, this.modifiedAt,  this.address, this.imagePath, this.like, this.comments});
+  NewsModel({this.title, this.description, this.startDateTime, this.endDateTime, this.createdAt, this.modifiedAt,  this.address, this.imagePath, this.like, this.comments});
 
 }
