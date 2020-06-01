@@ -47,8 +47,8 @@ class NewsDetail extends StatelessWidget {
                         ),
                         child: Column(
                           children: <Widget>[
-                            DateDetailView(newsModel.startTime, newsModel.endTime),
-                            TimeDetailView(newsModel.startTime, newsModel.endTime),
+                            DateDetailView(newsModel.startTime as DateTime, newsModel.endTime as DateTime),
+                            TimeDetailView(newsModel.startTime as DateTime, newsModel.endTime as DateTime),
                             AddressDetailView(newsModel.address)
                           ],
                         ),
@@ -77,12 +77,19 @@ class NewsDetail extends StatelessWidget {
           );
         }
         else {
-          return Center(
-            child: Text(
-              'Lädt...',
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 40.0
+          return Scaffold(
+            body: Container(
+              color: Colors.white,
+              child: Center(
+                child: Text(
+                  'Lädt...',
+                  style: TextStyle(
+                      fontFamily: 'Raleway',
+                      fontWeight: FontWeight.normal,
+                      fontSize: 40.0,
+                      color: Colors.black
+                  ),
+                ),
               ),
             )
           );
