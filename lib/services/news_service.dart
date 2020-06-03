@@ -13,8 +13,7 @@ class NewsService {
 
     try {
       _newsCollectionReference.document(newsID).get().then((dataSnapshot) {
-        if (dataSnapshot.exists) {
-          newsModel = NewsModel(
+          return NewsModel(
               id: newsID,
               title: dataSnapshot.data['title'].toString(),
               description: dataSnapshot.data['description'].toString(),
@@ -24,16 +23,18 @@ class NewsService {
               imagePath: dataSnapshot.data['imagePath'].toString(),
               likes: null,
               comments: null,
-              isNews: dataSnapshot.data['isNews'],
+              //isNews: dataSnapshot.data['isNews'],
+              isNews: false,
               createdAt: dataSnapshot.data['createdAt'],
               modifiedAt: dataSnapshot.data['modifiedAt']
           );
-        }
       });
     } catch (err) {
       print(err.toString());
     }
+
     return newsModel;
+
   }
 
   Address convertSnapshotToAddress(DocumentSnapshot ds) {

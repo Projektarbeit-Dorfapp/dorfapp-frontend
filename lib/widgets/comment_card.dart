@@ -1,5 +1,5 @@
 import 'package:dorf_app/models/comment_model.dart';
-import 'package:dorf_app/screens/news/widgets/dateComment.dart';
+import 'package:dorf_app/widgets/date_comment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
