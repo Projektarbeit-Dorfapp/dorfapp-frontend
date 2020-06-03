@@ -1,10 +1,8 @@
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
-import 'package:dorf_app/screens/home/home.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/login/registrationPage/registrationPage.dart';
 import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
-import 'file:///C:/Users/R4pture/AndroidStudioProjects/dorfapp-frontend/lib/screens/login/loginPage/loginPage.dart';
-import 'package:dorf_app/screens/news/news.dart';
 import 'package:dorf_app/services/auth/authentification.dart';
 import 'package:dorf_app/services/auth/userService.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +26,7 @@ class Application {
       providers: [
         ChangeNotifierProvider(create: (context) => Authentication(),),
         ChangeNotifierProvider(create: (context) => UserService(),),
+        ChangeNotifierProvider(create: (context) => AccessHandler(),),
       ],
       child: MaterialApp(
         routes: routes,

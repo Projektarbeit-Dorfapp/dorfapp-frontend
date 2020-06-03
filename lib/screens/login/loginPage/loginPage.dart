@@ -1,12 +1,19 @@
-
 import 'package:dorf_app/screens/login/loginPage/widgets/loginButton.dart';
+import 'package:dorf_app/screens/login/loginPage/widgets/loginEmailFormField.dart';
+import 'package:dorf_app/screens/login/loginPage/widgets/loginPasswordFormField.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/loginPicture.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/registrationTextNavi.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  final VoidCallback loginCallback;
-  LoginPage({@required this.loginCallback});
+///Matthias Maxelon
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,35 +23,37 @@ class LoginPage extends StatelessWidget {
             Column(
               children: <Widget>[
                 LoginPicture(),
-                /*
-                CustomFormField(
-                  icon: Icons.email,
-                  type: FormFieldType.loginEmail,
-                  labelText: "Email-Adresse",
-                  validation: "",
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      LoginEmailFormField(),
+                      LoginPasswordFormField(),
+                    ],
+                  ),
                 ),
-                CustomFormField(
-                  icon: Icons.lock,
-                  type: FormFieldType.username,
-                  labelText: "Passwort",
-                  validation: "",
-                  obscureText: true,
-                ),
-
-                 */
                 Align(
                   alignment: Alignment.centerRight,
                   child: Padding(
                     padding: EdgeInsets.only(right: 20, top: 10),
-                    child: RegistrationTextNavi(
-                    ),
+                    child: RegistrationTextNavi(),
                   ),
                 ),
                 SizedBox(
-                  height: (MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top) * 0.05,
+                  height: (MediaQuery.of(context).size.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.05,
                 ),
-                LoginButton(
-                  loginCallback: loginCallback,
+                LoginButton(_formKey),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: InkWell(
+                    onTap: (){
+                      //TODO: Change Password process
+                    },
+                    child: Text("Passwort vergessen?"
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -53,5 +62,4 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
 }

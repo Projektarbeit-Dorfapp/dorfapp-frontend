@@ -1,29 +1,29 @@
-import 'package:dorf_app/screens/login/registrationPage/provider/registrationValidator.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
-class PassWordFormField extends StatefulWidget {
+class LoginPasswordFormField extends StatefulWidget {
   @override
-  _PassWordFormFieldState createState() => _PassWordFormFieldState();
+  _LoginPasswordFormFieldState createState() => _LoginPasswordFormFieldState();
 }
 
-class _PassWordFormFieldState extends State<PassWordFormField> {
+class _LoginPasswordFormFieldState extends State<LoginPasswordFormField> {
   @override
   Widget build(BuildContext context) {
-    final registrationValidator = Provider.of<RegistrationValidator>(context, listen: false);
+    final accessHandler = Provider.of<AccessHandler>(context, listen: false);
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       child: TextFormField(
         onChanged: (password){
-          registrationValidator.setPassword(password);
+          accessHandler.setPassword(password);
         },
         validator: (password){
           if(password.isEmpty){
             return "Bitte ein Passwort angeben";
           }
-          if(password.length < 6){
-            return "Passwort muss mindestens 6 Zeichen lang sein";
+          if(accessHandler.validationFailed){
+            return "E-mail oder Passwort inkorrekt";
           }
           return null;
         },
@@ -36,6 +36,6 @@ class _PassWordFormFieldState extends State<PassWordFormField> {
           labelText: "Passwort",
         ),
       ),
-    );
+    );;
   }
 }

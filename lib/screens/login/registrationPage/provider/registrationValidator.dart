@@ -10,17 +10,20 @@ class RegistrationValidator extends ChangeNotifier{
   String _currentUserName = "";
   String _currentEmail = "";
   String _currentPassword = "";
+
   get userExist => _userExist;
   get emailExist => _emailExist;
   get currentEmail => _currentEmail;
   get currentPassword => _currentPassword;
   get currentUserName => _currentUserName;
 
+  ///checkup if email already exist in database
   validateEmail() async{
     if(_currentEmail != ""){
       _emailExist = await userService.validateEmail(_currentEmail);
     }
   }
+  ///checkup if user name already exist in database
   validateUserName() async{
     if(_currentUserName != ""){
       _userExist = await userService.validateUser(_currentUserName);
@@ -45,8 +48,8 @@ class RegistrationValidator extends ChangeNotifier{
 
   }
   ///cleanse validator state to default values.
-  ///Should be called when registrationprocess is complete or canceled
-  clean(){
+  ///Should normally be called when registration process is complete or canceled
+  clear(){
     _userExist = false;
     _emailExist = false;
      _currentUserName = "";

@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 class RegistrationButton extends StatelessWidget {
-  final snackBar = SnackBar(
+  final _snackBar = SnackBar(
       content: Text("Etwas ist schiefgelaufen, versuche es später erneut"));
-  final GlobalKey<FormState> formKey;
-  RegistrationButton(this.formKey);
+  final GlobalKey<FormState> _formKey;
+  RegistrationButton(this._formKey);
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
@@ -16,8 +16,8 @@ class RegistrationButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      onPressed: () async {
-        _tryToAddUser(context);
+      onPressed: () async{
+        await _tryToAddUser(context);
       },
       child: Padding(
         padding: EdgeInsets.all(5),
@@ -28,28 +28,28 @@ class RegistrationButton extends StatelessWidget {
       ),
     );
   }
-
   _tryToAddUser(BuildContext context) async {
     final validator =
-        Provider.of<RegistrationValidator>(context, listen: false);
+      Provider.of<RegistrationValidator>(context, listen: false);
+
     await validator.validateUserName();
     await validator.validateEmail();
-    if (formKey.currentState.validate()) {
+
+    if (_formKey.currentState.validate()) {
       final auth = Provider.of<Authentication>(context, listen: false);
       String uid = "";
-      await auth
-          .userSignUp(validator.currentEmail, validator.currentPassword)
+      await auth.userSignUp(validator.currentEmail, validator.currentPassword)
           .then((registrationUID) {
-        uid = registrationUID;
+            uid = registrationUID;
       }).catchError((e) {
         print(e);
-        Scaffold.of(context).showSnackBar(snackBar);
+        Scaffold.of(context).showSnackBar(_snackBar);
         return;
       });
       if (uid != "") {
         validator.createUser(uid);
-        validator.clean();
-        Navigator.pop(context, "sucess");
+        validator.clear();
+        Navigator.pop(context, "success");
       }
     }
   }
