@@ -2,7 +2,7 @@ import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/news.dart';
-import 'package:dorf_app/screens/news/newsPage.dart';
+import 'package:dorf_app/screens/news/news.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
