@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 
 ///Matthias Maxelon
-class RegistrationTextNavi extends StatelessWidget {
+class RegistrationText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: (){
         _showRegistrationPage(context);
       },
-      child: Text(
-        "Neu hier?",
-        style: TextStyle(color: Colors.blueGrey, fontSize: 17),
-      ),
+      child: Container(
+        width: 80,
+        height: 20,
+        child: Center(
+            child: Text(
+              "Neu hier?",
+              style: TextStyle(
+                fontSize: 18,
+                  color: Colors.black,
+              fontFamily: "Raleway"),
+            ),
+          ),
+        ),
     );
   }
   _showRegistrationPage(BuildContext context){

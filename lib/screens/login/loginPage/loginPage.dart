@@ -1,8 +1,9 @@
+import 'package:dorf_app/screens/login/loginPage/widgets/forgetPasswordText.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/loginButton.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/loginEmailFormField.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/loginPasswordFormField.dart';
 import 'package:dorf_app/screens/login/loginPage/widgets/loginPicture.dart';
-import 'package:dorf_app/screens/login/loginPage/widgets/registrationTextNavi.dart';
+import 'package:dorf_app/screens/login/loginPage/widgets/registrationText.dart';
 import 'package:flutter/material.dart';
 
 ///Matthias Maxelon
@@ -12,50 +13,98 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+   FocusNode _focusNode;
+   bool _hidePassword = true;
+  @override
+  void initState() {
+    _focusNode = FocusNode();
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
+    double _safeArea = MediaQuery.of(context).padding.top;
+    double _pictureScreenHeight = MediaQuery.of(context).size.height * 0.5 - _safeArea;
+
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Stack(
+        child: Column(
           children: <Widget>[
-            Column(
+            Container(
+              height: _safeArea,
+            ),
+            Container(
+              height: _pictureScreenHeight,
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: LoginPicture(),
+
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.06),
+                child: RegistrationText(),
+              ),
+            ),
+            Stack(
               children: <Widget>[
-                LoginPicture(),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      LoginEmailFormField(),
-                      LoginPasswordFormField(),
-                    ],
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 20, top: 10),
-                    child: RegistrationTextNavi(),
-                  ),
-                ),
-                SizedBox(
-                  height: (MediaQuery.of(context).size.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.05,
-                ),
-                LoginButton(_formKey),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: InkWell(
-                    onTap: (){
-                      //TODO: Change Password process
-                    },
-                    child: Text("Passwort vergessen?"
+                Container(
+                  height: 175,
+                  width: MediaQuery.of(context).size.width,
+                  child: Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20, top: 10),
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            top: 10,
+                            child: LoginEmailFormField(focusNode: _focusNode),
+                          ),
+                          Positioned(
+                            top: 90,
+                            child: LoginPasswordFormField(_focusNode, _hidePassword),
+                          ),
+                          Positioned(
+                            right: 20,
+                            bottom: 28,
+                            child: IconButton(
+                              iconSize: 20,
+                              onPressed: () {
+                                setState(() {
+                                  _hidePassword = !_hidePassword;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.remove_red_eye,
+                                color: _hidePassword ? Colors.black38 : Color(0xff95B531),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+
               ],
+
+            ),
+            Container(
+              height: (MediaQuery.of(context).size.height - _safeArea) * 0.05,
+            ),
+            LoginButton(
+                _formKey),
+            Padding(
+              padding: EdgeInsets.only(top: 30),
+
+              child: ForgetPasswordText()
             ),
           ],
         ),

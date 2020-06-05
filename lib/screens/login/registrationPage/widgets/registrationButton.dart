@@ -11,19 +11,27 @@ class RegistrationButton extends StatelessWidget {
   RegistrationButton(this._formKey);
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Colors.blueGrey,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      onPressed: () async{
-        await _tryToAddUser(context);
-      },
-      child: Padding(
-        padding: EdgeInsets.all(5),
-        child: Text(
-          "Registrieren",
-          style: TextStyle(color: Colors.white, fontSize: 30),
+    return Container(
+      height: 50,
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: RaisedButton(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(40)),
+        ),
+        color: Color(0xff95B531),
+        onPressed: () async{
+          await _tryToAddUser(context);
+        },
+        child: Padding(
+          padding: EdgeInsets.all(5),
+          child: Text(
+            "Registrieren",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+            fontFamily: "Raleway"),
+          ),
         ),
       ),
     );

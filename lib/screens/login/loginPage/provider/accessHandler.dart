@@ -8,41 +8,20 @@ class AccessHandler extends ChangeNotifier{
 
   String _currentLoginEmail = "";
   String _currentLoginPassword = "";
-  bool _validationFailed = false;
-
+  bool _isLoginValidationFailed = false;
+  bool _isEmailResetValidationFailed = false;
   get uid => _uid;
-  get validationFailed => _validationFailed;
-  get loginEmail => _currentLoginEmail;
-  get loginPassword => _currentLoginPassword;
+  get isLoginValidationFailed => _isLoginValidationFailed;
+  get isEmailResetValidationFailed => _isEmailResetValidationFailed;
+  get currentEmail => _currentLoginEmail;
+  get currentPassword => _currentLoginPassword;
 
-  ///Sets callbacks for login and logout operations from the rootPage.
-  ///The rootPage decides if loginPage or user dependent homePage should be loaded.
-  ///Do not call this method outside of rootPage
-  initCallbacks(VoidCallback login, VoidCallback logout){
-    _login = login;
-    _logout = logout;
-  }
-  ///Sets validationError to true. This method is used for the login process
-  validationError(){
-    _validationFailed = true;
-  }
-  ///sets validationError back to false (default State). This method is used
-  ///for the login process
-  cancelValidationError(){
-    _validationFailed = false;
-  }
-  setEmail(String email){
-    _currentLoginEmail = email;
-  }
-  setPassword(String password){
-    _currentLoginPassword = password;
-  }
   ///sets user ID, this method is called from logout and login Callback function
   ///inside rootPage. Each login() and logout() call will set user ID to _uid
   setUID(String uid){
     _uid = uid;
   }
-  ///forces logged in user to log out and show loginPage
+  ///forces user to log out and show loginPage
   logout(){
     _logout.call();
   }
@@ -52,12 +31,39 @@ class AccessHandler extends ChangeNotifier{
   login(){
     _login.call();
   }
+  ///Sets callbacks for login and logout operations from the rootPage.
+  ///The rootPage decides if loginPage or user dependent homePage should be loaded.
+  ///Do not call this method outside of rootPage
+  initCallbacks(VoidCallback login, VoidCallback logout){
+    _login = login;
+    _logout = logout;
+  }
+  setEmail(String email){
+    _currentLoginEmail = email.trim();
+  }
+  setPassword(String password){
+    _currentLoginPassword = password.trim();
+  }
+
   ///Cleanse login info state. Usually called when user successfully
   ///accessed App
   clear(){
     _currentLoginEmail = "";
     _currentLoginPassword = "";
-    _validationFailed = false;
+    _isLoginValidationFailed = false;
+    _isEmailResetValidationFailed = false;
+  }
+  ///activates or deactivates login validation. the user can only login if
+  ///[_isLoginValidationFailed] is false. If true, validation will
+  ///fail and the user will see an error message on form fields
+  loginValidationError(){
+    _isLoginValidationFailed = !_isLoginValidationFailed;
+  }
+  ///activates or deactivates password reset validation. The user can only
+  ///get an email, if [_isEmailResetValidationFailed] is false. If true, validation will
+  ///fail and the user will see an error message on Form fields
+  emailResetValidationError(){
+    _isEmailResetValidationFailed = !_isEmailResetValidationFailed;
   }
 
 }

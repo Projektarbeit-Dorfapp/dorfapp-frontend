@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/auth/authentification.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,19 +12,27 @@ class LoginButton extends StatelessWidget {
   LoginButton(this._formKey);
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      color: Colors.blueGrey,
-      onPressed: () async {
-        await _tryLogin(context);
-      },
-      child: Padding(
-        padding: EdgeInsets.all(5),
-        child: Text(
-          "Anmelden",
-          style: TextStyle(color: Colors.white, fontSize: 30),
+    return Container(
+      height: 50,
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: RaisedButton(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(40)),
+        ),
+        color: Color(0xff95B531),
+        onPressed: () async {
+          await _tryLogin(context);
+        },
+        child: Padding(
+          padding: EdgeInsets.all(5),
+          child: Text(
+            "Anmelden",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+            fontFamily: "Raleway"),
+          ),
         ),
       ),
     );
@@ -30,11 +41,21 @@ class LoginButton extends StatelessWidget {
   ///tries to login user, if error, show error message,
   ///if successful show homePage
   _tryLogin(BuildContext context) async {
+    try{
+      await InternetAddress.lookup("example.com");
+    } on SocketException catch(_){
+      Flushbar(
+        icon: Icon(Icons.error_outline, color: Colors.yellow,),
+        message: "Du hast leider kein Internet",
+        duration: Duration(seconds: 3),
+      )..show(context);
+      return;
+    }
     if (_formKey.currentState.validate()) {
       final accessHandler = Provider.of<AccessHandler>(context, listen: false);
       final auth = Provider.of<Authentication>(context, listen: false);
 
-      auth.userSignIn(accessHandler.loginEmail, accessHandler.loginPassword)
+      auth.userSignIn(accessHandler.currentEmail, accessHandler.currentPassword)
           .then((value) {
         _showHomePage(accessHandler);
       }).catchError((error) {
@@ -47,15 +68,14 @@ class LoginButton extends StatelessWidget {
     accessHandler.login();
     accessHandler.clear();
   }
-
   ///When userSignIn throws an exception, the [accessHandler] validationError will
   ///be set to true and another validate() call will show error messages on
   ///each TextFormField connected to the [_formKey]. After the validation() process
   ///completes the validation error will be set back to false to stop validate() calls to always
   ///be false afterwards
   _showErrorWarning(AccessHandler accessHandler) {
-    accessHandler.validationError();
+    accessHandler.loginValidationError();
     _formKey.currentState.validate();
-    accessHandler.cancelValidationError();
+    accessHandler.loginValidationError();
   }
 }

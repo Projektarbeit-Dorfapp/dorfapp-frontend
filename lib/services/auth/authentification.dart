@@ -12,6 +12,8 @@ abstract class Auth {
   Future<String> userSignUp(String email, String password);
   ///Get currently logged in user information
   Future<FirebaseUser> getCurrentUser();
+  ///send password reset to users email
+  Future<void> sendPasswordResetEmail(String email);
 
   Future<void> sendEmailVerification();
   ///force user to sign out
@@ -49,6 +51,10 @@ class Authentication extends ChangeNotifier implements Auth {
   Future<void> sendEmailVerification() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     user.sendEmailVerification();
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<bool> isEmailVerified() async {

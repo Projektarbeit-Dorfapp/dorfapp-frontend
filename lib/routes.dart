@@ -1,6 +1,7 @@
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/screens/login/passwordResetPage/passwordResetPage.dart';
 import 'package:dorf_app/screens/login/registrationPage/registrationPage.dart';
 import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
 import 'package:dorf_app/services/auth/authentification.dart';
@@ -19,6 +20,8 @@ class Application {
     '/calendar': (BuildContext context) => new Calendar(),
     '/forum': (BuildContext context) => new Forum(),
     '/registration' : (BuildContext context) => RegistrationPage(),
+    '/passwordReset' : (BuildContext context) => PasswordResetPage(),
+    '/rootPage' : (BuildContext context) => RootPage(),
   };
 
   void main() {
