@@ -27,7 +27,7 @@ class _ConfirmedPasswordFormFieldState
         focusNode: widget.focusNode,
         validator: (confirmedPassword){
           if(confirmedPassword != registrationValidator.currentPassword){
-            return "Passwort muss übereinstimmen";
+            return "Dein Passwort muss übereinstimmen";
           }
           return null;
         },

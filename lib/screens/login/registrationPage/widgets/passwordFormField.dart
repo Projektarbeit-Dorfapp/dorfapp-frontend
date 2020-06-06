@@ -35,7 +35,7 @@ class _PassWordFormFieldState extends State<PassWordFormField> {
         },
         validator: (password){
           if(password.isEmpty){
-            return "Bitte ein Passwort angeben";
+            return "Es fehlt noch ein Passwort";
           }
           if(password.length < 6){
             return "Passwort muss mindestens 6 Zeichen lang sein";

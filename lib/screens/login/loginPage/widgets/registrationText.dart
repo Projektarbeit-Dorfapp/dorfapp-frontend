@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 ///Matthias Maxelon
@@ -27,8 +28,13 @@ class RegistrationText extends StatelessWidget {
     Navigator.pushNamed(context, '/registration')
         .then((value) {
       if(value == "success"){
-        SnackBar snackBar = SnackBar(content: Text("Account angelegt"));
-        Scaffold.of(context).showSnackBar(snackBar);
+        Flushbar(
+          message: "Dein neuer Account ist angelegt",
+          maxWidth: MediaQuery.of(context).size.width * 0.7,
+          icon: Icon(Icons.error_outline, color: Colors.yellow,),
+          duration: Duration(seconds: 5),
+          flushbarPosition: FlushbarPosition.TOP,
+        )..show(context);
       }
     });
   }

@@ -29,10 +29,10 @@ class _UserNameFormFieldState extends State<UserNameFormField> {
         },
         validator: (userName) {
           if(userName.isEmpty){
-            return "Benutzer darf nicht leer sein";
+            return "Wie möchtest du heißen?";
           }
           if(registrationValidator.userExist){
-            return "Name ist vergeben";
+            return "Name ist leider schon vergeben";
           } else {
             return null;
           }

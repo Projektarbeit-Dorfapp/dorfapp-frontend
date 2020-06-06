@@ -22,7 +22,7 @@ class PasswordResetPage extends StatelessWidget {
                 child: LoginPicture(),
               ),
               Container(
-                height: (MediaQuery.of(context).size.height - safeArea) * 0.1,
+                height: (MediaQuery.of(context).size.height - safeArea) * 0.05,
               ),
               Container(
                 height: 70,

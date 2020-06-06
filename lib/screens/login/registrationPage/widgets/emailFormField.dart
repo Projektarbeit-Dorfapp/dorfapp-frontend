@@ -35,10 +35,10 @@ class _EmailFormFieldState extends State<EmailFormField> {
         },
         validator: (emailValue) {
           if (emailValue.isEmpty) {
-            return "Bitte eine Emailadresse angeben";
+            return "Es fehlt noch deine E-Mail";
           }
           if (registrationValidator.emailExist) {
-            return "Emailadresse wird bereits genutzt";
+            return "Deine E-Mail wird bereits genutzt";
           }
           if (!regex.hasMatch(registrationValidator.currentEmail))
             return "Emailadresse nicht korrekt";

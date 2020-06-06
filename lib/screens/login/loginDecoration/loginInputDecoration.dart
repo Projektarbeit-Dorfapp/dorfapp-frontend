@@ -10,14 +10,19 @@ class LoginInputDecoration {
 
   InputDecoration decorate() {
     return InputDecoration(
+
         contentPadding: contentPadding != null ? EdgeInsets.only(right: contentPadding) : null,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+
+        enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(width: 1, color: Colors.black38),
         ),
+
+        /*
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(width: 2, color: Colors.red)),
+
+         */
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(width: 2, color: Colors.red)),

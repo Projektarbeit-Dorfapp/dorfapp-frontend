@@ -1,3 +1,4 @@
+import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/auth/authentification.dart';
 import 'package:flushbar/flushbar.dart';
@@ -22,9 +23,11 @@ class ResetButton extends StatelessWidget {
             if(_formKey.currentState.validate()){
               final auth = Provider.of<Authentication>(context, listen: false);
               final accessHandler = Provider.of<AccessHandler>(context, listen: false);
+              Navigator.of(context).push(LoadingOverlay());
               await auth.sendPasswordResetEmail(accessHandler.currentEmail).then((value){
+                Navigator.of(context).pop();
                 Flushbar(
-                  message: "Wir haben dir eine E-mail gesendet. Dort kannst du dann ein neues Passwort auswählen",
+                  message: "Wir haben dir eine E-mail gesendet. Dort kannst du dann ein neues Passwort einrichten",
                   maxWidth: MediaQuery.of(context).size.width * 0.7,
                   icon: Icon(Icons.error_outline, color: Colors.yellow,),
                   duration: Duration(seconds: 5),
@@ -32,6 +35,7 @@ class ResetButton extends StatelessWidget {
                 )..show(context);
                 accessHandler.clear();
               }).catchError((onError){
+                Navigator.of(context).pop();
                 accessHandler.emailResetValidationError();
                 _formKey.currentState.validate();
                 accessHandler.emailResetValidationError();

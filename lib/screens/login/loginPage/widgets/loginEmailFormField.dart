@@ -36,13 +36,13 @@ class _LoginEmailFormFieldState extends State<LoginEmailFormField> {
             },
             validator: (email){
               if(email.isEmpty){
-                return "Bitte E-Mail angeben";
+                return "Du musst noch deine E-Mail angeben";
               }
               if(accessHandler.isLoginValidationFailed){
-                return "E-Mail oder Passwort inkorrekt";
+                return "E-Mail oder Passwort ist falsch";
               }
               if(accessHandler.isEmailResetValidationFailed){
-                return "Die angegebene E-Mail ist inkorrekt";
+                return "Die E-Mail ist nicht richtig";
               }
               return null;
             },
