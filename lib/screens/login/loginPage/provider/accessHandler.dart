@@ -10,6 +10,7 @@ class AccessHandler extends ChangeNotifier{
   String _currentLoginPassword = "";
   bool _isLoginValidationFailed = false;
   bool _isEmailResetValidationFailed = false;
+
   get uid => _uid;
   get isLoginValidationFailed => _isLoginValidationFailed;
   get isEmailResetValidationFailed => _isEmailResetValidationFailed;
@@ -26,8 +27,8 @@ class AccessHandler extends ChangeNotifier{
     _logout.call();
   }
   ///shows homePage, calling this method does not login the user, it will only
-  ///show the defined homePage. Make sure, that the user is successfully logged
-  ///in when calling this method
+  ///show the defined homePage. Use [Authentication] class and [userSignIn] function
+  ///to actually sign in user, then call [login].
   login(){
     _login.call();
   }
