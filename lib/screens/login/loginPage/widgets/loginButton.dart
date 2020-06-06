@@ -45,11 +45,7 @@ class LoginButton extends StatelessWidget {
     try{
       await InternetAddress.lookup("example.com");
     } on SocketException catch(_){
-      Flushbar(
-        icon: Icon(Icons.error_outline, color: Colors.yellow,),
-        message: "Du hast leider kein Internet",
-        duration: Duration(seconds: 3),
-      )..show(context);
+      _showNoConnectionMessage(context);
       return;
     }
     if (_formKey.currentState.validate()) {
@@ -80,5 +76,12 @@ class LoginButton extends StatelessWidget {
     accessHandler.loginValidationError();
     _formKey.currentState.validate();
     accessHandler.loginValidationError();
+  }
+  _showNoConnectionMessage(BuildContext context){
+    Flushbar(
+      icon: Icon(Icons.error_outline, color: Colors.yellow,),
+      message: "Du hast leider kein Internet",
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 }

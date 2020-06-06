@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/registrationPage/provider/registrationValidator.dart';
 import 'package:dorf_app/services/auth/authentification.dart';
@@ -40,6 +42,9 @@ class RegistrationButton extends StatelessWidget {
     final validator =
       Provider.of<RegistrationValidator>(context, listen: false);
 
+    if( await _isConnected(context) == false)
+      return;
+
     Navigator.of(context).push(LoadingOverlay());
     await validator.validateUserName();
     await validator.validateEmail();
@@ -57,15 +62,31 @@ class RegistrationButton extends StatelessWidget {
       }).catchError((e) {
         print(e);
         Navigator.of(context).pop();
-        Flushbar(
-          message: "Etwas ist leider schief gelaufen, versuche es später erneuert",
-          maxWidth: MediaQuery.of(context).size.width * 0.7,
-          icon: Icon(Icons.error_outline, color: Colors.yellow,),
-          duration: Duration(seconds: 5),
-          flushbarPosition: FlushbarPosition.TOP,
-        )..show(context);
+        _showErrorMessage(context);
       });
     }
     Navigator.pop(context, "success");
+  }
+  Future<bool> _isConnected(BuildContext context) async{
+    try{
+      await InternetAddress.lookup("example.com");
+      return true;
+    } on SocketException catch(_){
+      Flushbar(
+        icon: Icon(Icons.error_outline, color: Colors.yellow,),
+        message: "Du hast leider kein Internet",
+        duration: Duration(seconds: 3),
+      )..show(context);
+      return false;
+    }
+  }
+  _showErrorMessage(BuildContext context){
+    Flushbar(
+      message: "Etwas ist leider schief gelaufen, versuche es später erneuert",
+      maxWidth: MediaQuery.of(context).size.width * 0.7,
+      icon: Icon(Icons.error_outline, color: Colors.yellow,),
+      duration: Duration(seconds: 5),
+      flushbarPosition: FlushbarPosition.TOP,
+    )..show(context);
   }
 }

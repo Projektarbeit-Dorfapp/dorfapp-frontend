@@ -26,19 +26,11 @@ class ResetButton extends StatelessWidget {
               Navigator.of(context).push(LoadingOverlay());
               await auth.sendPasswordResetEmail(accessHandler.currentEmail).then((value){
                 Navigator.of(context).pop();
-                Flushbar(
-                  message: "Wir haben dir eine E-mail gesendet. Dort kannst du dann ein neues Passwort einrichten",
-                  maxWidth: MediaQuery.of(context).size.width * 0.7,
-                  icon: Icon(Icons.error_outline, color: Colors.yellow,),
-                  duration: Duration(seconds: 5),
-                  flushbarPosition: FlushbarPosition.TOP,
-                )..show(context);
+                _showSuccessMessage(context);
                 accessHandler.clear();
               }).catchError((onError){
                 Navigator.of(context).pop();
-                accessHandler.emailResetValidationError();
-                _formKey.currentState.validate();
-                accessHandler.emailResetValidationError();
+                _showErrorMessage(accessHandler);
               });
             }
         },
@@ -57,5 +49,19 @@ class ResetButton extends StatelessWidget {
         ),
       ),
     );
+  }
+  _showErrorMessage(AccessHandler accessHandler){
+    accessHandler.emailResetValidationError();
+    _formKey.currentState.validate();
+    accessHandler.emailResetValidationError();
+  }
+  _showSuccessMessage(BuildContext context){
+    Flushbar(
+      message: "Wir haben dir eine E-Mail gesendet. Dort kannst du dann ein neues Passwort einrichten",
+      maxWidth: MediaQuery.of(context).size.width * 0.7,
+      icon: Icon(Icons.error_outline, color: Colors.yellow,),
+      duration: Duration(seconds: 5),
+      flushbarPosition: FlushbarPosition.TOP,
+    )..show(context);
   }
 }

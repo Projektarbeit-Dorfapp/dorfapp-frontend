@@ -51,19 +51,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
       create: (context) => RegistrationValidator(),
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  height: safeArea,
-                ),
-                Container(
-                  height: pictureScreenHeight,
-                  child: LoginPicture(),
-                ),
-                Container(
+          child: Column(
+
+            children: <Widget>[
+              Container(
+                height: safeArea,
+              ),
+              Container(
+                height: pictureScreenHeight,
+                child: LoginPicture(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+                child: Container(
                   height: 310,
                   width: MediaQuery.of(context).size.width,
                   child: Form(
@@ -109,16 +109,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                   ),
                 ),
-                Container(
-                  height: (MediaQuery.of(context).size.height - safeArea) * 0.05,
-                ),
-                RegistrationButton(_formKey),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                  child: AccountExistText(),
-                ),
-              ],
-            ),
+              ),
+              Container(
+                height: (MediaQuery.of(context).size.height - safeArea) * 0.05,
+              ),
+              RegistrationButton(_formKey),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: AccountExistText(),
+              ),
+            ],
           ),
         ),
       ),
