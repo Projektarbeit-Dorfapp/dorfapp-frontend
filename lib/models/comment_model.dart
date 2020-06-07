@@ -10,5 +10,4 @@ class Comment{
 
   Comment({this.id, this.content, this.user, this.creationDate});
 
-
 }

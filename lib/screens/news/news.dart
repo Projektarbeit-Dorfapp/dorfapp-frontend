@@ -1,3 +1,4 @@
+import 'package:dorf_app/screens/news_edit/news_edit.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/screens/news/widgets/news_card.dart';
 import 'package:dorf_app/screens/news/widgets/search_bar.dart';
@@ -12,8 +13,8 @@ class News extends StatelessWidget {
   final _newsService = new NewsService();
 
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
+    return Scaffold(
+      body: Column(
         children: <Widget>[
           SearchBar(),
           FutureBuilder(
@@ -54,6 +55,16 @@ class News extends StatelessWidget {
             },
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewsEdit()));
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
       ),
     );
   }

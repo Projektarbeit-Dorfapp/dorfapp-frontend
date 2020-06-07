@@ -2,14 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 
-//Kilian Berthold & Meike Nedwidek
-class NewsService {
-  CollectionReference _newsCollectionReference =
-      Firestore.instance.collection('Veranstaltung');
 
-  NewsService() {
-    getAllNews();
-  }
+class NewsService {
+  CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
+  
+   void insertNews(NewsModel news) async {
+     DocumentReference ref = await _newsCollectionReference
+         .add({
+       'title': news.title,
+       'description': news.description,
+       'startTime': news.startTime,
+       'endTime': news.endTime,
+       'createdAt': DateTime.now(),
+       'address': news.address,
+     });
+   }
+
 
   Future<NewsModel> getNews(String newsID) async {
     NewsModel newsModel;
@@ -62,7 +70,6 @@ class NewsService {
     }
     return news;
   }
-
   Address convertSnapshotToAddress(DocumentSnapshot ds) {
     Address address;
     if (ds.data['address'] != null) {
