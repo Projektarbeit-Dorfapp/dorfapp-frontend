@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  intl: ^0.15.7
 
   cloud_firestore:
   firebase_auth: ^0.16.0
@@ -67,7 +68,6 @@ flutter:
       fonts:
         - asset: fonts/Raleway-Regular.ttf
         - asset: fonts/Raleway-Thin.ttf
-
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
