@@ -10,7 +10,6 @@ class RegistrationValidator extends ChangeNotifier{
   String _currentUserName = "";
   String _currentEmail = "";
   String _currentPassword = "";
-
   get userExist => _userExist;
   get emailExist => _emailExist;
   get currentEmail => _currentEmail;
@@ -33,10 +32,10 @@ class RegistrationValidator extends ChangeNotifier{
     _currentUserName = userName;
   }
   setEmail(String email){
-    _currentEmail = email;
+    _currentEmail = email.trim();
   }
   setPassword(String password){
-    _currentPassword = password;
+    _currentPassword = password.trim();
   }
   ///creates User object and saves into user collection as document
   createUser(String uid) async{

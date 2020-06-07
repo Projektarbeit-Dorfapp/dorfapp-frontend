@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+///Matthias Maxelon
 class User extends ChangeNotifier {
   String uid;
   bool admin;
