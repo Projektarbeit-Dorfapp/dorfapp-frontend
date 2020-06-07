@@ -1,11 +1,13 @@
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/screens/news/news.dart';
 import 'package:dorf_app/screens/news/news.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-
   State<StatefulWidget> createState() {
     return _HomeState();
   }
@@ -14,15 +16,33 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 1;
   final List<Widget> _children = [
-    Calendar('Calendar'),
-    News('News'),
-    Forum('Forum'),
+    Calendar(),
+    News(),
+    Forum(),
   ];
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-//        leading: Icon(Icons.location_city),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: (){
+              final accessHandler =
+                Provider.of<AccessHandler>(context, listen: false);
+              accessHandler.logout();
+            },
+            child: Text(
+              "Ausloggen",
+              style: TextStyle(
+                color: Colors.white
+              ),
+            ),
+          ),
+        ],
         title: Text('Dorf App'),
         centerTitle: true,
       ),
