@@ -5,21 +5,28 @@ import 'package:flutter/material.dart';
 class DateComment extends StatelessWidget {
 
   final DateTime datetime;
+  final Color color;
 
-  const DateComment(this.datetime);
+  const DateComment(this.datetime, this.color);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       _getDateDifference(),
       style: TextStyle(
-          fontSize: 12.0
+          fontSize: 12.0,
+          color: this.color
       ),
     );
   }
 
   _getDateDifference(){
     DateTime curDatetime = DateTime.now();
+
+    if (this.datetime == null) {
+      return '-';
+    }
+
     Duration dateDiff = this.datetime.difference(curDatetime);
 
     if (dateDiff.inSeconds <= 59) {
