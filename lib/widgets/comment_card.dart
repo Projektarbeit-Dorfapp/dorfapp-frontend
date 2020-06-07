@@ -31,7 +31,7 @@ class CommentCard extends StatelessWidget{
             padding: EdgeInsets.all(15.0),
             width: MediaQuery.of(context).size.width - 100,
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFE6E6E6),
                 borderRadius: BorderRadius.circular(10.0)
             ),
             child: Column(
@@ -45,7 +45,8 @@ class CommentCard extends StatelessWidget{
                         style: TextStyle(
                             fontFamily: 'Raleway',
                             fontWeight: FontWeight.bold,
-                            fontSize: 16
+                            fontSize: 16,
+                            color: Colors.black
                         ),
                       ),
                       Expanded(

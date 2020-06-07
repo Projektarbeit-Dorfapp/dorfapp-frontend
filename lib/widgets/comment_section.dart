@@ -8,7 +8,8 @@ import 'package:flutter/rendering.dart';
 //Meike Nedwidek
 class CommentSection extends StatefulWidget {
 
-  List<Comment> commentList;
+  final List<Comment> commentList;
+
   CommentSection(this.commentList);
 
   @override
@@ -49,7 +50,6 @@ class _CommentSectionState extends State<CommentSection> {
     return Container(
       padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 20.0),
       decoration: BoxDecoration(
-          color: Color(0xFFE6E6E6),
           border: Border(
               top: BorderSide(
                   color: Color(0xFF141e3e),
@@ -79,14 +79,47 @@ class _CommentSectionState extends State<CommentSection> {
               ) */
             ),
           ),
-          Container(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: commentList.map((comment) => CommentCard(comment: comment)).toList()
-            ),
-          ),
+          Column(
+            children: <Widget>[
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: commentList.length > 0 ? commentList.map((comment) => CommentCard(comment: comment)).toList() : [
+                    _getTextIfCommentListEmpty()
+                  ]
+              ),
+            ],
+          )
         ],
       ),
+    );
+  }
+
+  Container _getTextIfCommentListEmpty(){
+    return Container(
+      margin: EdgeInsets.only(top: 20.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+              Icons.message,
+              color: Colors.grey,
+              size: 80.0
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                'Noch keine Kommentare',
+                style: TextStyle(
+                    fontFamily: 'Raleway',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.grey
+                ),
+              )
+          )
+        ],
+      )
     );
   }
 

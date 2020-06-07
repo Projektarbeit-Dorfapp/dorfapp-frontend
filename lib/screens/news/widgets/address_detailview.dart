@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 //Meike Nedwidek
 class AddressDetailView extends StatelessWidget {
 
-  Address address;
+  final Address address;
 
   AddressDetailView(this.address);
 

@@ -37,15 +37,18 @@ class TimeDetailView extends StatelessWidget {
   }
 
   _getTime(){
+    DateTime startTime = this.start.toLocal();
+    DateTime endTime = this.end.toLocal();
+
     if (this.start == null && this.end == null) {
       return '-';
     }
     if (this.end == null) {
-      String formattedTime = DateFormat('HH:mm').format(start);
+      String formattedTime = DateFormat('HH:mm').format(startTime);
       return formattedTime;
     }
-    String formattedStartTime = DateFormat('HH:mm').format(start);
-    String formattedEndTime = DateFormat('HH:mm').format(end);
+    String formattedStartTime = DateFormat('HH:mm').format(startTime);
+    String formattedEndTime = DateFormat('HH:mm').format(endTime);
 
     String time = formattedStartTime + ' - ' + formattedEndTime;
     return time;

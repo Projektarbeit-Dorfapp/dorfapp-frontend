@@ -7,7 +7,6 @@ import 'package:dorf_app/screens/news/widgets/time_detailview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/services/news_service.dart';
 
 //Meike Nedwidek
@@ -22,7 +21,6 @@ class NewsDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<NewsModel>(
       future: _newsService.getNews(newsID),
-      initialData: null,
       builder: (context, AsyncSnapshot<NewsModel> snapshot) {
        if (snapshot.hasData) {
           this.newsModel = snapshot.data;
@@ -36,23 +34,8 @@ class NewsDetail extends StatelessWidget {
                   child: ListView(
                     shrinkWrap: true,
                     children: <Widget>[
-                      _getImageStack(),
-                      Container(
-                        padding: EdgeInsets.all(15.0),
-                        margin: EdgeInsets.all(20.0),
-                        decoration: BoxDecoration(
-                            color: Color(0xFF141e3e),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Column(
-                          children: <Widget>[
-                            DateDetailView(newsModel.startTime as DateTime,
-                                newsModel.endTime as DateTime),
-                            TimeDetailView(newsModel.startTime as DateTime,
-                                newsModel.endTime as DateTime),
-                            AddressDetailView(newsModel.address)
-                          ],
-                        ),
-                      ),
+                      _getImageAndTitle(),
+                      _getEventInfo(),
                       Container(
                           padding: EdgeInsets.only(
                               left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
@@ -63,9 +46,10 @@ class NewsDetail extends StatelessWidget {
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16,
                                 color: Colors.black),
-                          )),
-                      Container(child: LikeSection(newsModel.likes)),
-                      Container(child: CommentSection(newsModel.comments))
+                          )
+                      ),
+                      LikeSection(newsModel.likes),
+                      CommentSection(newsModel.comments),
                     ],
                   )
               )
@@ -76,16 +60,8 @@ class NewsDetail extends StatelessWidget {
             body: Container(
               color: Colors.white,
               child: Center(
-                child: Text(
-                  'Lädt...',
-                  style: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontWeight: FontWeight.normal,
-                      fontSize: 40.0,
-                      color: Colors.black
-                  ),
-                ),
-              ),
+                child: CircularProgressIndicator()
+              )
             )
           );
         } else {
@@ -94,7 +70,7 @@ class NewsDetail extends StatelessWidget {
                color: Colors.white,
                child: Center(
                  child: Text(
-                   'keine Daten ....',
+                   'keine Daten ...',
                    style: TextStyle(
                        fontFamily: 'Raleway',
                        fontWeight: FontWeight.normal,
@@ -110,16 +86,16 @@ class NewsDetail extends StatelessWidget {
     );
   }
 
-  _getImageStack() {
+  _getImageAndTitle() {
     if (newsModel.imagePath.isEmpty) {
       return Container(
-          margin: EdgeInsets.only(top: 70.0),
+          margin: EdgeInsets.only(top: 20.0),
           child: Center(
               child: Text(newsModel.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontFamily: 'Raleway',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                       fontSize: 22,
                       color: Colors.black54))));
     }
@@ -153,5 +129,25 @@ class NewsDetail extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Container _getEventInfo() {
+    if (newsModel.isNews == false) {
+      return Container(
+        padding: EdgeInsets.all(15.0),
+        margin: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+            color: Color(0xFF141e3e),
+            borderRadius: BorderRadius.circular(10.0)),
+        child: Column(
+          children: <Widget>[
+            DateDetailView(newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
+            TimeDetailView(newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
+            AddressDetailView(newsModel.address)
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 }

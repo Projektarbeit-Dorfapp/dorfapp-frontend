@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,15 +39,18 @@ class DateDetailView extends StatelessWidget {
   }
 
   _getDate(){
+    DateTime startTime = this.start.toLocal();
+    DateTime endTime = this.end.toLocal();
+
     if (this.start == null && this.end == null) {
       return '-';
     }
     if (this.end == null) {
-      String formattedDate = DateFormat('dd.MM.yyyy').format(start);
+      String formattedDate = DateFormat('dd.MM.yyyy').format(startTime);
       return formattedDate;
     }
-    String formattedStartDate = DateFormat('dd.MM.yyyy').format(start);
-    String formattedEndDate = DateFormat('dd.MM.yyyy').format(end);
+    String formattedStartDate = DateFormat('dd.MM.yyyy').format(startTime);
+    String formattedEndDate = DateFormat('dd.MM.yyyy').format(endTime);
 
     String date = formattedStartDate + ' - ' + formattedEndDate;
     return date;

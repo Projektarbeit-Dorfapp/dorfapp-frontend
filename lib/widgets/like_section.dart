@@ -7,7 +7,7 @@ import 'package:dorf_app/screens/general/like_detail.dart';
 //Meike Nedwidek
 class LikeSection extends StatefulWidget {
 
-  List<User> likeList;
+  final List<User> likeList;
 
   LikeSection(this.likeList);
 
@@ -43,6 +43,7 @@ class _LikeSectionState extends State<LikeSection> {
   String _getNumberOfLikes() {
 
     return likeList.length.toString();
+
   }
 
   @override
