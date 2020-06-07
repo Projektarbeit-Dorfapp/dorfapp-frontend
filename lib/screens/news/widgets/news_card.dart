@@ -1,11 +1,6 @@
-import 'package:dorf_app/models/address_model.dart';
-import 'package:dorf_app/models/comment_model.dart';
-import 'package:dorf_app/models/news_model.dart';
-import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/services/news_service.dart';
 
 class NewsCard extends StatelessWidget {
