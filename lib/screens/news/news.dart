@@ -1,21 +1,42 @@
+import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/screens/news/widgets/news_card.dart';
+import 'package:dorf_app/screens/news/widgets/search_bar.dart';
+import 'package:dorf_app/services/news_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class News extends StatelessWidget {
+  List<NewsModel> news;
 
+  final _newsService = new NewsService();
 
+  test() {
+    this._newsService.getAllNews();
+  }
 
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-       children: <Widget>[
-         NewsCard('News 1', 'Example description','assets/australian-shepherd-2208371_1920.jpg'),
-         NewsCard('News 2', 'Example description', 'assets/azalea-5012549_1920.jpg'),
-         NewsCard('News 3', 'Example description', 'assets/church-4911852_1920.jpg'),
-         NewsCard('News 4', 'Example description', 'assets/australian-shepherd-2208371_1920.jpg'),
-         NewsCard('News 5', 'Example description', 'assets/azalea-5012549_1920.jpg'),
-       ],
+        children: <Widget>[
+          SearchBar(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  NewsCard('Hello1', 'Hello2', 'Hello3'),
+                  FlatButton(
+                    onPressed: () {
+                      test();
+                    },
+                    child: Text("TEst")
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
