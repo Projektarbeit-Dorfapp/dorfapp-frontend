@@ -30,7 +30,6 @@ class _NewsEditState extends State<NewsEdit> {
   DateTime startDateTime = DateTime.now();
   DateTime endDateTime = DateTime.now();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,8 +139,8 @@ class _NewsEditState extends State<NewsEdit> {
                             if (_formKey.currentState.validate()) {
                               news.title = _titleController.text;
                               news.description = _descriptionController.text;
-                              news.startDateTime = new DateTime(startDateTime.year, startDateTime.month, startDateTime.day, startDateTime.hour, startDateTime.minute);
-                              news.endDateTime = new DateTime(endDateTime.year, endDateTime.month, endDateTime.day, endDateTime.hour, endDateTime.minute);
+                              news.startTime = Timestamp.fromDate(startDateTime);
+                              news.endTime = Timestamp.fromDate(endDateTime);
                               _newsService.insertNews(news);
                             }
                           },

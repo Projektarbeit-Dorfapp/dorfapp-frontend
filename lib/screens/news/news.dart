@@ -13,8 +13,8 @@ class News extends StatelessWidget {
   final _newsService = new NewsService();
 
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
+    return Scaffold(
+      body: Column(
         children: <Widget>[
           SearchBar(),
           FutureBuilder(
@@ -55,6 +55,16 @@ class News extends StatelessWidget {
             },
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewsEdit()));
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
       ),
     );
   }

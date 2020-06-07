@@ -6,16 +6,18 @@ import 'package:dorf_app/models/news_model.dart';
 class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
   
-   void insertNews(NewsModel news) async{
-    DocumentReference ref = await _newsCollectionReference
-        .add({
-      'title': news.title,
-      'description': news.description,
-      'startTime': news.startDateTime,
-      'endTime': news.endDateTime,
-      'createdAt': DateTime.now(),
-      'address': news.address,
-    });
+   void insertNews(NewsModel news) async {
+     DocumentReference ref = await _newsCollectionReference
+         .add({
+       'title': news.title,
+       'description': news.description,
+       'startTime': news.startTime,
+       'endTime': news.endTime,
+       'createdAt': DateTime.now(),
+       'address': news.address,
+     });
+   }
+
 
   Future<NewsModel> getNews(String newsID) async {
     NewsModel newsModel;
@@ -68,7 +70,6 @@ class NewsService {
     }
     return news;
   }
-
   Address convertSnapshotToAddress(DocumentSnapshot ds) {
     Address address;
     if (ds.data['address'] != null) {
