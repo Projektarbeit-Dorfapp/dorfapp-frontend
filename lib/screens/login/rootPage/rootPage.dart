@@ -2,7 +2,7 @@
 import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentification.dart';
+import 'package:dorf_app/services/auth/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +35,7 @@ class _RootPageState extends State<RootPage> {
     });
   }
   initiateCallbacks(){
-    _accessHandler.initCallbacks(loginCallback, logoutCallback);
+    _accessHandler.initCallbacks(loginCallback, logoutCallback, _userID);
   }
   void loginCallback(){
     _auth.getCurrentUser().then((user) {
@@ -48,12 +48,13 @@ class _RootPageState extends State<RootPage> {
       _currentStatus = AuthStatus.LOGGED_IN;
     });
   }
-  void logoutCallback() {
+  void logoutCallback(){
     setState(() {
-      _currentStatus = AuthStatus.NOT_LOGGED_IN;
       _userID = "";
       _accessHandler.setUID(_userID);
-      _auth.userSignOut();
+      _auth.userSignOut().then((value){
+        _currentStatus = AuthStatus.NOT_LOGGED_IN;
+      });
     });
   }
   @override

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentification.dart';
+import 'package:dorf_app/services/auth/authentication.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,10 +52,11 @@ class LoginButton extends StatelessWidget {
       final accessHandler = Provider.of<AccessHandler>(context, listen: false);
       final auth = Provider.of<Authentication>(context, listen: false);
       Navigator.of(context).push(LoadingOverlay());
-      auth.userSignIn(accessHandler.currentEmail, accessHandler.currentPassword)
+      await auth.userSignIn(accessHandler.currentEmail, accessHandler.currentPassword)
           .then((value) {
-        _showHomePage(accessHandler);
         Navigator.of(context).pop();
+        _showHomePage(accessHandler);
+
       }).catchError((error) {
         _showErrorWarning(accessHandler);
         Navigator.of(context).pop();

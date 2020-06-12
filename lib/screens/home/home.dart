@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         actions: <Widget>[
           GestureDetector(
@@ -46,6 +47,8 @@ class _HomeState extends State<Home> {
         title: Text('Dorf App'),
         centerTitle: true,
       ),
+
+
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
