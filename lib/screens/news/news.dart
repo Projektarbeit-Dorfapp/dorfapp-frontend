@@ -8,7 +8,7 @@ import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
 class News extends StatelessWidget {
-    List<NewsModel> news;
+  List<NewsModel> news;
 
   final _newsService = new NewsService();
 
@@ -31,35 +31,44 @@ class News extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Clock(),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.0), child: Clock()),
                           Spacer(),
                           UserAvatar(safeAreaHeight),
                         ],
                       ),
-                      DateTimeDisplay(),
+                      Padding( padding: EdgeInsets.only(left: 10.0), child: DateTimeDisplay()),
                     ],
                   ),
                 ),
               ),
             ),
             SliverToBoxAdapter(
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      "Deine ",
-                      style: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Raleway'),
-                    ),
-                    Icon(Icons.pin_drop,
-                      color: Colors.blueGrey,
-                      size: 16,),
-                  ],
-
+              child: Padding(
+                padding: EdgeInsets.only(right: 10.0),
+                child: Container(
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        "Deine ",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blueGrey,
+                            fontFamily: 'Raleway'),
+                      ),
+                      Icon(
+                        Icons.pin_drop,
+                        color: Colors.blueGrey,
+                        size: 16,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
+
             ///Gepinnte Karte
             SliverToBoxAdapter(
               child: Container(
@@ -82,7 +91,11 @@ class News extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.all(10),
                               child: Center(
-                                child: Text("Philcard", style: TextStyle(fontSize: 30, color: Colors.white),),
+                                child: Text(
+                                  "Philcard",
+                                  style: TextStyle(
+                                      fontSize: 30, color: Colors.white),
+                                ),
                               ),
                             ),
                           ),
@@ -96,55 +109,64 @@ class News extends StatelessWidget {
               ),
             ),
             SliverToBoxAdapter(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "Neuigkeiten auf einem Blick",
-                  style: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: "Raleway"),
+              child: Padding(
+                padding: EdgeInsets.only(right: 10.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "Neuigkeiten auf einem Blick",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blueGrey,
+                        fontFamily: "Raleway"),
+                  ),
                 ),
               ),
             ),
+
             ///Neuigkeiten
             SliverList(
               delegate:
-              SliverChildBuilderDelegate((BuildContext context, int index) {
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
                 return FutureBuilder(
-            future: _newsService.getAllNews(),
-            builder: (context, AsyncSnapshot<List<NewsModel>> snapshot) {
-              if (snapshot.hasData) {
-                this.news = snapshot.data;
-                return SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: 
-                          news.length > 0 ? news.map<Widget>((newsModel) => prepareNewsCards(newsModel)).toList() : [_getTextIfNewsListEmpty()]
-                      )
-                    ]
-                  ),
+                  future: _newsService.getAllNews(),
+                  builder: (context, AsyncSnapshot<List<NewsModel>> snapshot) {
+                    if (snapshot.hasData) {
+                      this.news = snapshot.data;
+                      return SingleChildScrollView(
+                        child: Column(children: <Widget>[
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: news.length > 0
+                                  ? news
+                                      .map<Widget>((newsModel) =>
+                                          prepareNewsCards(newsModel))
+                                      .toList()
+                                  : [_getTextIfNewsListEmpty()])
+                        ]),
+                      );
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Container(
+                          color: Colors.white,
+                          child: Center(child: CircularProgressIndicator()));
+                    } else {
+                      return Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: Text(
+                            'keine Daten ...',
+                            style: TextStyle(
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.normal,
+                                fontSize: 40.0,
+                                color: Colors.black),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                    color: Colors.white,
-                    child: Center(child: CircularProgressIndicator()));
-              } else {
-                return Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: Text(
-                      'keine Daten ...',
-                      style: TextStyle(
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.normal,
-                          fontSize: 40.0,
-                          color: Colors.black),
-                    ),
-                  ),
-                );
-              }
-            },
-          );
               }, childCount: 1),
             ),
           ],
@@ -152,8 +174,10 @@ class News extends StatelessWidget {
       ),
     );
   }
-    prepareNewsCards(NewsModel newsModel) {
-    return new NewsCard(newsModel.id, newsModel.title, newsModel.description, newsModel.imagePath, newsModel.createdAt);
+
+  prepareNewsCards(NewsModel newsModel) {
+    return new NewsCard(newsModel.id, newsModel.title, newsModel.description,
+        newsModel.imagePath, newsModel.createdAt);
   }
 
   Container _getTextIfNewsListEmpty() {
@@ -173,10 +197,7 @@ class News extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         color: Colors.grey),
-                  )
-                )
-            ]
-          )
-        );
+                  ))
+            ]));
   }
 }
