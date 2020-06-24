@@ -19,7 +19,7 @@ class NewsModel{
   Timestamp createdAt;
   Timestamp modifiedAt;
 
-  NewsModel({this.id, this.title, this.description, this.startTime, this.endTime, this.address, this.imagePath, this.likes, this.comments, this.isNews, this.createdAt, this.modifiedAt});
+  NewsModel({this.id, this.title, this.description, this.startTime, this.endTime, this.address, this.imagePath, this.likes, this.comments, this.isNews = false, this.createdAt, this.modifiedAt});
 
   DateTime convertTimestamp(Timestamp timestamp) {
     if (timestamp != null) return DateTime.parse(timestamp.toDate().toString());
