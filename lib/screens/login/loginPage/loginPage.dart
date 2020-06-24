@@ -17,17 +17,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
    FocusNode _focusNode;
    bool _hidePassword = true;
+
   @override
   void initState() {
     _focusNode = FocusNode();
     super.initState();
   }
+
   @override
   void dispose() {
     _focusNode.dispose();
     super.dispose();
   }
+
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     double _safeArea = MediaQuery.of(context).padding.top;
@@ -114,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
 class LoadingOverlay extends ModalRoute<void> {
   @override
   Duration get transitionDuration => Duration(milliseconds: 150);

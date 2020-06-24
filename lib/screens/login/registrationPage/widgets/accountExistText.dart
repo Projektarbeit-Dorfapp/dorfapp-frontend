@@ -18,6 +18,6 @@ class AccountExistText extends StatelessWidget {
               fontFamily: "Raleway"
           ),),
       ),
-    );;
+    );
   }
 }

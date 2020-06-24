@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 ///Matthias Maxelon
 class LoginButton extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
+
   LoginButton(this._formKey);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,9 +32,7 @@ class LoginButton extends StatelessWidget {
           child: Text(
             "Anmelden",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-            fontFamily: "Raleway"),
+                color: Colors.white, fontSize: 30, fontFamily: "Raleway"),
           ),
         ),
       ),
@@ -42,9 +42,9 @@ class LoginButton extends StatelessWidget {
   ///tries to login user, if error, show error message,
   ///if successful show homePage
   _tryLogin(BuildContext context) async {
-    try{
+    try {
       await InternetAddress.lookup("example.com");
-    } on SocketException catch(_){
+    } on SocketException catch (_) {
       _showNoConnectionMessage(context);
       return;
     }
@@ -52,7 +52,8 @@ class LoginButton extends StatelessWidget {
       final accessHandler = Provider.of<AccessHandler>(context, listen: false);
       final auth = Provider.of<Authentication>(context, listen: false);
       Navigator.of(context).push(LoadingOverlay());
-      auth.userSignIn(accessHandler.currentEmail, accessHandler.currentPassword)
+      auth
+          .userSignIn(accessHandler.currentEmail, accessHandler.currentPassword)
           .then((value) {
         _showHomePage(accessHandler);
         Navigator.of(context).pop();
@@ -62,11 +63,13 @@ class LoginButton extends StatelessWidget {
       });
     }
   }
+
   ///Show defined homePage when userSignIn was successful
   _showHomePage(AccessHandler accessHandler) {
     accessHandler.login();
     accessHandler.clear();
   }
+
   ///When userSignIn throws an exception, the [accessHandler] validationError will
   ///be set to true and another validate() call will show error messages on
   ///each TextFormField connected to the [_formKey]. After the validation() process
@@ -77,7 +80,8 @@ class LoginButton extends StatelessWidget {
     _formKey.currentState.validate();
     accessHandler.loginValidationError();
   }
-  _showNoConnectionMessage(BuildContext context){
+
+  _showNoConnectionMessage(BuildContext context) {
     Flushbar(
       icon: Icon(Icons.error_outline, color: Color(0xFF548c58)),
       message: "Du hast leider kein Internet",

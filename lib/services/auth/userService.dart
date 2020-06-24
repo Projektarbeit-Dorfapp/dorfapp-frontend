@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
 class UserService extends ChangeNotifier{
+
   final CollectionReference _ref = Firestore.instance.collection("User");
+
   ///Checks in database if userName already exist in user collection
   Future<bool> validateUser(String userName) async{
    QuerySnapshot snapshot = await _ref
@@ -16,6 +18,7 @@ class UserService extends ChangeNotifier{
      return true;
    }
   }
+
   ///Checks in database if email already exist in user collection
   Future<bool> validateEmail(String email) async{
     QuerySnapshot snapshot = await _ref
@@ -27,8 +30,21 @@ class UserService extends ChangeNotifier{
       return true;
     }
   }
+
   ///add User into user collection as document
   Future<void> insertUser(User user) async{
     await _ref.document().setData(user.toJson());
   }
+
+  ///check if user is admin
+  Future<bool> checkIfAdmin(String userID) async {
+    bool isAdmin;
+    await _ref.where("uid", isEqualTo: userID)
+        .getDocuments().then((dataSnapshot) {
+          var document = dataSnapshot.documents.first;
+          isAdmin = document != null ? document.data['admin'] : false;
+    });
+      return isAdmin;
+  }
+
 }

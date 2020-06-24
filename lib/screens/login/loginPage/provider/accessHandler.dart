@@ -1,3 +1,4 @@
+import 'package:dorf_app/services/auth/authentification.dart';
 import 'package:flutter/material.dart';
 
 class AccessHandler extends ChangeNotifier{
@@ -8,6 +9,7 @@ class AccessHandler extends ChangeNotifier{
 
   String _currentLoginEmail = "";
   String _currentLoginPassword = "";
+  bool _isAdmin = false;
   bool _isLoginValidationFailed = false;
   bool _isEmailResetValidationFailed = false;
 
@@ -20,8 +22,31 @@ class AccessHandler extends ChangeNotifier{
   ///sets user ID, this method is called from logout and login Callback function
   ///inside rootPage. Each login() and logout() call will set user ID to _uid
   setUID(String uid){
-    _uid = uid;
+    this._uid = uid;
   }
+
+  ///retrieves the stored user ID or loads it from the database if it's empty
+  getUID() {
+    if ( this._uid == null) {
+      this._uid = getUIDFromDatabase();
+      final Authentication _auth = Authentication();
+      _auth.getCurrentUser().then((test) {
+        this._uid = test.uid;
+      });
+      return this._uid;
+    } else {
+      return this._uid;
+    }
+  }
+
+  setIsAdmin(bool isAdmin) {
+    this._isAdmin = isAdmin;
+  }
+
+  getIsAdmin() {
+    return this._isAdmin;
+  }
+
   ///forces user to log out and show loginPage
   logout(){
     _logout.call();
@@ -65,6 +90,10 @@ class AccessHandler extends ChangeNotifier{
   ///fail and the user will see an error message on Form fields
   emailResetValidationError(){
     _isEmailResetValidationFailed = !_isEmailResetValidationFailed;
+  }
+
+  getUIDFromDatabase() {
+
   }
 
 }

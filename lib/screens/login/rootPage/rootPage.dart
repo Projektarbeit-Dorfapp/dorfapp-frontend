@@ -4,6 +4,7 @@ import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/auth/authentification.dart';
+import 'package:dorf_app/services/auth/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,8 @@ class _RootPageState extends State<RootPage> {
   AuthStatus _currentStatus = AuthStatus.NOT_LOGGED_IN;
   Authentication _auth;
   AccessHandler _accessHandler;
+  final _userService = UserService();
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +46,9 @@ class _RootPageState extends State<RootPage> {
       setState(() {
           _userID = user.uid;
           _accessHandler.setUID(_userID);
+          _userService.checkIfAdmin(_userID).then((isAdmin) {
+            _accessHandler.setIsAdmin(isAdmin);
+          });
       });
     });
     setState(() {
@@ -65,7 +71,6 @@ class _RootPageState extends State<RootPage> {
       return LoginPage();
     } else if (_currentStatus == AuthStatus.LOGGED_IN){
       if(_userID.length > 0 && _userID != null){
-        print(_userID);
         return Home(PageIndexes.NEWSINDEX);
       } else {
         return _getLoadingIndicator();
