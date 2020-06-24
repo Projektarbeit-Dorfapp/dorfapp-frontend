@@ -9,9 +9,9 @@ final ThemeData basicTheme = new ThemeData(
   primarySwatch: Colors.blue,
   fontFamily: 'Georgia',
   textTheme: TextTheme(
-    headline1: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
-    headline2: TextStyle(fontSize: 30),
-    bodyText1: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
-    bodyText2: TextStyle(fontSize: 10, fontFamily: 'Hind'),
+    headline1: TextStyle(fontFamily: 'Raleway', fontSize: 60, fontWeight: FontWeight.bold),
+    headline2: TextStyle(fontFamily: 'Raleway', fontSize: 30),
+    bodyText1: TextStyle(fontFamily: 'Raleway', fontSize: 20, fontStyle: FontStyle.italic),
+    bodyText2: TextStyle(fontFamily: 'Raleway', fontSize: 10),
   ),
 );

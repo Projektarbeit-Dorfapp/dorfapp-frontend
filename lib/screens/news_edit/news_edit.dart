@@ -15,6 +15,10 @@ import 'package:intl/intl.dart';
 //Hannes Hauenstein
 
 class NewsEdit extends StatefulWidget {
+
+  final String newsID;
+  const NewsEdit([this.newsID]);
+
   @override
   _NewsEditState createState() => _NewsEditState();
 }
@@ -32,6 +36,7 @@ class _NewsEditState extends State<NewsEdit> {
   NewsModel news = new NewsModel();
   Address address = new Address();
 
+
   File _image;
   String _uploadedFileURL;
   final f = new DateFormat('dd.MM.yyyy HH:mm');
@@ -43,6 +48,7 @@ class _NewsEditState extends State<NewsEdit> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        backgroundColor: Color(0xFF6178a3),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -106,11 +112,9 @@ class _NewsEditState extends State<NewsEdit> {
                         },
                         trailing: Icon(Icons.keyboard_arrow_down),
                       ),
-
                     ],
                   ),
                 ),
-//
                 Container(
                   padding: const EdgeInsets.all(20),
                   child: Form(
@@ -202,25 +206,8 @@ class _NewsEditState extends State<NewsEdit> {
                             }
                             return null;
                           },
-                        ),
-                        RaisedButton(
-                          child: Text('Erstellen'),
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              news.title = _titleController.text;
-                              news.description = _descriptionController.text;
-                              address.district = _districtController.text;
-                              address.houseNumber = _houseNumberController.text;
-                              address.street = _streetController.text;
-                              address.zipCode = _zipCodeController.text;
-                              news.address = address;
-                              news.startTime = Timestamp.fromDate(startDateTime);
-                              news.endTime = Timestamp.fromDate(endDateTime);
-                              news.imagePath = _uploadedFileURL;
-                              _newsService.insertNews(news);
-                            }
-                          },
-                        )
+                        ),                        
+                        _addNewsButton(widget.newsID),
                       ],
                     ),
                   ),
@@ -256,5 +243,46 @@ class _NewsEditState extends State<NewsEdit> {
   }
 
 
-
+  RaisedButton _addNewsButton(String newsID) {
+    if (newsID != null){
+      return RaisedButton(
+        child: Text('Aktualisieren'),
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+            news.title = _titleController.text;
+            news.description = _descriptionController.text;
+            address.district = _districtController.text;
+            address.houseNumber = _houseNumberController.text;
+            address.street = _streetController.text;
+            address.zipCode = _zipCodeController.text;
+            news.address = address;
+            news.startTime = Timestamp.fromDate(startDateTime);
+            news.endTime = Timestamp.fromDate(endDateTime);
+            news.imagePath = _uploadedFileURL;
+            _newsService.insertNews(news);
+          }
+        },
+      );
+    }
+    else {
+      return RaisedButton(
+        child: Text('Erstellen'),
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+            news.title = _titleController.text;
+            news.description = _descriptionController.text;
+            address.district = _districtController.text;
+            address.houseNumber = _houseNumberController.text;
+            address.street = _streetController.text;
+            address.zipCode = _zipCodeController.text;
+            news.address = address;
+            news.startTime = Timestamp.fromDate(startDateTime);
+            news.endTime = Timestamp.fromDate(endDateTime);
+            news.imagePath = _uploadedFileURL;
+            _newsService.insertNews(news);
+          }
+        },
+      );
+    }
+  }
 }

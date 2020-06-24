@@ -35,7 +35,7 @@ class NewsCard extends StatelessWidget {
                 height: 125,
                 margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
                 decoration: BoxDecoration(
-                  color: Color(0xff0b2566),
+                  color: Color(0xFF141e3e),
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -45,11 +45,12 @@ class NewsCard extends StatelessWidget {
                   children: <Widget>[
                     Container(
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 10.0),
+                        padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 10.0),
                         child: Text(
                           this.newsCard.title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
+                              fontFamily: 'Raleway',
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
@@ -58,11 +59,11 @@ class NewsCard extends StatelessWidget {
                     ),
                     Container(
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0.0),
+                        padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0.0),
                         child: Text(
                           newsCard.description,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(fontFamily: 'Raleway', fontSize: 14, color: Colors.white),
                         ),
                       ),
                     ),
@@ -71,7 +72,7 @@ class NewsCard extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                           child: DateComment(
                               this
                                   .newsCard
@@ -79,7 +80,7 @@ class NewsCard extends StatelessWidget {
                               Colors.white),
                         ),
                         Container(
-                          padding: EdgeInsets.only(right: 10.0),
+                          padding: EdgeInsets.only(right: 15.0),
                           child: Row(
                             children: <Widget>[
                               Container(

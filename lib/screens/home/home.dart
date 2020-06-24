@@ -1,3 +1,4 @@
+import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
@@ -8,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
+  int _pageIndex;
+  Home(this._pageIndex);
+
   State<StatefulWidget> createState() {
     return _HomeState();
   }
@@ -28,20 +32,20 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF6178a3),
         actions: <Widget>[
-          GestureDetector(
-            onTap: (){
-              final accessHandler =
-                Provider.of<AccessHandler>(context, listen: false);
-              accessHandler.logout();
-            },
-            child: Text(
-              "Ausloggen",
-              style: TextStyle(
-                color: Colors.white
-              ),
+          PopupMenuButton<String> (
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              onSelected: (value) => _choiceAction(value, context),
+              itemBuilder: (BuildContext context) {
+                return MenuButtons.HomePopUpMenu.map((String choice) {
+                  return PopupMenuItem<String> (
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
             ),
-          ),
         ],
         title: Text('Dorf App'),
         centerTitle: true,
@@ -71,5 +75,13 @@ class _HomeState extends State<Home> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  void _choiceAction(String choice, BuildContext context) {
+    if(choice == MenuButtons.LOGOUT){
+      final accessHandler =
+      Provider.of<AccessHandler>(context, listen: false);
+      accessHandler.logout();
+    }
   }
 }

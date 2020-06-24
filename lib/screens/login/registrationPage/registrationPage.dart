@@ -144,11 +144,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if(type == _PasswordType.password){
       return Icon(
           Icons.remove_red_eye,
-          color: _hidePassword ? Colors.black38 : Color(0xff95B531));
+          color: _hidePassword ? Colors.black38 : Color(0xFF548c58));
     } else {
       return Icon(
           Icons.remove_red_eye,
-          color: _hideConfirmedPassword ? Colors.black38 : Color(0xff95B531));
+          color: _hideConfirmedPassword ? Colors.black38 : Color(0xFF548c58));
     }
 
   }
