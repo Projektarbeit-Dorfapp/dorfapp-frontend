@@ -14,7 +14,14 @@ class NewsService {
        'startTime': news.startTime,
        'endTime': news.endTime,
        'createdAt': DateTime.now(),
-       'address': news.address,
+       'address': {
+         'street' : news.address.street,
+         'houseNumber': news.address.houseNumber,
+         'district' : news.address.district,
+         'zipCode' : news.address.zipCode,
+       },
+       'isNews' : news.isNews,
+       'imagePath' : news.imagePath
      });
    }
 
