@@ -1,4 +1,4 @@
-import 'package:dorf_app/services/auth/authentification.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:flutter/material.dart';
 
 class AccessHandler extends ChangeNotifier{
@@ -13,7 +13,7 @@ class AccessHandler extends ChangeNotifier{
   bool _isLoginValidationFailed = false;
   bool _isEmailResetValidationFailed = false;
 
-  get uid => _uid;
+  get userID => _uid;
   get isLoginValidationFailed => _isLoginValidationFailed;
   get isEmailResetValidationFailed => _isEmailResetValidationFailed;
   get currentEmail => _currentLoginEmail;
@@ -59,8 +59,8 @@ class AccessHandler extends ChangeNotifier{
   }
   ///Sets callbacks for login and logout operations from the rootPage.
   ///The rootPage decides if loginPage or user dependent homePage should be loaded.
-  ///Do not call this method outside of rootPage
-  initCallbacks(VoidCallback login, VoidCallback logout){
+  initCallbacks(VoidCallback login, VoidCallback logout, String userID){
+    _uid = userID;
     _login = login;
     _logout = logout;
   }

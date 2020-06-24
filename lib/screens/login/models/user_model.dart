@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
 class User extends ChangeNotifier {
+  String id;
   String uid;
   bool admin;
   bool verificationState;
@@ -34,7 +35,8 @@ class User extends ChangeNotifier {
       this.street,
       this.email});
 
-  User.fromJson(Map snapshot){
+  User.fromJson(Map snapshot, String id){
+    this.id = id;
     admin = snapshot["admin"] ?? false;
     verificationState = snapshot["verificationState"] ?? false;
     userName = snapshot["userName"] ?? "";

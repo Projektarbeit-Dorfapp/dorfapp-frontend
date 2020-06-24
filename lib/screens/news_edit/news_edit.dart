@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dorf_app/screens/news/news_detail.dart';
+import 'package:dorf_app/models/address_model.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,12 +30,18 @@ class _NewsEditState extends State<NewsEdit> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _zipCodeController = TextEditingController();
+  final _houseNumberController = TextEditingController();
+  final _districtController = TextEditingController();
+  final _streetController = TextEditingController();
   final _newsService = NewsService();
 
   NewsModel news = new NewsModel();
+  Address address = new Address();
 
 
   File _image;
+  String _uploadedFileURL;
   final f = new DateFormat('dd.MM.yyyy HH:mm');
   DateTime startDateTime = DateTime.now();
   DateTime endDateTime = DateTime.now();
@@ -153,6 +161,68 @@ class _NewsEditState extends State<NewsEdit> {
                             return null;
                           },
                         ),
+                        Row(
+                          children: <Widget>[
+                            Flexible(
+                              flex: 4,
+                              child: TextFormField(
+                                controller: _streetController,
+                                maxLines: null,
+                                decoration: const InputDecoration(
+                                    hintText: 'Straßennamen eingeben',
+                                    labelText: 'Straßennamen'),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Straßennamen eingeben';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: _houseNumberController,
+                                maxLines: null,
+                                decoration: const InputDecoration(
+                                    hintText: 'Hausnummer eingeben',
+                                    labelText: 'Hausnummer'),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Hausnummer eingeben';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextFormField(
+                          controller: _zipCodeController,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                              hintText: 'Postleitzahl eingeben',
+                              labelText: 'Postleitzahl'),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Postleitzahl eingeben';
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          controller: _districtController,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                              hintText: 'Ort eingeben',
+                              labelText: 'Ort'),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Ort eingeben';
+                            }
+                            return null;
+                          },
+                        ),                        
                         _addNewsButton(widget.newsID),
                       ],
                     ),
@@ -170,7 +240,24 @@ class _NewsEditState extends State<NewsEdit> {
     setState(() {
       _image = File(image.path);
     });
+    uploadFile();
   }
+
+
+  Future uploadFile() async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child(new DateTime.now().millisecondsSinceEpoch.toString() + _image.path.split("/")?.last);
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        _uploadedFileURL = fileURL;
+      });
+    });
+  }
+
 
   RaisedButton _addNewsButton(String newsID) {
     AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
@@ -181,11 +268,17 @@ class _NewsEditState extends State<NewsEdit> {
           if (_formKey.currentState.validate()) {
             news.title = _titleController.text;
             news.description = _descriptionController.text;
+            address.district = _districtController.text;
+            address.houseNumber = _houseNumberController.text;
+            address.street = _streetController.text;
+            address.zipCode = _zipCodeController.text;
+            news.address = address;
             news.startTime = Timestamp.fromDate(startDateTime);
             news.endTime = Timestamp.fromDate(endDateTime);
             news.isNews = this.isNews;
             news.createdBy = await _accessHandler.getUID();
             ///Noch eigene Funktion 'updateNews' draus machen
+            news.imagePath = _uploadedFileURL;
             _newsService.insertNews(news);
 
             Navigator.push(
@@ -203,11 +296,17 @@ class _NewsEditState extends State<NewsEdit> {
           if (_formKey.currentState.validate()) {
             news.title = _titleController.text;
             news.description = _descriptionController.text;
+            address.district = _districtController.text;
+            address.houseNumber = _houseNumberController.text;
+            address.street = _streetController.text;
+            address.zipCode = _zipCodeController.text;
+            news.address = address;
             news.startTime = Timestamp.fromDate(startDateTime);
             news.endTime = Timestamp.fromDate(endDateTime);
             news.isNews = this.isNews;
             news.createdBy = await _accessHandler.getUID();
             ///Insert so überarbeiten, dass er die ID der neuen Veranstaltung zurückgibt. Dann zur DetailView dieser ID navigieren
+            news.imagePath = _uploadedFileURL;
             _newsService.insertNews(news);
             /*Navigator.push(
                 context,

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentification.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class LoginButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(40)),
         ),
-        color: Color(0xFF548c58),
+        color: Theme.of(context).buttonColor,
         onPressed: () async {
           await _tryLogin(context);
         },
@@ -52,11 +52,12 @@ class LoginButton extends StatelessWidget {
       final accessHandler = Provider.of<AccessHandler>(context, listen: false);
       final auth = Provider.of<Authentication>(context, listen: false);
       Navigator.of(context).push(LoadingOverlay());
-      auth
+      await auth
           .userSignIn(accessHandler.currentEmail, accessHandler.currentPassword)
           .then((value) {
-        _showHomePage(accessHandler);
         Navigator.of(context).pop();
+        _showHomePage(accessHandler);
+
       }).catchError((error) {
         _showErrorWarning(accessHandler);
         Navigator.of(context).pop();

@@ -30,6 +30,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Color(0xFF6178a3),
         actions: <Widget>[
@@ -49,6 +50,8 @@ class _HomeState extends State<Home> {
         title: Text('Dorf App'),
         centerTitle: true,
       ),
+
+
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,

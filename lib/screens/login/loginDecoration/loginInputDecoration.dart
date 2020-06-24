@@ -8,7 +8,7 @@ class LoginInputDecoration {
   final double contentPadding;
   LoginInputDecoration({this.icon, this.color, this.labelText, this.contentPadding});
 
-  InputDecoration decorate() {
+  InputDecoration decorate(BuildContext context) {
     return InputDecoration(
 
         contentPadding: contentPadding != null ? EdgeInsets.only(right: contentPadding) : null,
@@ -37,7 +37,7 @@ class LoginInputDecoration {
               child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Icon(icon, color: color,),
+                    Icon(icon, color: Theme.of(context).buttonColor,),
                     Container(
                         height: 40,
                         child: VerticalDivider(

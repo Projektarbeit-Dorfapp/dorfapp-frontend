@@ -37,7 +37,7 @@ class _ConfirmedPasswordFormFieldState
             color: Color(0xFF548c58),
             icon: Icons.lock,
             labelText: "Passwort bestätigen"
-        ).decorate(),
+        ).decorate(context),
         ),
     );
   }

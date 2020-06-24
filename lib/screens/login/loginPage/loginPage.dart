@@ -35,7 +35,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     double _safeArea = MediaQuery.of(context).padding.top;
-    double _pictureScreenHeight = MediaQuery.of(context).size.height * 0.5 - _safeArea;
+    double _pictureScreenHeight =
+        MediaQuery.of(context).size.height * 0.5 - _safeArea;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -49,12 +50,12 @@ class _LoginPageState extends State<LoginPage> {
               height: _pictureScreenHeight,
               width: MediaQuery.of(context).size.width * 0.7,
               child: LoginPicture(),
-
             ),
             Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.06),
+                padding: EdgeInsets.only(
+                    right: MediaQuery.of(context).size.width * 0.06),
                 child: RegistrationText(),
               ),
             ),
@@ -75,7 +76,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Positioned(
                             top: 90,
-                            child: LoginPasswordFormField(_focusNode, _hidePassword),
+                            child: LoginPasswordFormField(
+                                _focusNode, _hidePassword),
                           ),
                           Positioned(
                             right: 20,
@@ -89,7 +91,9 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               icon: Icon(
                                 Icons.remove_red_eye,
-                                color: _hidePassword ? Colors.black38 : Color(0xFF548c58),
+                                color: _hidePassword
+                                    ? Colors.black38
+                                    : Theme.of(context).buttonColor,
                               ),
                             ),
                           ),
@@ -98,20 +102,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-
               ],
-
             ),
             Container(
               height: (MediaQuery.of(context).size.height - _safeArea) * 0.05,
             ),
-            LoginButton(
-                _formKey),
+            LoginButton(_formKey),
             Padding(
-                padding: EdgeInsets.only(top: 30),
-
-                child: ForgetPasswordText()
-            ),
+                padding: EdgeInsets.only(top: 30), child: ForgetPasswordText()),
           ],
         ),
       ),
@@ -139,9 +137,11 @@ class LoadingOverlay extends ModalRoute<void> {
   bool get maintainState => true;
 
   @override
-  Widget buildPage(BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     // This makes sure that text and other content follows the material style
     return Material(
       type: MaterialType.transparency,
@@ -153,10 +153,6 @@ class LoadingOverlay extends ModalRoute<void> {
   }
 
   Widget _buildOverlayContent(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(
-
-          backgroundColor: Color(0xFF548c58)),
-    );
+    return Center(child: CircularProgressIndicator());
   }
 }

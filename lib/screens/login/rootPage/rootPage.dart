@@ -3,8 +3,8 @@ import 'package:dorf_app/constants/page_indexes.dart';
 import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentification.dart';
-import 'package:dorf_app/services/auth/userService.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +39,7 @@ class _RootPageState extends State<RootPage> {
     });
   }
   initiateCallbacks(){
-    _accessHandler.initCallbacks(loginCallback, logoutCallback);
+    _accessHandler.initCallbacks(loginCallback, logoutCallback, _userID);
   }
   void loginCallback(){
     _auth.getCurrentUser().then((user) {
@@ -55,33 +55,24 @@ class _RootPageState extends State<RootPage> {
       _currentStatus = AuthStatus.LOGGED_IN;
     });
   }
-  void logoutCallback() {
-    setState(() {
+  void logoutCallback(){
+    _userID = "";
+    _accessHandler.setUID(_userID);
+    _auth.userSignOut().then((value){
       _currentStatus = AuthStatus.NOT_LOGGED_IN;
-      _userID = "";
-      _accessHandler.setUID(_userID);
-      _auth.userSignOut();
+      setState(() {});
     });
+
   }
   @override
   Widget build(BuildContext context) {
-    if(_currentStatus == AuthStatus.WAITING){
-      return _getLoadingIndicator();
-    } else if(_currentStatus == AuthStatus.NOT_LOGGED_IN){
+    if (_currentStatus == AuthStatus.NOT_LOGGED_IN) {
       return LoginPage();
-    } else if (_currentStatus == AuthStatus.LOGGED_IN){
-      if(_userID.length > 0 && _userID != null){
-        return Home(PageIndexes.NEWSINDEX);
-      } else {
-        return _getLoadingIndicator();
-      }
-    } else return _getLoadingIndicator();
-  }
-
-  Widget _getLoadingIndicator(){
-    return Container(
-      alignment: Alignment.bottomCenter,
-      child: CircularProgressIndicator(),
-    );
+    } else if (_currentStatus == AuthStatus.LOGGED_IN) {
+      print("Current User: " + _userID);
+      return Home(PageIndexes.NEWSINDEX);
+    } else {
+      return LoginPage();
+    }
   }
 }

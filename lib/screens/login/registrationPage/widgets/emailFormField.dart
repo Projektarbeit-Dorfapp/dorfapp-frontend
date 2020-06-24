@@ -49,7 +49,7 @@ class _EmailFormFieldState extends State<EmailFormField> {
             color: Color(0xFF548c58),
             icon: Icons.email,
             labelText: "E-Mail"
-        ).decorate(),
+        ).decorate(context),
       ),
     );
   }

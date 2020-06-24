@@ -48,7 +48,7 @@ class _PassWordFormFieldState extends State<PassWordFormField> {
             color: Color(0xFF548c58),
             icon: Icons.lock,
             labelText: "Passwort"
-        ).decorate(),
+        ).decorate(context),
       ),
     );
   }
