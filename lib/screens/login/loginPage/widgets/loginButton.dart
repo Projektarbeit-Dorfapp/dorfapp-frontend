@@ -21,7 +21,7 @@ class LoginButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(40)),
         ),
-        color: Color(0xff95B531),
+        color: Color(0xFF548c58),
         onPressed: () async {
           await _tryLogin(context);
         },
@@ -79,7 +79,7 @@ class LoginButton extends StatelessWidget {
   }
   _showNoConnectionMessage(BuildContext context){
     Flushbar(
-      icon: Icon(Icons.error_outline, color: Colors.yellow,),
+      icon: Icon(Icons.error_outline, color: Color(0xFF548c58)),
       message: "Du hast leider kein Internet",
       duration: Duration(seconds: 3),
     )..show(context);

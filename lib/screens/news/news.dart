@@ -64,7 +64,7 @@ class News extends StatelessWidget {
                   builder: (context) => NewsEdit()));
         },
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+        backgroundColor: Color(0xFF548c58)
       ),
     );
   }

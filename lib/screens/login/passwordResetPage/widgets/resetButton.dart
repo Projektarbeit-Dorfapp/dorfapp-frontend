@@ -18,7 +18,7 @@ class ResetButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(40)),
         ),
-        color: Color(0xff95B531),
+        color: Color(0xFF548c58),
         onPressed: () async{
             if(_formKey.currentState.validate()){
               final auth = Provider.of<Authentication>(context, listen: false);
@@ -59,7 +59,7 @@ class ResetButton extends StatelessWidget {
     Flushbar(
       message: "Wir haben dir eine E-Mail gesendet. Dort kannst du dann ein neues Passwort einrichten",
       maxWidth: MediaQuery.of(context).size.width * 0.7,
-      icon: Icon(Icons.error_outline, color: Colors.yellow,),
+      icon: Icon(Icons.error_outline, color: Color(0xFF548c58)),
       duration: Duration(seconds: 5),
       flushbarPosition: FlushbarPosition.TOP,
     )..show(context);
