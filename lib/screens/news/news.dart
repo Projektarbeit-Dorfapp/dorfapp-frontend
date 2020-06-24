@@ -2,6 +2,7 @@ import 'package:dorf_app/screens/news/widgets/clock.dart';
 import 'package:dorf_app/screens/news/widgets/dateTimeDisplay.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
+import 'package:dorf_app/screens/news_edit/news_edit.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/news_model.dart';
@@ -169,6 +170,16 @@ class News extends StatelessWidget {
               }, childCount: 1),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewsEdit()));
+            },
+            child: Icon(Icons.add),
+            backgroundColor: Color(0xFF548c58)
         ),
       ),
     );
