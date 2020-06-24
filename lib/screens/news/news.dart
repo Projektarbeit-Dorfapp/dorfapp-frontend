@@ -1,6 +1,7 @@
 import 'package:dorf_app/screens/news/widgets/clock.dart';
 import 'package:dorf_app/screens/news/widgets/dateTimeDisplay.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
+import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/news_model.dart';
@@ -31,13 +32,11 @@ class News extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 10.0), child: Clock()),
+                          WeatherDisplay(),
                           Spacer(),
                           UserAvatar(safeAreaHeight),
                         ],
                       ),
-                      Padding( padding: EdgeInsets.only(left: 10.0), child: DateTimeDisplay()),
                     ],
                   ),
                 ),
