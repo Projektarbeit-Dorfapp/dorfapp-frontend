@@ -61,7 +61,7 @@ class _DateTimeDisplayState extends State<DateTimeDisplay> {
           ),
         ),
       ],
-    );;
+    );
   }
   String weekDay() {
     switch (currentWeekDay) {
