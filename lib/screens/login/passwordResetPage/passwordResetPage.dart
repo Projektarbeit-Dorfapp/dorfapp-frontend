@@ -48,7 +48,7 @@ class PasswordResetPage extends StatelessWidget {
                 padding: EdgeInsets.only(top: 30),
                 child: InkWell(
                   onTap: (){
-                    Navigator.pushReplacementNamed(context, "/rootPage");
+                    Navigator.pop(context);
                   },
                   child: Text( "Zurück zum Anmeldebildschirm",
                     style: TextStyle(

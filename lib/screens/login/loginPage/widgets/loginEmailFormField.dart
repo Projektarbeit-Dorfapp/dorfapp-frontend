@@ -51,7 +51,7 @@ class _LoginEmailFormFieldState extends State<LoginEmailFormField> {
               color: Color(0xFF548c58),
               icon: Icons.email,
               labelText: "E-Mail"
-            ).decorate(),
+            ).decorate(context),
           ),
         ),
       ],

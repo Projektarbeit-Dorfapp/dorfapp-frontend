@@ -1,6 +1,6 @@
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentification.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,7 @@ class ResetButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(40)),
         ),
-        color: Color(0xFF548c58),
+        color: Theme.of(context).buttonColor,
         onPressed: () async{
             if(_formKey.currentState.validate()){
               final auth = Provider.of<Authentication>(context, listen: false);

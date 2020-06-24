@@ -4,14 +4,14 @@ class AccessHandler extends ChangeNotifier{
 
   VoidCallback _logout;
   VoidCallback _login;
-  String _uid; ///currently logged in user ID
+  String _userID; ///currently logged in user ID
 
   String _currentLoginEmail = "";
   String _currentLoginPassword = "";
   bool _isLoginValidationFailed = false;
   bool _isEmailResetValidationFailed = false;
 
-  get uid => _uid;
+  get userID => _userID;
   get isLoginValidationFailed => _isLoginValidationFailed;
   get isEmailResetValidationFailed => _isEmailResetValidationFailed;
   get currentEmail => _currentLoginEmail;
@@ -20,7 +20,7 @@ class AccessHandler extends ChangeNotifier{
   ///sets user ID, this method is called from logout and login Callback function
   ///inside rootPage. Each login() and logout() call will set user ID to _uid
   setUID(String uid){
-    _uid = uid;
+    _userID = uid;
   }
   ///forces user to log out and show loginPage
   logout(){
@@ -34,8 +34,8 @@ class AccessHandler extends ChangeNotifier{
   }
   ///Sets callbacks for login and logout operations from the rootPage.
   ///The rootPage decides if loginPage or user dependent homePage should be loaded.
-  ///Do not call this method outside of rootPage
-  initCallbacks(VoidCallback login, VoidCallback logout){
+  initCallbacks(VoidCallback login, VoidCallback logout, String userID){
+    _userID = userID;
     _login = login;
     _logout = logout;
   }
