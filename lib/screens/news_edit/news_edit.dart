@@ -40,6 +40,7 @@ class _NewsEditState extends State<NewsEdit> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        backgroundColor: Color(0xFF6178a3),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
