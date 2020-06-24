@@ -41,7 +41,7 @@ class _BoardMessageTextFieldState extends State<BoardMessageTextField> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               SizedBox(
-                width: 6,
+                width: 10,
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 12),
@@ -54,7 +54,7 @@ class _BoardMessageTextFieldState extends State<BoardMessageTextField> {
                 width: 6,
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.835,
+                width: MediaQuery.of(context).size.width * 0.82,
                 child: Consumer<BoardMessageHandler>(
                   builder: (context, messageHandler,_){
                     _controller.text = messageHandler.currentMessage;

@@ -1,4 +1,5 @@
 
+import 'package:dorf_app/basic_theme.dart';
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/addEntryPage.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/boardEntryPage.dart';
@@ -8,8 +9,8 @@ import 'package:dorf_app/screens/login/passwordResetPage/passwordResetPage.dart'
 import 'package:dorf_app/screens/login/registrationPage/registrationPage.dart';
 import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
-import 'file:///C:/Users/R4pture/AndroidStudioProjects/dorfapp-frontend/lib/services/user_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
+import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class Application {
         ChangeNotifierProvider(create: (context) => BoardEntryService(),),
       ],
       child: MaterialApp(
+        theme: basicTheme,
         routes: routes,
       ),
     ));

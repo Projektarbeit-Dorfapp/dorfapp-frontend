@@ -14,6 +14,7 @@ class AddEntryButton extends StatelessWidget {
     return FloatingActionButton(
 
       child: Icon(Icons.check),
+      backgroundColor: Theme.of(context).buttonColor,
       onPressed: () async{
         final entryState = Provider.of<EntryState>(context, listen: false);
         final authentication = Provider.of<Authentication>(context, listen: false);

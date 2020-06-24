@@ -1,5 +1,5 @@
 import 'package:dorf_app/models/boardCategory_model.dart';
-import 'file:///C:/Users/R4pture/AndroidStudioProjects/dorfapp-frontend/lib/screens/forum/boardCategoryPage/widgets/boardCategoryDisplay.dart';
+import 'package:dorf_app/screens/forum/boardCategoryPage/widgets/boardCategoryDisplay.dart';
 import 'package:dorf_app/services/boardCategory_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

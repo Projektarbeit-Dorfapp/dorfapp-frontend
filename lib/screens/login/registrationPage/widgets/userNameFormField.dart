@@ -42,7 +42,7 @@ class _UserNameFormFieldState extends State<UserNameFormField> {
             color: Color(0xff95B531),
             icon: Icons.person,
             labelText: "Dein Benutzername"
-        ).decorate(),
+        ).decorate(context),
       ),
     );
   }

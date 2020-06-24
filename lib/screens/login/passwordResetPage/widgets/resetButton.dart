@@ -18,7 +18,7 @@ class ResetButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(40)),
         ),
-        color: Color(0xff95B531),
+        color: Theme.of(context).buttonColor,
         onPressed: () async{
             if(_formKey.currentState.validate()){
               final auth = Provider.of<Authentication>(context, listen: false);

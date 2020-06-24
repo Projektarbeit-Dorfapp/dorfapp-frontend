@@ -1,5 +1,5 @@
 import 'package:dorf_app/screens/login/models/user_model.dart';
-import 'file:///C:/Users/R4pture/AndroidStudioProjects/dorfapp-frontend/lib/services/user_service.dart';
+import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class RegistrationValidator extends ChangeNotifier{

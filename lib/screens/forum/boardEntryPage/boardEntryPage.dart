@@ -88,16 +88,16 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.only(bottom: 25, right: 25),
                 child: Container(
 
-                  width: 60,
-                  height: 60,
+                  width: 63,
+                  height: 63,
                   child: OpenContainer(
                     onClosed: (_) {
                       setState(() {});
                     },
-                    closedColor: Colors.lightGreen,
+                    closedColor: Theme.of(context).buttonColor,
                     closedElevation: 10.0,
                     openElevation: 15.0,
                     closedShape: RoundedRectangleBorder(

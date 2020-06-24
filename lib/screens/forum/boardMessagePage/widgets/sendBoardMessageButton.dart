@@ -11,7 +11,7 @@ class SendBoardMessageButton extends StatelessWidget {
       },
       child: Icon(
         Icons.send,
-        color: Colors.lightGreen,),
+        color: Theme.of(context).buttonColor,),
     );
   }
   _submitBoardMessage(BuildContext context){
