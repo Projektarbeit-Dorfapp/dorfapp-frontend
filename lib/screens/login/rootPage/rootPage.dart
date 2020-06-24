@@ -2,7 +2,7 @@
 import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentication.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,34 +49,23 @@ class _RootPageState extends State<RootPage> {
     });
   }
   void logoutCallback(){
-    setState(() {
-      _userID = "";
-      _accessHandler.setUID(_userID);
-      _auth.userSignOut().then((value){
-        _currentStatus = AuthStatus.NOT_LOGGED_IN;
-      });
+    _userID = "";
+    _accessHandler.setUID(_userID);
+    _auth.userSignOut().then((value){
+      _currentStatus = AuthStatus.NOT_LOGGED_IN;
+      setState(() {});
     });
+
   }
   @override
   Widget build(BuildContext context) {
-    if(_currentStatus == AuthStatus.WAITING){
-      return _getLoadingIndicator();
-    } else if(_currentStatus == AuthStatus.NOT_LOGGED_IN){
+    if (_currentStatus == AuthStatus.NOT_LOGGED_IN) {
       return LoginPage();
-    } else if (_currentStatus == AuthStatus.LOGGED_IN){
-      if(_userID.length > 0 && _userID != null){
-        print(_userID);
-        return Home();
-      } else {
-        return _getLoadingIndicator();
-      }
-    } else return _getLoadingIndicator();
-  }
-
-  Widget _getLoadingIndicator(){
-    return Container(
-      alignment: Alignment.bottomCenter,
-      child: CircularProgressIndicator(),
-    );
+    } else if (_currentStatus == AuthStatus.LOGGED_IN) {
+      print("Current User: " + _userID);
+      return Home();
+    } else {
+      return LoginPage();
+    }
   }
 }

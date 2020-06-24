@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/screens/login/models/user_model.dart';
-import 'package:dorf_app/services/auth/userService.dart';
+import 'file:///C:/Users/R4pture/AndroidStudioProjects/dorfapp-frontend/lib/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -15,7 +15,7 @@ class EntryWithUser{
 class BoardEntryService extends ChangeNotifier{
   final _timeout = Duration(seconds: 10);
   final CollectionReference _ref = Firestore.instance.collection("Forumeintrag");
-  final userService = UserService();
+  final _userService = UserService();
 
   insertEntry(BoardEntry entry) async {
     await _ref.add(entry.toJson());
@@ -28,12 +28,13 @@ class BoardEntryService extends ChangeNotifier{
     List<EntryWithUser> list = [];
     await _ref
         .where("boardCategoryReference", isEqualTo: category.id)
+        //.limit(length)
         //.orderBy("postingDate", descending: true)
         .getDocuments()
         .then((snapshot) async{
           for(var document in snapshot.documents){
             var entry = BoardEntry.fromJson(document.data, document.documentID);
-            var user = await userService.getUser(entry.userReference);
+            var user = await _userService.getUser(entry.userReference);
             list.add(EntryWithUser(entry: entry, user: user));
           }
         })

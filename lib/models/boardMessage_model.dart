@@ -10,13 +10,13 @@ class BoardMessage{
   Timestamp postingDate;
   String message;
 
-  BoardMessage(
+  BoardMessage({
   this.boardEntryReference,
   this.postingDate,
   this.lastModifiedDate,
   this.message,
   this.boardCategoryReference,
-  this.userReference);
+  this.userReference});
 
   BoardMessage.fromJson(Map snapshot, String id){
     this.id = id;

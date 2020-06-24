@@ -1,6 +1,6 @@
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/provider/entryState.dart';
-import 'package:dorf_app/services/auth/authentication.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ class AddEntryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+
       child: Icon(Icons.check),
       onPressed: () async{
         final entryState = Provider.of<EntryState>(context, listen: false);

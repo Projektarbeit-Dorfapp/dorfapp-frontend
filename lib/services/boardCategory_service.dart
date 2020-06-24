@@ -10,7 +10,6 @@ class BoardCategoryService extends ChangeNotifier{
   final _timeout = Duration(seconds: 10);
   CollectionReference _ref = Firestore.instance.collection("Forumkategorie");
 
-  ///returns
   Stream<QuerySnapshot> getDocumentsAsStream(){
     return _ref.snapshots();
   }

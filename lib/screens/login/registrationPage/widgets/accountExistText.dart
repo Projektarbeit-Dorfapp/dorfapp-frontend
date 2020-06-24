@@ -8,7 +8,7 @@ class AccountExistText extends StatelessWidget {
 
       child: InkWell(
         onTap: () {
-          Navigator.pushReplacementNamed(context, "/rootPage");
+          Navigator.pop(context);
         },
         child: Text(
           "Du hast schon ein Account?",

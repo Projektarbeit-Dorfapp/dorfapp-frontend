@@ -41,8 +41,8 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
             child: Stack(
               children: <Widget>[
                 Positioned(
-                  left: 13,
-                  top: 9,
+                  left: 16,
+                  top: 13,
                   child: UserAvatarDisplay(//TODO: Fetch from storage
                       ),
                 ),
@@ -52,7 +52,7 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                     icon: Icon(
                       Icons.more_vert,
                       color: Colors.grey,
-                      size: 20,
+                      size: 25,
                     ),
                     onPressed: () {
                       //TODO: What to do?
@@ -65,23 +65,23 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                     Row(
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.only(left: 50, top: 10),
+                          padding: EdgeInsets.only(left: 60, top: 10),
                           child: Text(
                             widget.entryWithUser.user.userName,
                             style: TextStyle(
                                 fontFamily: "Raleway",
                                 fontWeight: FontWeight.bold,
-                                fontSize: 12),
+                                fontSize: 16),
                           ),
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        SizedBox(width: 50),
+                        SizedBox(width: 60),
                         Icon(
                           Icons.date_range,
-                          size: 11,
+                          size: 12,
                           color: Colors.grey,
                         ),
                         SizedBox(width: 5),
@@ -90,7 +90,7 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                               widget.entryWithUser.entry.postingDate.toDate()),
                           style: TextStyle(
                               fontFamily: "Raleway",
-                              fontSize: 10,
+                              fontSize: 12,
                               color: Colors.grey),
                         ),
                         SizedBox(
@@ -100,7 +100,7 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                             ? Icon(
                                 Icons.edit,
                                 color: Colors.grey,
-                                size: 11,
+                                size: 12,
                               )
                             : Container(),
                         SizedBox(width: 5),
@@ -111,14 +111,14 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                                     .toDate()),
                                 style: TextStyle(
                                     fontFamily: "Raleway",
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     color: Colors.grey),
                               )
                             : Container()
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 10, top: 2),
+                      padding: EdgeInsets.only(left: 16, top: 5),
                       child: Text(
                         widget.entryWithUser.entry.title,
                         style: TextStyle(

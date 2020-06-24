@@ -46,9 +46,13 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data.length + 1,
                     itemBuilder: (BuildContext context, int index) {
-
+                      if(index == snapshot.data.length){
+                        return Container(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                        );
+                      }
                       _controller.forward();
                       return FadeScaleTransition(
                         animation: _controller,
@@ -62,7 +66,7 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
-                } else {
+                } else { ///ERROR
                   return Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -86,13 +90,14 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: Container(
-                  width: 50,
-                  height: 50,
+
+                  width: 60,
+                  height: 60,
                   child: OpenContainer(
                     onClosed: (_) {
                       setState(() {});
                     },
-                    closedColor: Colors.lightBlue,
+                    closedColor: Colors.lightGreen,
                     closedElevation: 10.0,
                     openElevation: 15.0,
                     closedShape: RoundedRectangleBorder(

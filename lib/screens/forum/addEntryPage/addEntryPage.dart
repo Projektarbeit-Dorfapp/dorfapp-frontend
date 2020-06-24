@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class AddEntryPage extends StatelessWidget {
   final BoardCategory category;
-  AddEntryPage({@required this.category});
+  AddEntryPage({this.category});
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
