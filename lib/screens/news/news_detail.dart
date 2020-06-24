@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/menu_buttons.dart';
+import 'package:dorf_app/constants/page_indexes.dart';
 import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
+import 'package:dorf_app/screens/news_edit/news_edit.dart';
 import 'package:dorf_app/widgets/comment_section.dart';
 import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
 import 'package:dorf_app/widgets/like_section.dart';
@@ -8,6 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dorf_app/services/news_service.dart';
+
+import 'news.dart';
 
 //Meike Nedwidek
 class NewsDetail extends StatelessWidget {
@@ -27,6 +34,20 @@ class NewsDetail extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Color(0xFF6178a3),
+                actions: <Widget>[
+                  PopupMenuButton<String> (
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    onSelected: (value) => _choiceAction(value, context),
+                    itemBuilder: (BuildContext context) {
+                      return MenuButtons.EditDelete.map((String choice) {
+                        return PopupMenuItem<String> (
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ],
               ),
               body: Container(
                   color: Colors.white,
@@ -87,7 +108,7 @@ class NewsDetail extends StatelessWidget {
   }
 
   _getImageAndTitle() {
-    if (newsModel.imagePath.isEmpty) {
+    if (newsModel.imagePath == null) {
       return Container(
           margin: EdgeInsets.only(top: 20.0),
           child: Center(
@@ -149,5 +170,21 @@ class NewsDetail extends StatelessWidget {
       );
     }
     return Container();
+  }
+
+  void _choiceAction(String choice, BuildContext context) {
+    if(choice == MenuButtons.EDIT){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NewsEdit(newsID)));
+    }
+    else if(choice == MenuButtons.DELETE){
+      Firestore.instance.collection('Veranstaltung').document(newsID).delete();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Home(PageIndexes.NEWSINDEX)));
+    }
   }
 }

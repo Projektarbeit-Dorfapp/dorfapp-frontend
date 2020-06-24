@@ -48,7 +48,7 @@ class _LoginEmailFormFieldState extends State<LoginEmailFormField> {
             },
             decoration: LoginInputDecoration(
               contentPadding: 5,
-              color: Color(0xff95B531),
+              color: Color(0xFF548c58),
               icon: Icons.email,
               labelText: "E-Mail"
             ).decorate(context),

@@ -80,7 +80,7 @@ class LoginButton extends StatelessWidget {
   }
   _showNoConnectionMessage(BuildContext context){
     Flushbar(
-      icon: Icon(Icons.error_outline, color: Colors.yellow,),
+      icon: Icon(Icons.error_outline, color: Color(0xFF548c58)),
       message: "Du hast leider kein Internet",
       duration: Duration(seconds: 3),
     )..show(context);

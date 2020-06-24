@@ -34,7 +34,7 @@ class _ConfirmedPasswordFormFieldState
         obscureText: widget.hidePassword ? true : false,
         decoration: LoginInputDecoration(
             contentPadding: 40,
-            color: Color(0xff95B531),
+            color: Color(0xFF548c58),
             icon: Icons.lock,
             labelText: "Passwort bestätigen"
         ).decorate(context),

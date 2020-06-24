@@ -14,6 +14,7 @@ class DateComment extends StatelessWidget {
     return Text(
       _getDateDifference(),
       style: TextStyle(
+          fontFamily: 'Raleway',
           fontSize: 12.0,
           color: this.color
       ),
@@ -24,10 +25,10 @@ class DateComment extends StatelessWidget {
     DateTime curDatetime = DateTime.now();
 
     if (this.datetime == null) {
-      return '-';
+      return '';
     }
 
-    Duration dateDiff = this.datetime.difference(curDatetime);
+    Duration dateDiff = this.datetime.difference(curDatetime) *-1;
 
     if (dateDiff.inSeconds <= 59) {
       return 'Gerade eben';
@@ -37,6 +38,9 @@ class DateComment extends StatelessWidget {
     }
     if (dateDiff.inHours <= 23) {
       return 'Vor ' + dateDiff.inHours.toString() + ' Std.';
+    }
+    if (dateDiff.inDays == 1) {
+      return 'Vor ' + dateDiff.inDays.toString() + ' Tag';
     }
     return 'Vor ' + dateDiff.inDays.toString() + ' Tagen';
   }
