@@ -3,13 +3,12 @@ import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/news.dart';
-import 'package:dorf_app/screens/news/news.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  int _pageIndex;
+  final int _pageIndex;
   Home(this._pageIndex);
 
   State<StatefulWidget> createState() {

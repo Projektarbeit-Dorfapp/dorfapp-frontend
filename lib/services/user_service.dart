@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
 class UserService extends ChangeNotifier{
+
   final CollectionReference _ref = Firestore.instance.collection("User");
   final _timeout = Duration(seconds: 10);
   ///Checks in database if userName already exist in user collection
@@ -32,6 +33,18 @@ class UserService extends ChangeNotifier{
   Future<void> insertUser(User user) async{
     await _ref.document().setData(user.toJson());
   }
+
+  ///check if user is admin
+  Future<bool> checkIfAdmin(String userID) async {
+    bool isAdmin;
+    await _ref.where("uid", isEqualTo: userID)
+        .getDocuments().then((dataSnapshot) {
+          var document = dataSnapshot.documents.first;
+          isAdmin = document != null ? document.data['admin'] : false;
+    });
+      return isAdmin;
+  }
+
   Future<User> getUser(String userID) async{
     User user;
     await _ref

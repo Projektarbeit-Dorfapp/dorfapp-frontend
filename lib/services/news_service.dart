@@ -21,10 +21,10 @@ class NewsService {
          'zipCode' : news.address.zipCode,
        },
        'isNews' : news.isNews,
-       'imagePath' : news.imagePath
+       'imagePath' : news.imagePath,
+       'createdBy': news.createdBy
      });
    }
-
 
   Future<NewsModel> getNews(String newsID) async {
     NewsModel newsModel;
@@ -47,7 +47,9 @@ class NewsService {
             //isNews: dataSnapshot.data['isNews'],
             isNews: false,
             createdAt: dataSnapshot.data['createdAt'],
-            modifiedAt: dataSnapshot.data['modifiedAt']);
+            modifiedAt: dataSnapshot.data['modifiedAt'],
+            createdBy: dataSnapshot.data['createdBy']
+        );
       });
     } catch (err) {
       print(err.toString());
@@ -68,7 +70,8 @@ class NewsService {
             description: querySnapshot.documents[i].data['description'].toString(),
             imagePath: querySnapshot.documents[i].data['imagePath'].toString(),
             isNews: false,
-            createdAt: querySnapshot.documents[i].data['createdAt']
+            createdAt: querySnapshot.documents[i].data['createdAt'],
+            createdBy: querySnapshot.documents[i].data['createdBy']
             );
         news.add(newsModel);
       }
@@ -77,6 +80,7 @@ class NewsService {
     }
     return news;
   }
+
   Address convertSnapshotToAddress(DocumentSnapshot ds) {
     Address address;
     if (ds.data['address'] != null) {

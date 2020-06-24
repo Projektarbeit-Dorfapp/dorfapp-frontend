@@ -53,6 +53,7 @@ class User extends ChangeNotifier {
     email = snapshot["email"] ?? "";
     uid = snapshot["uid"] ?? "";
   }
+
   Map<String, dynamic> toJson(){
     return {
       "admin" : admin,

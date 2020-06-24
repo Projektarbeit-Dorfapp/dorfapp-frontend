@@ -3,6 +3,7 @@ import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/constants/page_indexes.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/screens/home/home.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
 import 'package:dorf_app/widgets/comment_section.dart';
@@ -13,10 +14,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dorf_app/services/news_service.dart';
+import 'package:provider/provider.dart';
 
-import 'news.dart';
-
-//Meike Nedwidek
+///Meike Nedwidek
 class NewsDetail extends StatelessWidget {
   NewsModel newsModel;
   String newsID;
@@ -30,6 +30,7 @@ class NewsDetail extends StatelessWidget {
       future: _newsService.getNews(newsID),
       builder: (context, AsyncSnapshot<NewsModel> snapshot) {
        if (snapshot.hasData) {
+          AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
           this.newsModel = snapshot.data;
           return Scaffold(
               appBar: AppBar(
@@ -39,12 +40,21 @@ class NewsDetail extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     onSelected: (value) => _choiceAction(value, context),
                     itemBuilder: (BuildContext context) {
-                      return MenuButtons.EditDelete.map((String choice) {
-                        return PopupMenuItem<String> (
-                          value: choice,
-                          child: Text(choice),
-                        );
-                      }).toList();
+                      if (_accessHandler.getUID() == this.newsModel.createdBy) {
+                        return MenuButtons.EditDeleteLogout.map((String choice) {
+                          return PopupMenuItem<String> (
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
+                      }  else {
+                        return MenuButtons.HomePopUpMenu.map((String choice) {
+                          return PopupMenuItem<String> (
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
+                      }
                     },
                   ),
                 ],
@@ -185,6 +195,10 @@ class NewsDetail extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => Home(PageIndexes.NEWSINDEX)));
+    } else if(choice == MenuButtons.LOGOUT){
+      final accessHandler = Provider.of<AccessHandler>(context, listen: false);
+      accessHandler.logout();
     }
   }
+
 }

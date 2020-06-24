@@ -15,8 +15,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  FocusNode _focusNode;
-  bool _hidePassword = true;
+   FocusNode _focusNode;
+   bool _hidePassword = true;
+
   @override
   void initState() {
     _focusNode = FocusNode();
@@ -30,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     double _safeArea = MediaQuery.of(context).padding.top;

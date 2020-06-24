@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,9 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/services/news_service.dart';
 import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 //Hannes Hauenstein
 
@@ -42,6 +45,8 @@ class _NewsEditState extends State<NewsEdit> {
   final f = new DateFormat('dd.MM.yyyy HH:mm');
   DateTime startDateTime = DateTime.now();
   DateTime endDateTime = DateTime.now();
+  ///Anpassen, sodass der Wert aus dem Dokument übernommen wird
+  bool isNews = false;
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +126,17 @@ class _NewsEditState extends State<NewsEdit> {
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
+                        CheckboxListTile(
+                          title: const Text('News?'),
+                          value: isNews,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              isNews = newValue;
+                            });
+                            print(newValue);
+                            print(isNews);
+                          },
+                        ),
                         TextFormField(
                           controller: _titleController,
                           decoration: const InputDecoration(
@@ -244,10 +260,11 @@ class _NewsEditState extends State<NewsEdit> {
 
 
   RaisedButton _addNewsButton(String newsID) {
+    AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     if (newsID != null){
       return RaisedButton(
         child: Text('Aktualisieren'),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
             news.title = _titleController.text;
             news.description = _descriptionController.text;
@@ -258,8 +275,16 @@ class _NewsEditState extends State<NewsEdit> {
             news.address = address;
             news.startTime = Timestamp.fromDate(startDateTime);
             news.endTime = Timestamp.fromDate(endDateTime);
+            news.isNews = this.isNews;
+            news.createdBy = await _accessHandler.getUID();
+            ///Noch eigene Funktion 'updateNews' draus machen
             news.imagePath = _uploadedFileURL;
             _newsService.insertNews(news);
+
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewsDetail(newsID)));
           }
         },
       );
@@ -267,7 +292,7 @@ class _NewsEditState extends State<NewsEdit> {
     else {
       return RaisedButton(
         child: Text('Erstellen'),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
             news.title = _titleController.text;
             news.description = _descriptionController.text;
@@ -278,8 +303,16 @@ class _NewsEditState extends State<NewsEdit> {
             news.address = address;
             news.startTime = Timestamp.fromDate(startDateTime);
             news.endTime = Timestamp.fromDate(endDateTime);
+            news.isNews = this.isNews;
+            news.createdBy = await _accessHandler.getUID();
+            ///Insert so überarbeiten, dass er die ID der neuen Veranstaltung zurückgibt. Dann zur DetailView dieser ID navigieren
             news.imagePath = _uploadedFileURL;
             _newsService.insertNews(news);
+            /*Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewsDetail(newsID)));
+             */
           }
         },
       );
