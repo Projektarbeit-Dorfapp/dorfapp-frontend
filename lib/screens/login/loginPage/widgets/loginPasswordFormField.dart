@@ -44,7 +44,7 @@ class _LoginPasswordFormFieldState extends State<LoginPasswordFormField> {
               contentPadding: 40,
                     labelText: "Passwort",
                     icon: Icons.lock,
-                    color: Color(0xff95B531))
+                    color: Color(0xFF548c58))
                 .decorate(),
           ),
         ),

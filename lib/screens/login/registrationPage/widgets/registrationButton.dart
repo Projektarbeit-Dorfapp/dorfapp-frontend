@@ -21,7 +21,7 @@ class RegistrationButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(40)),
         ),
-        color: Color(0xff95B531),
+        color: Color(0xFF548c58),
         onPressed: () async{
           await _tryToAddUser(context);
         },
@@ -73,7 +73,7 @@ class RegistrationButton extends StatelessWidget {
       return true;
     } on SocketException catch(_){
       Flushbar(
-        icon: Icon(Icons.error_outline, color: Colors.yellow,),
+        icon: Icon(Icons.error_outline, color: Color(0xFF548c58)),
         message: "Du hast leider kein Internet",
         duration: Duration(seconds: 3),
       )..show(context);
@@ -84,7 +84,7 @@ class RegistrationButton extends StatelessWidget {
     Flushbar(
       message: "Etwas ist leider schief gelaufen, versuche es später erneuert",
       maxWidth: MediaQuery.of(context).size.width * 0.7,
-      icon: Icon(Icons.error_outline, color: Colors.yellow,),
+      icon: Icon(Icons.error_outline, color: Color(0xFF548c58)),
       duration: Duration(seconds: 5),
       flushbarPosition: FlushbarPosition.TOP,
     )..show(context);

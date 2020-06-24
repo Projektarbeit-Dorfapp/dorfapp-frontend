@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               icon: Icon(
                                 Icons.remove_red_eye,
-                                color: _hidePassword ? Colors.black38 : Color(0xff95B531),
+                                color: _hidePassword ? Colors.black38 : Color(0xFF548c58),
                               ),
                             ),
                           ),
@@ -151,7 +151,7 @@ class LoadingOverlay extends ModalRoute<void> {
     return Center(
       child: CircularProgressIndicator(
 
-          backgroundColor: Colors.lightGreen,),
+          backgroundColor: Color(0xFF548c58)),
     );
   }
 }
