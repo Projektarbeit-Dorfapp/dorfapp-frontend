@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:dorf_app/helperFunctions/transform_post_date.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
@@ -86,7 +87,7 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          _transformPostDate(
+                          TransformPostDate.transform(
                               widget.entryWithUser.entry.postingDate.toDate()),
                           style: TextStyle(
                               fontFamily: "Raleway",
@@ -96,7 +97,8 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                         SizedBox(
                           width: 10,
                         ),
-                        widget.entryWithUser.entry.lastModifiedDate != null
+                        widget.entryWithUser.entry.lastModifiedDate !=
+                            widget.entryWithUser.entry.postingDate
                             ? Icon(
                                 Icons.edit,
                                 color: Colors.grey,
@@ -104,9 +106,10 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                               )
                             : Container(),
                         SizedBox(width: 5),
-                        widget.entryWithUser.entry.lastModifiedDate != null
+                        widget.entryWithUser.entry.lastModifiedDate !=
+                            widget.entryWithUser.entry.postingDate
                             ? Text(
-                                _transformPostDate(widget
+                                TransformPostDate.transform(widget
                                     .entryWithUser.entry.lastModifiedDate
                                     .toDate()),
                                 style: TextStyle(
@@ -136,57 +139,5 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
         },
       ),
     );
-  }
-
-  String _transformPostDate(DateTime date) {
-    DateTime entryDate = date;
-    DateTime currentDate = DateTime.now();
-    int dayDifference = currentDate.difference(entryDate).inDays;
-    String transformedText = "";
-    if (dayDifference == 0) {
-      transformedText = _transformToHours(entryDate, currentDate);
-    } else if (dayDifference == 1) {
-      transformedText = dayDifference.toString() + " Tag";
-    } else if (dayDifference > 28) {
-      return _transformToFullDate(entryDate, currentDate);
-    } else {
-      transformedText = dayDifference.toString() + " Tage";
-    }
-    return transformedText;
-  }
-
-  String _transformToFullDate(DateTime postingDate, DateTime currentDate) {
-    return postingDate.day.toString() +
-        "." +
-        postingDate.month.toString() +
-        "." +
-        postingDate.year.toString();
-  }
-
-  String _transformToHours(DateTime postingDate, DateTime currentDate) {
-    int hourDifference = currentDate.difference(postingDate).inHours;
-    String transformedText = "";
-    if (hourDifference == 0) {
-      return _transformToMinutes(postingDate, currentDate);
-    } else if (hourDifference == 1) {
-      transformedText = hourDifference.toString() + " Stunde";
-    } else {
-      transformedText = hourDifference.toString() + " Stunden";
-    }
-    return transformedText;
-  }
-
-  String _transformToMinutes(DateTime postingDate, DateTime currentDate) {
-    int minuteDifference = currentDate.difference(postingDate).inMinutes;
-    String transformedText = "";
-    if (minuteDifference == 0) {
-      transformedText = "Gerade eben";
-    }
-    if (minuteDifference == 1) {
-      transformedText = minuteDifference.toString() + " Minute";
-    } else if (minuteDifference > 1 && minuteDifference < 61) {
-      transformedText = minuteDifference.toString() + " Minuten";
-    }
-    return transformedText;
   }
 }

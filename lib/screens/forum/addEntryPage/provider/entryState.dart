@@ -9,10 +9,12 @@ class EntryState extends ChangeNotifier{
 
 
   BoardEntry createBoardEntry(String userID, BoardCategory category){
-  return BoardEntry(
+    final dateTime = DateTime.now();
+    return BoardEntry(
     title: title,
     userReference: userID,
-    postingDate: Timestamp.fromDate(DateTime.now()),
+    postingDate: Timestamp.fromDate(dateTime),
+    lastModifiedDate: Timestamp.fromDate(dateTime),
     boardCategoryReference: category.id,
   );
 

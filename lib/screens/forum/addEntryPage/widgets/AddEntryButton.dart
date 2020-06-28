@@ -11,19 +11,21 @@ class AddEntryButton extends StatelessWidget {
   AddEntryButton(this.category);
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-
-      child: Icon(Icons.check),
-      backgroundColor: Theme.of(context).buttonColor,
-      onPressed: () async{
-        final entryState = Provider.of<EntryState>(context, listen: false);
-        final authentication = Provider.of<Authentication>(context, listen: false);
-        FirebaseUser user = await authentication.getCurrentUser();
-        final createdEntry = entryState.createBoardEntry(user.uid, category);
-        final entryService = Provider.of<BoardEntryService>(context, listen: false);
-        entryService.insertEntry(createdEntry);
-        Navigator.pop(context);
-      },
-    );
+    final bool showFAB = MediaQuery.of(context).viewInsets.bottom == 0.0;
+    return showFAB
+        ? FloatingActionButton(
+            child: Icon(Icons.check),
+            backgroundColor: Theme.of(context).buttonColor,
+            onPressed: () async {
+              final entryState = Provider.of<EntryState>(context, listen: false);
+              final authentication = Provider.of<Authentication>(context, listen: false);
+              FirebaseUser user = await authentication.getCurrentUser();
+              final createdEntry = entryState.createBoardEntry(user.uid, category);
+              final entryService = Provider.of<BoardEntryService>(context, listen: false);
+              entryService.insertEntry(createdEntry);
+              Navigator.pop(context);
+            },
+          )
+        : Container();
   }
 }

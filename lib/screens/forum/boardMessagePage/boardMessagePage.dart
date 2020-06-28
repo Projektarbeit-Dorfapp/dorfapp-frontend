@@ -27,8 +27,8 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
             children: <Widget>[
               Consumer<BoardMessageHandler>(
                 builder: (context, messageHandler, _){
-                  return FutureBuilder<List<BoardMessageWithUser>>(
-                    future: BoardMessageService().getBoardMessagesWithUser(widget.category, widget.entry),
+                  return StreamBuilder<List<BoardMessageWithUser>>(
+                    stream: BoardMessageService().getBoardMessagesWithUserAsStream(widget.category, widget.entry, 10, OrderType.latest),
                     builder: (context, snapshot){
                       if(snapshot.hasData){
                         return ListView.builder(

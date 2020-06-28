@@ -5,6 +5,8 @@ import 'package:dorf_app/models/boardMessage_model.dart';
 import 'package:dorf_app/screens/login/models/user_model.dart';
 import 'package:dorf_app/services/user_service.dart';
 
+enum OrderType {latest, oldest, mostLikes,}
+
 class BoardMessageWithUser{
   BoardMessage message;
   User user;
@@ -13,12 +15,46 @@ class BoardMessageWithUser{
 class BoardMessageService{
   final CollectionReference _ref = Firestore.instance.collection("Forumbeitrag");
   final _userService = UserService();
-  final _timeout = Duration(seconds: 10);
+  //final _timeout = Duration(seconds: 10);
 
   insertBoardMessage(BoardMessage message){
     _ref.add(message.toJson());
   }
 
+  Stream<List<BoardMessageWithUser>> getBoardMessagesWithUserAsStream(
+      BoardCategory category, BoardEntry entry, int limit, OrderType orderType){
+    String orderField = "";
+
+
+    Stream<QuerySnapshot> stream = _ref
+        .where("boardCategoryReference", isEqualTo: category.id)
+        .where("boardEntryReference", isEqualTo: entry.id)
+        .orderBy(_getOrderField(orderType), descending: true)
+        .limit(limit)
+        .snapshots();
+
+    return stream.asyncMap((snapshot) async{
+      List<BoardMessageWithUser> list = [];
+      for (var document in snapshot.documents){
+        var message = BoardMessage.fromJson(document.data, document.documentID);
+        var user = await _userService.getUser(message.userReference);
+        list.add(BoardMessageWithUser(message: message, user: user));
+      }
+      return list;
+    });
+  }
+  String _getOrderField(OrderType orderType){
+    String orderField = "";
+    if(OrderType.latest == orderType){
+      orderField = "postingDate";
+    } else if (OrderType.oldest == orderType){
+      orderField = "postingDate";
+    } else {
+      //TODO: ORDER BY COMMENTS WITH MOST LIKES
+    }
+    return orderField;
+  }
+/*
   Future<List<BoardMessageWithUser>> getBoardMessagesWithUser(BoardCategory category, BoardEntry entry) async{
     List<BoardMessageWithUser> list = [];
     await _ref
@@ -43,4 +79,6 @@ class BoardMessageService{
         });
     return list;
   }
+
+   */
 }
