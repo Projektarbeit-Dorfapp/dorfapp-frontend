@@ -7,6 +7,7 @@ class UserService extends ChangeNotifier{
 
   final CollectionReference _ref = Firestore.instance.collection("User");
   final _timeout = Duration(seconds: 10);
+
   ///Checks in database if userName already exist in user collection
   Future<bool> validateUser(String userName) async{
    QuerySnapshot snapshot = await _ref
@@ -14,6 +15,7 @@ class UserService extends ChangeNotifier{
        .getDocuments();
    return _validate(snapshot);
   }
+
   bool _validate(QuerySnapshot snapshot){
     if(snapshot.documents.length == 0){
       return false;
@@ -21,6 +23,7 @@ class UserService extends ChangeNotifier{
       return true;
     }
   }
+
   ///Checks in database if email already exist in user collection
   Future<bool> validateEmail(String email) async{
 
@@ -29,6 +32,7 @@ class UserService extends ChangeNotifier{
         .getDocuments();
     return _validate(snapshot);
   }
+
   ///add User into user collection as document
   Future<void> insertUser(User user) async{
     await _ref.document().setData(user.toJson());

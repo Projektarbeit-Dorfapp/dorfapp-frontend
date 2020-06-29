@@ -13,11 +13,12 @@ class User extends ChangeNotifier {
   String sex;
   String houseNumber;
   String lastName;
-  String foreName;
+  String firstName;
   String townDistrict;
   String plz;
   String street;
   String email;
+  String imagePath;
   User(
       {@required this.userName,
         @required this.uid,
@@ -29,11 +30,13 @@ class User extends ChangeNotifier {
       this.sex,
       this.houseNumber,
       this.lastName,
-      this.foreName,
+      this.firstName,
       this.townDistrict,
       this.plz,
       this.street,
-      this.email});
+      this.email,
+      this.imagePath,
+      this.id});
 
   User.fromJson(Map snapshot, String id){
     this.id = id;
@@ -46,12 +49,13 @@ class User extends ChangeNotifier {
     sex = snapshot["sex"] ?? "";
     houseNumber = snapshot["houseNumber"] ?? "";
     lastName = snapshot["lastName"] ?? "";
-    foreName = snapshot["foreName"] ?? "";
+    firstName = snapshot["firstName"] ?? "";
     townDistrict = snapshot["townDistrict"] ?? "";
     plz = snapshot["plz"] ?? "";
     street = snapshot["street"] ?? "";
     email = snapshot["email"] ?? "";
     uid = snapshot["uid"] ?? "";
+    imagePath = snapshot["imagePath"] ?? "";
   }
 
   Map<String, dynamic> toJson(){
@@ -65,12 +69,14 @@ class User extends ChangeNotifier {
       "sex" : sex,
       "houseNumber" : houseNumber,
       "lastName" : lastName,
-      "foreName" : foreName,
+      "firstName" : firstName,
       "townDistrict" : townDistrict,
       "plz" : plz,
       "street" : street,
       "email" : email,
       "uid" : uid,
+      "imagePath" : imagePath,
+      "id" : id,
     };
   }
 }
