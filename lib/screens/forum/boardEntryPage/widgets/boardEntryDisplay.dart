@@ -7,16 +7,10 @@ import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BoardEntryDisplay extends StatefulWidget {
+class BoardEntryDisplay extends StatelessWidget {
   final EntryWithUser entryWithUser;
   final BoardCategory category;
-
-  BoardEntryDisplay({@required this.entryWithUser, @required this.category});
-  @override
-  _BoardEntryDisplayState createState() => _BoardEntryDisplayState();
-}
-
-class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
+  const BoardEntryDisplay({@required this.entryWithUser, @required this.category});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,11 +22,11 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
           borderRadius: BorderRadius.all(Radius.circular(0)),
         ),
         transitionType: ContainerTransitionType.fade,
-        transitionDuration: const Duration(milliseconds: 450),
+        transitionDuration: const Duration(milliseconds: 300),
         openBuilder: (context, action) {
           return BoardMessagePage(
-            entry: widget.entryWithUser.entry,
-            category: widget.category,
+            entry: entryWithUser.entry,
+            category: category,
           );
         },
         closedBuilder: (context, action) {
@@ -45,12 +39,12 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                   left: 16,
                   top: 13,
                   child: UserAvatarDisplay(//TODO: Fetch from storage
-                      ),
+                  ),
                 ),
                 Positioned(
                   right: 0,
                   child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.more_vert,
                       color: Colors.grey,
                       size: 25,
@@ -68,8 +62,8 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                         Padding(
                           padding: EdgeInsets.only(left: 60, top: 10),
                           child: Text(
-                            widget.entryWithUser.user.userName,
-                            style: TextStyle(
+                            entryWithUser.user.userName,
+                            style: const TextStyle(
                                 fontFamily: "Raleway",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
@@ -79,52 +73,52 @@ class _BoardEntryDisplayState extends State<BoardEntryDisplay> {
                     ),
                     Row(
                       children: <Widget>[
-                        SizedBox(width: 60),
-                        Icon(
+                        const SizedBox(width: 60),
+                        const Icon(
                           Icons.date_range,
                           size: 12,
                           color: Colors.grey,
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Text(
                           TransformPostDate.transform(
-                              widget.entryWithUser.entry.postingDate.toDate()),
-                          style: TextStyle(
+                              entryWithUser.entry.postingDate.toDate()),
+                          style: const TextStyle(
                               fontFamily: "Raleway",
                               fontSize: 12,
                               color: Colors.grey),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
-                        widget.entryWithUser.entry.lastModifiedDate !=
-                            widget.entryWithUser.entry.postingDate
-                            ? Icon(
-                                Icons.edit,
-                                color: Colors.grey,
-                                size: 12,
-                              )
+                        entryWithUser.entry.lastModifiedDate !=
+                            entryWithUser.entry.postingDate
+                            ? const Icon(
+                          Icons.edit,
+                          color: Colors.grey,
+                          size: 12,
+                        )
                             : Container(),
-                        SizedBox(width: 5),
-                        widget.entryWithUser.entry.lastModifiedDate !=
-                            widget.entryWithUser.entry.postingDate
+                        const SizedBox(width: 5),
+                        entryWithUser.entry.lastModifiedDate !=
+                            entryWithUser.entry.postingDate
                             ? Text(
-                                TransformPostDate.transform(widget
-                                    .entryWithUser.entry.lastModifiedDate
-                                    .toDate()),
-                                style: TextStyle(
-                                    fontFamily: "Raleway",
-                                    fontSize: 12,
-                                    color: Colors.grey),
-                              )
+                          TransformPostDate.transform(
+                              entryWithUser.entry.lastModifiedDate
+                              .toDate()),
+                          style: const TextStyle(
+                              fontFamily: "Raleway",
+                              fontSize: 12,
+                              color: Colors.grey),
+                        )
                             : Container()
                       ],
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 16, top: 5),
                       child: Text(
-                        widget.entryWithUser.entry.title,
-                        style: TextStyle(
+                        entryWithUser.entry.title,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           fontFamily: "Raleway",

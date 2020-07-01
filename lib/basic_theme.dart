@@ -12,7 +12,7 @@ final ThemeData basicTheme = new ThemeData(
   //primarySwatch: Colors.blue,
   ///Fontfamaly müsste man auf Raleway umbauen, ich lasse es erstmal so wie es ist
   ///Thema fürs nächste meeting
-  fontFamily: 'Georgia',
+  fontFamily: 'Raleway',
   textTheme: TextTheme(
     headline1: TextStyle(fontFamily: 'Raleway', fontSize: 60, fontWeight: FontWeight.bold),
     headline2: TextStyle(fontFamily: 'Raleway', fontSize: 30),

@@ -4,9 +4,9 @@ import 'package:dorf_app/screens/forum/addEntryPage/addEntryPage.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 
-class EntryButton extends StatelessWidget {
+class EntryNavigationButton extends StatelessWidget {
   final BoardCategory category;
-  EntryButton({@required this.category});
+  EntryNavigationButton({@required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class EntryButton extends StatelessWidget {
               closedColor: Theme.of(context).buttonColor,
               closedElevation: 10.0,
               openElevation: 15.0,
-              closedShape: RoundedRectangleBorder(
+              closedShape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50)),
               ),
               transitionType: ContainerTransitionType.fade,
@@ -34,7 +34,7 @@ class EntryButton extends StatelessWidget {
               },
               closedBuilder: (context, action) {
                 return Container(
-                    child: Icon(
+                    child: const Icon(
                       Icons.add,
                       color: Colors.white,
                     ));

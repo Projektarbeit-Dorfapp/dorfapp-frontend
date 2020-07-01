@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
@@ -7,8 +9,8 @@ import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
 class EntryWithUser {
-  BoardEntry entry;
-  User user;
+  final BoardEntry entry;
+  final User user;
   EntryWithUser({@required this.entry, @required this.user});
 }
 
@@ -64,7 +66,7 @@ class BoardEntryService extends ChangeNotifier {
       List<EntryWithUser> list = [];
       for (var document in snapshot.documents){
         var entry = BoardEntry.fromJson(document.data, document.documentID);
-        var user = await _userService.getUser(entry.userReference);
+        var user = await _userService.getUser(entry.userReference); //BAD
         list.add(EntryWithUser(entry: entry, user: user));
       }
       return list;

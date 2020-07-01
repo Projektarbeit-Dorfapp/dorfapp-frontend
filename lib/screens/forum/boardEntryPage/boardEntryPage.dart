@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
-import 'package:dorf_app/screens/forum/boardEntryPage/widgets/addEntryButton.dart';
+import 'package:dorf_app/screens/forum/boardEntryPage/widgets/entryNavigationButton.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 
@@ -87,7 +87,7 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
                 }
               },
             ),
-            EntryButton(category: category,)
+            EntryNavigationButton(category: category,)
           ],
         ),
       ),

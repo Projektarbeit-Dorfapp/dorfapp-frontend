@@ -1,62 +1,116 @@
-import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/helperFunctions/transform_post_date.dart';
+import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/widgets/boardMessageLikeButton.dart';
 import 'package:dorf_app/services/boardMessage_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class BoardMessageDisplay extends StatefulWidget {
+
+class BoardMessageDisplay extends StatelessWidget {
   final BoardMessageWithUser messageWithUser;
-  BoardMessageDisplay(this.messageWithUser);
-  @override
-  _BoardMessageDisplayState createState() => _BoardMessageDisplayState();
-}
-
-class _BoardMessageDisplayState extends State<BoardMessageDisplay> {
-  FirebaseUser _currentUser;
-  @override
-  void initState() {
-    Provider.of<Authentication>(context, listen: false)
-        .getCurrentUser()
-        .then((user) {
-      setState(() {
-        _currentUser = user;
-      });
-    });
-    super.initState();
-  }
-
+  const BoardMessageDisplay(this.messageWithUser);
   @override
   Widget build(BuildContext context) {
-    if (_currentUser != null) {
-      return Container(
-        height: 100,
-        child: Card(
-              color: _getColor(),
-              child: Text(
-                widget.messageWithUser.message.message,
-                style: TextStyle(
-                    fontFamily: "Raleway",
-                color: _getTextColor()),
+    return Padding(
+      padding: EdgeInsets.only(top: 5),
+      child: Material(
+        color: Colors.white,
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              left: 16,
+              top: 13,
+              child: UserAvatarDisplay(//TODO: Fetch from storage
               ),
             ),
-      );
-    } else {
-      return Container();
-    }
-  }
-  Color _getColor(){
-    if(_currentUser.uid == widget.messageWithUser.user.uid){
-      return Colors.lightGreen;
-    } else {
-      return Color(0xfff2f2f2);
-    }
-  }
-  Color _getTextColor(){
-    if(_currentUser.uid == widget.messageWithUser.user.uid){
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
-  }
+            Positioned(
+              right: 0,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.more_vert,
+                  color: Colors.grey,
+                  size: 25,
+                ),
+                onPressed: () {
+                  //TODO: What to do?
+                },
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 60, top: 10),
+                      child: Text(
+                        messageWithUser.user.userName,
+                        style: const TextStyle(
+                            fontFamily: "Raleway",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(width: 60),
+                      const Icon(
+                      Icons.date_range,
+                      size: 12,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      TransformPostDate.transform(
+                          messageWithUser.message.postingDate.toDate()),
+                      style: const TextStyle(
+                          fontFamily: "Raleway",
+                          fontSize: 12,
+                          color: Colors.grey),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    messageWithUser.message.lastModifiedDate !=
+                        messageWithUser.message.postingDate
+                        ? const Icon(
+                      Icons.edit,
+                      color: Colors.grey,
+                      size: 12,
+                    )
+                        : Container(),
+                    const SizedBox(width: 5),
+                    messageWithUser.message.lastModifiedDate !=
+                        messageWithUser.message.postingDate
+                        ? Text(
+                      TransformPostDate.transform(
+                          messageWithUser.message.lastModifiedDate
+                          .toDate()),
+                      style: const TextStyle(
+                          fontFamily: "Raleway",
+                          fontSize: 12,
+                          color: Colors.grey),
+                    )
+                        : Container()
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 16, top: 10),
+                  child: Text(
+                    messageWithUser.message.message,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: "Raleway",
+                    ),
+                  ),
+                ),
 
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

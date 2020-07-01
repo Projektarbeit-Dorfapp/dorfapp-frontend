@@ -2,12 +2,7 @@ import 'package:dorf_app/screens/forum/addEntryPage/provider/entryState.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddEntryTitleField extends StatefulWidget {
-  @override
-  _AddEntryTitleFieldState createState() => _AddEntryTitleFieldState();
-}
-
-class _AddEntryTitleFieldState extends State<AddEntryTitleField> {
+class AddEntryTitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entryState = Provider.of<EntryState>(context, listen: false);
@@ -15,7 +10,7 @@ class _AddEntryTitleFieldState extends State<AddEntryTitleField> {
       onChanged: (value){
         entryState.title = value;
       },
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
           labelText: "Titel"
       ),
     );
