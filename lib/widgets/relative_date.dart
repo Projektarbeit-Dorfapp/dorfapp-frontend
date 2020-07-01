@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //Meike Nedwidek
-class DateComment extends StatelessWidget {
+class RelativeDate extends StatelessWidget {
 
   final DateTime datetime;
   final Color color;
+  final double fontSize;
 
-  const DateComment(this.datetime, this.color);
+  const RelativeDate(this.datetime, this.color, this.fontSize);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class DateComment extends StatelessWidget {
       _getDateDifference(),
       style: TextStyle(
           fontFamily: 'Raleway',
-          fontSize: 12.0,
+          fontSize: fontSize,
           color: this.color
       ),
     );

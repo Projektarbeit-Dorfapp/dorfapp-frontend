@@ -7,8 +7,8 @@ import '../../models/news_model.dart';
 import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
-class News extends StatelessWidget {
-  List<NewsModel> news;
+class NewsOverview extends StatelessWidget {
+  List<News> news;
 
   final _newsService = new NewsService();
 
@@ -128,7 +128,7 @@ class News extends StatelessWidget {
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 return FutureBuilder(
                   future: _newsService.getAllNews(),
-                  builder: (context, AsyncSnapshot<List<NewsModel>> snapshot) {
+                  builder: (context, AsyncSnapshot<List<News>> snapshot) {
                     if (snapshot.hasData) {
                       this.news = snapshot.data;
                       return SingleChildScrollView(
@@ -183,7 +183,7 @@ class News extends StatelessWidget {
     );
   }
 
-  prepareNewsCards(NewsModel newsModel) {
+  prepareNewsCards(News newsModel) {
     return new NewsCard(newsModel.id, newsModel.title, newsModel.description,
         newsModel.imagePath, newsModel.createdAt);
   }

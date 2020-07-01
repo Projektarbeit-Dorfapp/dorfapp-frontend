@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
-import 'package:dorf_app/screens/login/models/user_model.dart';
+import 'package:dorf_app/models/user_model.dart';
 
 //Meike Nedwidek
-class NewsModel{
+class News{
 
   String id;
   String title;
@@ -20,7 +20,7 @@ class NewsModel{
   Timestamp modifiedAt;
   String createdBy;
 
-  NewsModel({this.id, this.title, this.description, this.startTime, this.endTime, this.address, this.imagePath, this.likes, this.comments, this.isNews, this.createdAt, this.modifiedAt, this.createdBy});
+  News({this.id, this.title, this.description, this.startTime, this.endTime, this.address, this.imagePath, this.likes, this.comments, this.isNews, this.createdAt, this.modifiedAt, this.createdBy});
 
   DateTime convertTimestamp(Timestamp timestamp) {
     if (timestamp != null) return DateTime.parse(timestamp.toDate().toString());

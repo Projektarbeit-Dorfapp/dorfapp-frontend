@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/news_model.dart';
-import 'package:dorf_app/screens/login/models/user_model.dart';
+import 'package:dorf_app/models/user_model.dart';
 
 class NewsService {
   CollectionReference _newsCollectionReference =
       Firestore.instance.collection("Veranstaltung");
 
-  void insertNews(NewsModel news) async {
+  void insertNews(News news) async {
     DocumentReference ref = await _newsCollectionReference.add({
       'title': news.title,
       'description': news.description,
@@ -26,15 +26,15 @@ class NewsService {
     });
   }
 
-  Future<NewsModel> getNews(String newsID) async {
-    NewsModel newsModel;
+  Future<News> getNews(String newsID) async {
+    News newsModel;
 
     try {
       await _newsCollectionReference
           .document(newsID)
           .get()
           .then((dataSnapshot) {
-        newsModel = new NewsModel(
+        newsModel = new News(
             id: newsID,
             title: dataSnapshot.data['title'].toString(),
             description: dataSnapshot.data['description'].toString(),
@@ -82,13 +82,13 @@ class NewsService {
   })),
    */
 
-  Future<List<NewsModel>> getAllNews() async {
-    List<NewsModel> news = [];
+  Future<List<News>> getAllNews() async {
+    List<News> news = [];
     try {
       QuerySnapshot querySnapshot =
           await _newsCollectionReference.getDocuments();
       for (var i = 0; i < querySnapshot.documents.length; i++) {
-        NewsModel newsModel = new NewsModel(
+        News newsModel = new News(
             id: querySnapshot.documents[i].documentID,
             title: querySnapshot.documents[i].data['title'].toString(),
             description:

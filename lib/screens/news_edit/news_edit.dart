@@ -36,7 +36,7 @@ class _NewsEditState extends State<NewsEdit> {
   final _streetController = TextEditingController();
   final _newsService = NewsService();
 
-  NewsModel news = new NewsModel();
+  News news = new News();
   Address address = new Address();
 
 

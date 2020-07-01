@@ -9,6 +9,7 @@ final ThemeData basicTheme = new ThemeData(
   textSelectionColor: Color(0xff548c58),
   cardColor: Color(0xff141e3e),
   accentColor: Color(0xff548c58),
+  backgroundColor: Colors.white,
   //primarySwatch: Colors.blue,
   ///Fontfamaly müsste man auf Raleway umbauen, ich lasse es erstmal so wie es ist
   ///Thema fürs nächste meeting

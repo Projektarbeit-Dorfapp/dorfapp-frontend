@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 
 ///Meike Nedwidek
 class NewsDetail extends StatelessWidget {
-  NewsModel newsModel;
+  News newsModel;
   String newsID;
   final _newsService = NewsService();
 
@@ -26,9 +26,9 @@ class NewsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<NewsModel>(
+    return FutureBuilder<News>(
       future: _newsService.getNews(newsID),
-      builder: (context, AsyncSnapshot<NewsModel> snapshot) {
+      builder: (context, AsyncSnapshot<News> snapshot) {
        if (snapshot.hasData) {
           AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
           this.newsModel = snapshot.data;
@@ -39,21 +39,17 @@ class NewsDetail extends StatelessWidget {
                   PopupMenuButton<String> (
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     onSelected: (value) => _choiceAction(value, context),
+                    color: Colors.white,
                     itemBuilder: (BuildContext context) {
                       if (_accessHandler.getUID() == this.newsModel.createdBy) {
-                        return MenuButtons.EditDeleteLogout.map((String choice) {
+                        return MenuButtons.EditDelete.map((String choice) {
                           return PopupMenuItem<String> (
                             value: choice,
-                            child: Text(choice),
+                            child: Text(choice)
                           );
                         }).toList();
                       }  else {
-                        return MenuButtons.HomePopUpMenu.map((String choice) {
-                          return PopupMenuItem<String> (
-                            value: choice,
-                            child: Text(choice),
-                          );
-                        }).toList();
+                        return List();
                       }
                     },
                   ),

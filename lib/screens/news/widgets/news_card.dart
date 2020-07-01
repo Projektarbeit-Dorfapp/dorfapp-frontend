@@ -1,12 +1,12 @@
 import 'package:dorf_app/models/news_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dorf_app/widgets/date_comment.dart';
+import 'package:dorf_app/widgets/relative_date.dart';
 
 import '../news_detail.dart';
 
 class NewsCard extends StatelessWidget {
-  NewsModel newsCard = new NewsModel();
+  News newsCard = new News();
 
   NewsCard(id, title, description, imagePath, createdAt) {
     this.newsCard.title = title;
@@ -63,7 +63,10 @@ class NewsCard extends StatelessWidget {
                         child: Text(
                           newsCard.description,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontFamily: 'Raleway', fontSize: 14, color: Colors.white),
+                          style: TextStyle(
+                              fontFamily: 'Raleway',
+                              fontSize: 14,
+                              color: Colors.white),
                         ),
                       ),
                     ),
@@ -73,11 +76,12 @@ class NewsCard extends StatelessWidget {
                         Padding(
                           padding:
                               const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                          child: DateComment(
+                          child: RelativeDate(
                               this
                                   .newsCard
                                   .convertTimestamp(this.newsCard.createdAt),
-                              Colors.white),
+                              Colors.white,
+                              12.0),
                         ),
                         Container(
                           padding: EdgeInsets.only(right: 15.0),

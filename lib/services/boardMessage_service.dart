@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/boardMessage_model.dart';
-import 'package:dorf_app/screens/login/models/user_model.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';

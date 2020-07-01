@@ -1,4 +1,4 @@
-import 'package:dorf_app/screens/login/models/user_model.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/like_service.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,11 +1,10 @@
 import 'package:dorf_app/models/comment_model.dart';
-import 'package:dorf_app/widgets/date_comment.dart';
+import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //Meike Nedwidek
-class CommentCard extends StatelessWidget{
-
+class CommentCard extends StatelessWidget {
   final Comment comment;
 
   CommentCard({this.comment});
@@ -22,18 +21,16 @@ class CommentCard extends StatelessWidget{
                 shape: BoxShape.circle,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage(comment.user.imagePath != null ? comment.user.imagePath : "assets/avatar.png")
-                )
-            )
-        ),
+                    image: AssetImage(comment.user.imagePath != null
+                        ? comment.user.imagePath
+                        : "assets/avatar.png")))),
         Container(
             margin: EdgeInsets.only(top: 10.0),
             padding: EdgeInsets.all(15.0),
             width: MediaQuery.of(context).size.width - 100,
             decoration: BoxDecoration(
                 color: Color(0xFFE6E6E6),
-                borderRadius: BorderRadius.circular(10.0)
-            ),
+                borderRadius: BorderRadius.circular(10.0)),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,13 +43,13 @@ class CommentCard extends StatelessWidget{
                             fontFamily: 'Raleway',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Colors.black
-                        ),
+                            color: Colors.black),
                       ),
                       Expanded(
                         child: Container(
                           alignment: Alignment.topRight,
-                          child: DateComment(comment.creationDate, Colors.black),
+                          child: RelativeDate(
+                              comment.creationDate, Colors.black, 12.0),
                         ),
                       )
                     ],
@@ -64,14 +61,11 @@ class CommentCard extends StatelessWidget{
                         style: TextStyle(
                             fontFamily: 'Raleway',
                             fontWeight: FontWeight.normal,
-                            fontSize: 16
-                        ),
+                            fontSize: 16),
                       ),
                     ],
                   )
-                ]
-            )
-        )
+                ]))
       ],
     );
   }

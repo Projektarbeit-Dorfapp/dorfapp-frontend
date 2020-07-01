@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
   int _currentIndex = 1;
   final List<Widget> _children = [
     Calendar(),
-    News(),
+    NewsOverview(),
     Forum(),
   ];
   @override
@@ -37,6 +37,7 @@ class _HomeState extends State<Home> {
           PopupMenuButton<String> (
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               onSelected: (value) => _choiceAction(value, context),
+              color: Colors.white,
               itemBuilder: (BuildContext context) {
                 return MenuButtons.HomePopUpMenu.map((String choice) {
                   return PopupMenuItem<String> (
