@@ -15,7 +15,7 @@ class AddEntryPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Neues Thema"),
+          title: const Text("Neues Thema"),
         ),
         floatingActionButton: Container(
           width: 80,

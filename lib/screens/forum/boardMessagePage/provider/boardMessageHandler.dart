@@ -29,18 +29,20 @@ class BoardMessageHandler extends ChangeNotifier{
     if(_message.isEmpty){
       return;
     }
-    _boardMessageService.insertBoardMessage(await _createBoardMessage());
+    await _boardMessageService.insertBoardMessage(await _createBoardMessage());
     _message = "";
     notifyListeners();
 
   }
   Future<BoardMessage> _createBoardMessage() async {
+    final dateTime = DateTime.now();
     BoardMessage boardMessage;
     await _authentication.getCurrentUser().then((firebaseUser){
       boardMessage = BoardMessage(
         message: _message,
         userReference: firebaseUser.uid,
-        postingDate: Timestamp.fromDate(DateTime.now()),
+        postingDate: Timestamp.fromDate(dateTime),
+        lastModifiedDate: Timestamp.fromDate(dateTime),
         boardCategoryReference: _category.id,
         boardEntryReference: _entry.id,
       );
