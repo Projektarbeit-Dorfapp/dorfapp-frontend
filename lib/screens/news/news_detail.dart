@@ -79,7 +79,7 @@ class NewsDetail extends StatelessWidget {
                                 color: Colors.black),
                           )
                       ),
-                      LikeSection(newsModel.likes),
+                      LikeSection(newsModel.likes, newsID, "Veranstaltung"),
                       CommentSection(newsModel.comments),
                     ],
                   )

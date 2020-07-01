@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
-import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/models/user_model.dart';
 
 //Meike Nedwidek
 class NewsModel{

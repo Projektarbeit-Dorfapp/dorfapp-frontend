@@ -49,6 +49,9 @@ class _RootPageState extends State<RootPage> {
           _userService.checkIfAdmin(_userID).then((isAdmin) {
             _accessHandler.setIsAdmin(isAdmin);
           });
+          _userService.getUser(_userID).then((user) {
+            _accessHandler.setUser(user);
+          });
       });
     });
     setState(() {

@@ -1,11 +1,18 @@
 import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:dorf_app/screens/login/models/user_model.dart';
 
 class AccessHandler extends ChangeNotifier{
+
+  final _userService = UserService();
 
   VoidCallback _logout;
   VoidCallback _login;
   String _uid; ///currently logged in user ID
+  String _firstName;
+  String _lastName;
+  User _user;
 
   String _currentLoginEmail = "";
   String _currentLoginPassword = "";
@@ -37,6 +44,44 @@ class AccessHandler extends ChangeNotifier{
     } else {
       return this._uid;
     }
+  }
+
+  setFirstName(String firstName){
+    this._firstName = firstName;
+  }
+
+  getFirstName() {
+    return this._firstName;
+  }
+
+  setLastName(String lastName){
+    this._lastName = lastName;
+  }
+
+  getLastName() {
+    return this._lastName;
+  }
+
+  setUser(User user) {
+    this._user = user;
+    this._uid = user.uid;
+    this._firstName = user.firstName;
+    this._lastName = user.lastName;
+    this._isAdmin = user.admin;
+  }
+
+  getUser() {
+    if (this._user == null) {
+      ///this._uid = getUIDFromDatabase();
+      final Authentication _auth = Authentication();
+      _auth.getCurrentUser().then((test) {
+        this._uid = test.uid;
+        _userService.getUser(this._uid).then((user) {
+          this._user = user;
+        });
+      });
+    }
+      return this._user;
   }
 
   setIsAdmin(bool isAdmin) {

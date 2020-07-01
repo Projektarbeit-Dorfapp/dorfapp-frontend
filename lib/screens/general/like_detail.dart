@@ -1,4 +1,4 @@
-import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +39,7 @@ class LikeDetail extends StatelessWidget{
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     fit: BoxFit.fill,
-                                    image: AssetImage(user.imagePath != null ? user.imagePath : "assets/avatar.png")
+                                    image: AssetImage(user.imagePath != null && user.imagePath != "" ? user.imagePath : "assets/avatar.png")
                                 )
                             )
                         ),
