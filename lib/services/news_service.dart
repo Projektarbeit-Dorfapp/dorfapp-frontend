@@ -7,23 +7,33 @@ class NewsService {
   CollectionReference _newsCollectionReference =
       Firestore.instance.collection("Veranstaltung");
 
-  void insertNews(News news) async {
-    DocumentReference ref = await _newsCollectionReference.add({
-      'title': news.title,
-      'description': news.description,
-      'startTime': news.startTime,
-      'endTime': news.endTime,
-      'createdAt': DateTime.now(),
-      'address': {
-        'street': news.address.street,
-        'houseNumber': news.address.houseNumber,
-        'district': news.address.district,
-        'zipCode': news.address.zipCode,
-      },
-      'isNews': news.isNews,
-      'imagePath': news.imagePath,
-      'createdBy': news.createdBy
-    });
+  Future<String> insertNews(News news) async {
+    try {
+      DocumentReference ref = await _newsCollectionReference.add({
+        'title': news.title,
+        'description': news.description,
+        'startTime': news.startTime,
+        'endTime': news.endTime,
+        'createdAt': DateTime.now(),
+        'address': {
+          'street': news.address.street,
+          'houseNumber': news.address.houseNumber,
+          'district': news.address.district,
+          'zipCode': news.address.zipCode,
+        },
+        'isNews': news.isNews,
+        'imagePath': news.imagePath,
+        'createdBy': news.createdBy
+      });
+      return ref.documentID;
+    }
+    catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void updateNews(News news) async {
+
   }
 
   Future<News> getNews(String newsID) async {

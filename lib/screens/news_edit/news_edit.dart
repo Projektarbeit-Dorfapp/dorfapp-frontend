@@ -1,7 +1,6 @@
 import 'dart:io';
-
-import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:dorf_app/models/address_model.dart';
+import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,8 +47,11 @@ class _NewsEditState extends State<NewsEdit> {
   ///Anpassen, sodass der Wert aus dem Dokument übernommen wird
   bool isNews = false;
 
+
   @override
   Widget build(BuildContext context) {
+    AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
+    _setControllerInUpdateForm(_accessHandler);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -222,8 +224,8 @@ class _NewsEditState extends State<NewsEdit> {
                             }
                             return null;
                           },
-                        ),                        
-                        _addNewsButton(widget.newsID),
+                        ),
+                        _addOrUpdateNewsButton(widget.newsID)
                       ],
                     ),
                   ),
@@ -258,64 +260,58 @@ class _NewsEditState extends State<NewsEdit> {
     });
   }
 
-
-  RaisedButton _addNewsButton(String newsID) {
+  //Meike Nedwidek & Hannes Hauenstein
+  RaisedButton _addOrUpdateNewsButton(String newsID) {
     AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
-    if (newsID != null){
-      return RaisedButton(
-        child: Text('Aktualisieren'),
-        onPressed: () async {
-          if (_formKey.currentState.validate()) {
-            news.title = _titleController.text;
-            news.description = _descriptionController.text;
-            address.district = _districtController.text;
-            address.houseNumber = _houseNumberController.text;
-            address.street = _streetController.text;
-            address.zipCode = _zipCodeController.text;
-            news.address = address;
-            news.startTime = Timestamp.fromDate(startDateTime);
-            news.endTime = Timestamp.fromDate(endDateTime);
-            news.isNews = this.isNews;
-            news.createdBy = await _accessHandler.getUID();
-            ///Noch eigene Funktion 'updateNews' draus machen
-            news.imagePath = _uploadedFileURL;
-            _newsService.insertNews(news);
+    return RaisedButton(
+      child: newsID != null ? Text('Aktualiseren') : Text('Erstellen'),
+      onPressed: () async {
+        if (_formKey.currentState.validate()) {
+          _getControllerText(_accessHandler);
+          newsID != null ? _newsService.updateNews(news) : newsID = await _newsService.insertNews(news);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewsDetail(newsID)));
+        }
+      },
+    );
+  }
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NewsDetail(newsID)));
-          }
-        },
-      );
-    }
-    else {
-      return RaisedButton(
-        child: Text('Erstellen'),
-        onPressed: () async {
-          if (_formKey.currentState.validate()) {
-            news.title = _titleController.text;
-            news.description = _descriptionController.text;
-            address.district = _districtController.text;
-            address.houseNumber = _houseNumberController.text;
-            address.street = _streetController.text;
-            address.zipCode = _zipCodeController.text;
-            news.address = address;
-            news.startTime = Timestamp.fromDate(startDateTime);
-            news.endTime = Timestamp.fromDate(endDateTime);
-            news.isNews = this.isNews;
-            news.createdBy = await _accessHandler.getUID();
-            ///Insert so überarbeiten, dass er die ID der neuen Veranstaltung zurückgibt. Dann zur DetailView dieser ID navigieren
-            news.imagePath = _uploadedFileURL;
-            _newsService.insertNews(news);
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NewsDetail(newsID)));
-             */
-          }
-        },
-      );
+  Future<News> _getControllerText(AccessHandler _accessHandler) async {
+    news.title = _titleController.text;
+    news.description = _descriptionController.text;
+    address.district = _districtController.text;
+    address.houseNumber = _houseNumberController.text;
+    address.street = _streetController.text;
+    address.zipCode = _zipCodeController.text;
+    news.address = address;
+    news.startTime = Timestamp.fromDate(startDateTime);
+    news.endTime = Timestamp.fromDate(endDateTime);
+    news.isNews = this.isNews;
+    news.createdBy = await _accessHandler.getUID();
+    news.imagePath = _uploadedFileURL;
+
+    return news;
+  }
+
+  //Meike Nedwidek
+  void _setControllerInUpdateForm(AccessHandler _accessHandler) async {
+    if (widget.newsID != null) {
+      news = await _newsService.getNews(widget.newsID);
+      _titleController.text = news.title;
+      _descriptionController.text = news.description;
+      _districtController.text = news.address.district;
+      _houseNumberController.text = news.address.houseNumber;
+      _streetController.text = news.address.street;
+      _zipCodeController.text = news.address.zipCode;
+      ///TO DO: Set DateTimes, isNews and ImagePath
+      //startDateTime = news.convertTimestamp(news.startTime);
+      //endDateTime = news.convertTimestamp(news.endTime);
+      //news.isNews = this.isNews;
+      news.createdBy = await _accessHandler.getUID();
+      //news.imagePath = _uploadedFileURL;
+
     }
   }
 }

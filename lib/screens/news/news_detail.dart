@@ -35,24 +35,14 @@ class NewsDetail extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Color(0xFF6178a3),
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
                 actions: <Widget>[
-                  PopupMenuButton<String> (
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    onSelected: (value) => _choiceAction(value, context),
-                    color: Colors.white,
-                    itemBuilder: (BuildContext context) {
-                      if (_accessHandler.getUID() == this.newsModel.createdBy) {
-                        return MenuButtons.EditDelete.map((String choice) {
-                          return PopupMenuItem<String> (
-                            value: choice,
-                            child: Text(choice)
-                          );
-                        }).toList();
-                      }  else {
-                        return List();
-                      }
-                    },
-                  ),
+                  _getPopupMenuButton(_accessHandler, context),
                 ],
               ),
               body: Container(
@@ -195,6 +185,28 @@ class NewsDetail extends StatelessWidget {
       final accessHandler = Provider.of<AccessHandler>(context, listen: false);
       accessHandler.logout();
     }
+  }
+
+   _getPopupMenuButton(AccessHandler _accessHandler, BuildContext context) {
+    if (_accessHandler.getUIDFromDatabase() == this.newsModel.createdBy) {
+      return PopupMenuButton<String> (
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        onSelected: (value) => _choiceAction(value, context),
+        color: Colors.white,
+        itemBuilder: (BuildContext context) {
+          return MenuButtons.EditDelete.map((String choice) {
+            return PopupMenuItem<String> (
+                value: choice,
+                child: Text(choice)
+            );
+          }).toList();
+        },
+      );
+    }
+    else {
+      return Row();
+    }
+
   }
 
 }

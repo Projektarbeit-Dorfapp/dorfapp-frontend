@@ -4,7 +4,7 @@ import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 
 //Meike Nedwidek
-class News{
+class News {
 
   String id;
   String title;
