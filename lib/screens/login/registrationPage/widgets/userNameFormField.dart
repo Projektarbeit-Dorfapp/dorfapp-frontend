@@ -29,10 +29,10 @@ class _UserNameFormFieldState extends State<UserNameFormField> {
         },
         validator: (userName) {
           if(userName.isEmpty){
-            return "Wie möchtest du heißen?";
+            return "Wie soll dein Nickname heißen?";
           }
-          if(registrationValidator.userExist){
-            return "Name ist leider schon vergeben";
+          if(registrationValidator.isUserNameInUse){
+            return "Nickname ist leider schon vergeben";
           } else {
             return null;
           }
@@ -41,7 +41,7 @@ class _UserNameFormFieldState extends State<UserNameFormField> {
             contentPadding: 5,
             color: Color(0xFF548c58),
             icon: Icons.person,
-            labelText: "Dein Benutzername"
+            labelText: "Nickname"
         ).decorate(context),
       ),
     );

@@ -1,5 +1,5 @@
-import 'package:dorf_app/screens/login/loginPage/widgets/loginPicture.dart';
 import 'package:dorf_app/screens/login/registrationPage/provider/registrationValidator.dart';
+import 'package:dorf_app/screens/login/registrationPage/widgets/RealNameFormField.dart';
 import 'package:dorf_app/screens/login/registrationPage/widgets/accountExistText.dart';
 import 'package:dorf_app/screens/login/registrationPage/widgets/confirmedPasswordFormField.dart';
 import 'package:dorf_app/screens/login/registrationPage/widgets/emailFormField.dart';
@@ -22,6 +22,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   FocusNode _nodeUser;
   FocusNode _nodeEmail;
   FocusNode _nodePassword;
+  FocusNode _nodeFirstName;
+  FocusNode _nodeLastName;
   bool _hidePassword;
   bool _hideConfirmedPassword;
   @override
@@ -29,6 +31,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _nodeUser = FocusNode();
     _nodeEmail = FocusNode();
     _nodePassword = FocusNode();
+    _nodeFirstName = FocusNode();
+    _nodeLastName = FocusNode();
     _hidePassword = true;
     _hideConfirmedPassword = true;
     super.initState();
@@ -39,32 +43,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _nodeUser.dispose();
     _nodeEmail.dispose();
     _nodePassword.dispose();
+    _nodeFirstName.dispose();
+    _nodeLastName.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     double safeArea = MediaQuery.of(context).padding.top;
-    double pictureScreenHeight =
-        MediaQuery.of(context).size.height * 0.3 - safeArea;
     return ChangeNotifierProvider(
       create: (context) => RegistrationValidator(),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
-
             children: <Widget>[
               Container(
-                height: safeArea,
-              ),
-              Container(
-                height: pictureScreenHeight,
-                child: LoginPicture(),
+                height: safeArea + MediaQuery.of(context).size.height*0.05,
               ),
               Padding(
                 padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
                 child: Container(
-                  height: 310,
+                  height: 450,
                   width: MediaQuery.of(context).size.width,
                   child: Form(
                     key: _formKey,
@@ -74,33 +73,48 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: UserNameFormField(_nodeUser),
                         ),
                         Positioned(
-                          top: positionedDistance,
-                          child: EmailFormField(
-                            focusNodeUser: _nodeUser,
-                          focusNodeEmail: _nodeEmail,),
+                          top: positionedDistance * 1,
+                          child: RealNameFormField(
+                            nameType: RealNameType.firstName,
+                          focusRequested: _nodeUser,
+                          focusNext: _nodeFirstName,),
                         ),
                         Positioned(
                           top: positionedDistance * 2,
-                          child: PassWordFormField(
-                            focusNodeEmail: _nodeEmail,
-                            focusNodePassword: _nodePassword,
-                            hidePassword: _hidePassword,
+                          child: RealNameFormField(
+                            nameType: RealNameType.lastName,
+                            focusRequested: _nodeFirstName,
+                            focusNext: _nodeLastName,
                           ),
                         ),
                         Positioned(
                           top: positionedDistance * 3,
-                          child: ConfirmedPasswordFormField(
-                            hidePassword: _hideConfirmedPassword,
-                            focusNode: _nodePassword,
+                          child: EmailFormField(
+                            focusRequested: _nodeLastName,
+                          focusNext: _nodeEmail,),
+                        ),
+                        Positioned(
+                          top: positionedDistance * 4,
+                          child: PassWordFormField(
+                            focusRequested: _nodeEmail,
+                            focusNext: _nodePassword,
+                            hidePassword: _hidePassword,
                           ),
                         ),
                         Positioned(
-                          top: positionedDistance * 2 - 1,
+                          top: positionedDistance * 5,
+                          child: ConfirmedPasswordFormField(
+                            hidePassword: _hideConfirmedPassword,
+                            focusEnd: _nodePassword,
+                          ),
+                        ),
+                        Positioned(
+                          top: positionedDistance * 4 - 1,
                           right: 19,
                           child: _passwordHideDisplay(_PasswordType.password),
                         ),
                         Positioned(
-                          top: positionedDistance * 3 - 1,
+                          top: positionedDistance * 5 - 1,
                           right: 19,
                           child: _passwordHideDisplay(
                               _PasswordType.confirmedPassword),
@@ -111,11 +125,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
               ),
               Container(
-                height: (MediaQuery.of(context).size.height - safeArea) * 0.05,
+                height: (MediaQuery.of(context).size.height - safeArea) * 0.09,
               ),
               RegistrationButton(_formKey),
               Padding(
-                padding: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.only(top: 30, bottom: 20),
                 child: AccountExistText(),
               ),
             ],

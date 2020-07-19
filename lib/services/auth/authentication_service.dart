@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
-enum AuthStatus{WAITING, NOT_LOGGED_IN, LOGGED_IN}
+enum AuthStatus{NOT_LOGGED_IN, LOGGED_IN}
 
 abstract class Auth {
   ///User login

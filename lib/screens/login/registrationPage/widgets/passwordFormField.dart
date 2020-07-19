@@ -5,12 +5,12 @@ import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 class PassWordFormField extends StatefulWidget {
-  final FocusNode focusNodeEmail;
-  final FocusNode focusNodePassword;
+  final FocusNode focusRequested;
+  final FocusNode focusNext;
   final bool hidePassword;
   PassWordFormField({
-  @required this.focusNodeEmail,
-  @required this.focusNodePassword,
+  @required this.focusRequested,
+  @required this.focusNext,
   @required this.hidePassword});
   @override
   _PassWordFormFieldState createState() => _PassWordFormFieldState();
@@ -24,13 +24,13 @@ class _PassWordFormFieldState extends State<PassWordFormField> {
       width: MediaQuery.of(context).size.width * 0.9,
       child: TextFormField(
         style: TextStyle(fontFamily: "Raleway"),
-        focusNode: widget.focusNodeEmail,
+        focusNode: widget.focusRequested,
         onChanged: (password){
           registrationValidator.setPassword(password);
         },
         onFieldSubmitted: (value){
           if(value.isNotEmpty){
-            FocusScope.of(context).requestFocus(widget.focusNodePassword);
+            FocusScope.of(context).requestFocus(widget.focusNext);
           }
         },
         validator: (password){

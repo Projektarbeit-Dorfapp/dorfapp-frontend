@@ -1,13 +1,14 @@
-import 'package:dorf_app/helperFunctions/transform_post_date.dart';
+
+import 'package:dorf_app/models/boardMessage_model.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
-import 'package:dorf_app/screens/forum/boardMessagePage/widgets/boardMessageLikeButton.dart';
-import 'package:dorf_app/services/boardMessage_service.dart';
+import 'package:dorf_app/widgets/relative_date.dart';
+import 'package:dorf_app/widgets/showUserProfileText.dart';
 import 'package:flutter/material.dart';
 
 
 class BoardMessageDisplay extends StatelessWidget {
-  final BoardMessageWithUser messageWithUser;
-  const BoardMessageDisplay(this.messageWithUser);
+  final BoardMessage message;
+  const BoardMessageDisplay(this.message);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,12 +43,12 @@ class BoardMessageDisplay extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(left: 60, top: 10),
-                      child: Text(
-                        messageWithUser.user.userName,
-                        style: const TextStyle(
-                            fontFamily: "Raleway",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
+                      child: ShowUserProfileText(
+                        userName: message.userName,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        userReference: message.userReference,
                       ),
                     ),
                   ],
@@ -61,19 +62,16 @@ class BoardMessageDisplay extends StatelessWidget {
                       color: Colors.grey,
                     ),
                     const SizedBox(width: 5),
-                    Text(
-                      TransformPostDate.transform(
-                          messageWithUser.message.postingDate.toDate()),
-                      style: const TextStyle(
-                          fontFamily: "Raleway",
-                          fontSize: 12,
-                          color: Colors.grey),
+                    RelativeDate(
+                        message.postingDate.toDate(),
+                        Colors.grey,
+                        12
                     ),
                     const SizedBox(
                       width: 10,
                     ),
-                    messageWithUser.message.lastModifiedDate !=
-                        messageWithUser.message.postingDate
+                    message.lastModifiedDate !=
+                        message.postingDate
                         ? const Icon(
                       Icons.edit,
                       color: Colors.grey,
@@ -81,16 +79,12 @@ class BoardMessageDisplay extends StatelessWidget {
                     )
                         : Container(),
                     const SizedBox(width: 5),
-                    messageWithUser.message.lastModifiedDate !=
-                        messageWithUser.message.postingDate
-                        ? Text(
-                      TransformPostDate.transform(
-                          messageWithUser.message.lastModifiedDate
-                          .toDate()),
-                      style: const TextStyle(
-                          fontFamily: "Raleway",
-                          fontSize: 12,
-                          color: Colors.grey),
+                    message.lastModifiedDate !=
+                        message.postingDate
+                        ? RelativeDate(
+                        message.lastModifiedDate.toDate(),
+                        Colors.grey,
+                        12
                     )
                         : Container()
                   ],
@@ -98,7 +92,7 @@ class BoardMessageDisplay extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 16, top: 10),
                   child: Text(
-                    messageWithUser.message.message,
+                    message.message,
                     style: const TextStyle(
                       fontSize: 16,
                       fontFamily: "Raleway",

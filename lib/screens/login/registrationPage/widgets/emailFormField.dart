@@ -5,16 +5,14 @@ import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 class EmailFormField extends StatefulWidget {
-  final FocusNode focusNodeUser;
-  final FocusNode focusNodeEmail;
-  EmailFormField({@required this.focusNodeEmail, @required this.focusNodeUser});
+  final FocusNode focusRequested;
+  final FocusNode focusNext;
+  EmailFormField({@required this.focusNext, @required this.focusRequested});
   @override
   _EmailFormFieldState createState() => _EmailFormFieldState();
 }
 
 class _EmailFormFieldState extends State<EmailFormField> {
-  final regex = RegExp(
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
   @override
   Widget build(BuildContext context) {
     final registrationValidator =
@@ -23,25 +21,23 @@ class _EmailFormFieldState extends State<EmailFormField> {
       width: MediaQuery.of(context).size.width * 0.9,
       child: TextFormField(
         style: TextStyle(fontFamily: "Raleway"),
-        focusNode: widget.focusNodeUser,
+        focusNode: widget.focusRequested,
         keyboardType: TextInputType.emailAddress,
         onChanged: (emailValue) {
           registrationValidator.setEmail(emailValue);
         },
         onFieldSubmitted: (value){
           if(value.isNotEmpty){
-            FocusScope.of(context).requestFocus(widget.focusNodeEmail);
+            FocusScope.of(context).requestFocus(widget.focusNext);
           }
         },
         validator: (emailValue) {
-          if (emailValue.isEmpty) {
+          if (emailValue.isEmpty)
             return "Es fehlt noch deine E-Mail";
-          }
-          if (registrationValidator.emailExist) {
-            return "Deine E-Mail wird bereits genutzt";
-          }
-          if (!regex.hasMatch(registrationValidator.currentEmail))
-            return "Emailadresse nicht korrekt";
+          if (registrationValidator.isEmailInUse)
+            return "E-Mail wird bereits genutzt";
+          if (registrationValidator.isEmailInvalid)
+            return "E-Mail nicht korrekt";
           return null;
         },
         decoration: LoginInputDecoration(

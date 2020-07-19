@@ -2,21 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/boardMessage_model.dart';
-import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
-import 'package:dorf_app/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+///Matthias Maxelon
 enum OrderType {latest, oldest, mostLikes,}
 
-class BoardMessageWithUser{
-  BoardMessage message;
-  User user;
-  BoardMessageWithUser({this.message, this.user});
-}
+
 class BoardMessageService{
   final CollectionReference _ref = Firestore.instance.collection("Forumeintrag");
-  final _userService = UserService();
   final _auth = Authentication();
   //final _timeout = Duration(seconds: 10);
 
@@ -26,28 +19,27 @@ class BoardMessageService{
         .add(message.toJson());
   }
 
-  Stream<List<BoardMessageWithUser>> getBoardMessagesWithUserAsStream(
+  Stream<List<BoardMessage>> getBoardMessagesWithUserAsStream(
       BoardCategory category, BoardEntry entry, int limit, OrderType orderType){
-    String orderField = "";
+    //String orderField = "";
 
-    Stream<QuerySnapshot> stream = _ref.document(entry.id)
+    Stream<QuerySnapshot> stream = _ref.document(entry.documentID)
         .collection("Forumbeitrag")
         .where("boardCategoryReference", isEqualTo: category.id)
         .orderBy(_getOrderField(orderType), descending: true)
         .limit(limit)
         .snapshots();
 
-    return stream.asyncMap((snapshot) async{
-      List<BoardMessageWithUser> list = [];
+    return stream.map((snapshot) {
+      List<BoardMessage> list = [];
       for (var document in snapshot.documents){
         var message = BoardMessage.fromJson(document.data, document.documentID);
-        var user = await _userService.getUser(message.userReference);
-        list.add(BoardMessageWithUser(message: message, user: user));
+        list.add(message);
       }
       return list;
     });
   }
-  //TODO: INTO LIKE SERVICE FROM MEIKE??
+  //TODO: INTO LIKE SERVICE FROM MEIKE?? DELETE METHOD USE LIKE SERVICE METHODS
   Future<bool> insertBoardMessageLike(BoardMessage message) async{
     var likeRef = await _getLikeRef(message);
     if(await isLiked(message)){
@@ -58,7 +50,7 @@ class BoardMessageService{
       return true;
     }
   }
-  //TODO: INTO LIKE SERVICE FROM MEIKE??
+  //TODO: INTO LIKE SERVICE FROM MEIKE?? DELETE METHOD USE LIKE SERVICE METHODS
   Future<bool> isLiked(BoardMessage message) async{
 
     var likeRef = await _getLikeRef(message);
@@ -73,22 +65,22 @@ class BoardMessageService{
       return true; //TODO: SHOULD IT SIMPLY RETURN TRUE SO NOTHING HAPPENS WHEN ERROR OCCURES??
     }
   }
-  //TODO: INTO LIKE SERVICE FROM MEIKE??
+  //TODO: INTO LIKE SERVICE FROM MEIKE?? DELETE METHOD USE LIKE SERVICE METHODS
   Future<DocumentReference> _getLikeRef(BoardMessage message) async{
     FirebaseUser user = await _auth.getCurrentUser();
     return _ref.document(message.boardEntryReference)
         .collection("Forumbeitrag")
-        .document(message.id)
+        .document(message.documentID)
         .collection("Likes")
         .document(user.uid);
   }
-  //TODO: INTO MEIKES LIKE SERVICE???
+  //TODO: INTO MEIKES LIKE SERVICE??? DELETE METHOD USE LIKE SERVICE METHODS
   Future<List<dynamic>> getLikesAndIsLikedCheck(BoardMessage message) async{
     List<dynamic> likeWithUserCheckList = [];
     var user = await _auth.getCurrentUser();
     await _ref.document(message.boardEntryReference)
           .collection("Forumbeitrag")
-          .document(message.id)
+          .document(message.documentID)
           .collection("Likes")
           .getDocuments()
           .then((snapshot){

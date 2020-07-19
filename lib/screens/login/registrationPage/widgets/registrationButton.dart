@@ -45,27 +45,39 @@ class RegistrationButton extends StatelessWidget {
     if( await _isConnected(context) == false)
       return;
 
-    Navigator.of(context).push(LoadingOverlay());
-    await validator.validateUserName();
-    await validator.validateEmail();
 
+    //TODO: UserName Validation is currently not possible due to missing firestore security rule
+    //await validator.validateUserName();
     if (_formKey.currentState.validate()) {
       final auth = Provider.of<Authentication>(context, listen: false);
-      String uid = "";
-
-      await auth.userSignUp(validator.currentEmail, validator.currentPassword)
-          .then((registrationUID) {
+      try {
+        Navigator.of(context).push(LoadingOverlay());
+        String uid = await auth.userSignUp(
+            validator.currentEmail, validator.currentPassword);
+        validator.createUser(uid);
+        validator.clear();
+        Navigator.pop(context); //disabling loadingOverlay
+        Navigator.pop(context, "success"); //switching back to login screen
+      } catch (error) {
+        switch (error.code) {
+          case "ERROR_EMAIL_ALREADY_IN_USE":
             Navigator.of(context).pop();
-            uid = registrationUID;
-            validator.createUser(uid);
-            validator.clear();
-      }).catchError((e) {
-        print(e);
-        Navigator.of(context).pop();
-        _showErrorMessage(context);
-      });
+            validator.setEmailInUse(true);
+            _formKey.currentState.validate();
+            validator.setEmailInUse(false);
+            break;
+          case "ERROR_INVALID_EMAIL":
+            Navigator.of(context).pop();
+            validator.setEmailValidation(true);
+            _formKey.currentState.validate();
+            validator.setEmailValidation(false);
+            break;
+          default:
+            Navigator.of(context).pop();
+            _showErrorMessage(context);
+        }
+      }
     }
-    Navigator.pop(context, "success");
   }
   Future<bool> _isConnected(BuildContext context) async{
     try{

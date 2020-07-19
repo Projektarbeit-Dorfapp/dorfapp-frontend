@@ -3,6 +3,7 @@ import 'package:dorf_app/constants/page_indexes.dart';
 import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class _RootPageState extends State<RootPage> {
   AuthStatus _currentStatus = AuthStatus.NOT_LOGGED_IN;
   Authentication _auth;
   AccessHandler _accessHandler;
+  AlertService _alertService;
+  bool _isStreamInitiated = false;
   final _userService = UserService();
 
   @override
@@ -26,6 +29,7 @@ class _RootPageState extends State<RootPage> {
     super.initState();
     _auth = Provider.of<Authentication>(context, listen: false);
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
+    _alertService = Provider.of<AlertService>(context, listen: false);
     initiateCallbacks();
     _auth.getCurrentUser().then((user) {
       setState(() {
@@ -61,21 +65,26 @@ class _RootPageState extends State<RootPage> {
   void logoutCallback(){
     _userID = "";
     _accessHandler.setUID(_userID);
-    _auth.userSignOut().then((value){
+    _auth.userSignOut().then((_){
+      _alertService.disposeSubscription();
+      _isStreamInitiated = false;
       _currentStatus = AuthStatus.NOT_LOGGED_IN;
       setState(() {});
     });
 
   }
+  //Build function is called multiple times which causes multiple alert streams -> caused by this setState mess in loginCallback
+  //I will change this in the future if time is not running short
   @override
   Widget build(BuildContext context) {
     if (_currentStatus == AuthStatus.NOT_LOGGED_IN) {
       return LoginPage();
-    } else if (_currentStatus == AuthStatus.LOGGED_IN) {
-      print("Current User: " + _userID);
+    } else { ///[AuthStatus.LOGGED_IN]
+      if(!_isStreamInitiated){
+        _isStreamInitiated = true;
+        _alertService.initStream(_userService);
+      }
       return Home(PageIndexes.NEWSINDEX);
-    } else {
-      return LoginPage();
     }
   }
 }
