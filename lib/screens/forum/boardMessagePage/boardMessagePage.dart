@@ -146,6 +146,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     );
   }
 
+
   void _choiceAction(String choice, BuildContext context) {
     if (choice == MenuButtons.SUBSCRIBE) {
       _subscriptionEvent();
