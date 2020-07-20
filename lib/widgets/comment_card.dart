@@ -49,7 +49,7 @@ class CommentCard extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.topRight,
                           child: RelativeDate(
-                              comment.creationDate, Colors.black, 12.0),
+                              comment.convertTimestamp(comment.createdAt), Colors.black, 12.0),
                         ),
                       )
                     ],

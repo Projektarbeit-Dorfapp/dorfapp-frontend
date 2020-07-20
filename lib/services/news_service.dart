@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/address_model.dart';
+import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 
@@ -8,7 +9,7 @@ class NewsService {
       Firestore.instance.collection("Veranstaltung");
 
   void insertNews(News news) async {
-    DocumentReference ref = await _newsCollectionReference.add({
+    await _newsCollectionReference.add({
       'title': news.title,
       'description': news.description,
       'startTime': news.startTime,
@@ -51,21 +52,48 @@ class NewsService {
             createdBy: dataSnapshot.data['createdBy']);
       });
 
-      await _newsCollectionReference.document(newsID).collection("likes").getDocuments().then((dataSnapshot) {
-        if (dataSnapshot.documents.length > 0)
-          {
-            var userlist = List<User>();
-            for (var document in dataSnapshot.documents)
-            {
-              userlist.add(new User(
+      await _newsCollectionReference
+          .document(newsID)
+          .collection("likes")
+          .getDocuments()
+          .then((dataSnapshot) {
+        if (dataSnapshot.documents.length > 0) {
+          var userList = List<User>();
+          for (var document in dataSnapshot.documents) {
+            userList.add(new User(
                 uid: document.documentID,
                 firstName: document.data['firstName'],
-                lastName: document.data['lastName']
-              ));
-            }
-            newsModel.likes = userlist;
+                lastName: document.data['lastName']));
           }
+          newsModel.likes = userList;
+        }
       });
+
+      await _newsCollectionReference
+          .document(newsID)
+          .collection("comments")
+          .getDocuments()
+          .then((dataSnapshot) {
+        if (dataSnapshot.documents.length > 0) {
+          var commentList = List<Comment>();
+          for (var document in dataSnapshot.documents) {
+            commentList.add(new Comment(
+                id: document.documentID,
+                content: document.data["content"],
+                answerTo: document.data["answerTo"],
+                createdAt: document.data["createdAt"],
+                modifiedAt: document.data["modifiedAt"],
+                isDeleted: document.data["isDeleted"],
+                user: new User (
+                  uid: document.data["userID"],
+                  firstName: document.data["firstName"],
+                  lastName: document.data["lastName"]
+                )));
+          }
+          newsModel.comments = commentList;
+        }
+      });
+
     } catch (err) {
       print(err.toString());
     }
