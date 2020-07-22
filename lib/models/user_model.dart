@@ -19,9 +19,10 @@ class User extends ChangeNotifier {
   String street;
   String email;
   String imagePath;
+
   User(
-      {@required this.userName,
-        @required this.uid,
+      {@required this.uid,
+      this.userName,
       this.admin,
       this.verificationState,
       this.age,
@@ -38,7 +39,7 @@ class User extends ChangeNotifier {
       this.imagePath,
       this.id});
 
-  User.fromJson(Map snapshot, String id){
+  User.fromJson(Map snapshot, String id) {
     this.id = id;
     admin = snapshot["admin"] ?? false;
     verificationState = snapshot["verificationState"] ?? false;
@@ -58,25 +59,25 @@ class User extends ChangeNotifier {
     imagePath = snapshot["imagePath"] ?? "";
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
-      "admin" : admin,
-      "verificationState" : verificationState,
-      "userName" : userName,
-      "age" : age,
-      "userAvatarReference" : userAvatarReference,
-      "municipalReference" : municipalReference,
-      "sex" : sex,
-      "houseNumber" : houseNumber,
-      "lastName" : lastName,
-      "firstName" : firstName,
-      "townDistrict" : townDistrict,
-      "plz" : plz,
-      "street" : street,
-      "email" : email,
-      "uid" : uid,
-      "imagePath" : imagePath,
-      "id" : id,
+      "admin": admin,
+      "verificationState": verificationState,
+      "userName": userName,
+      "age": age,
+      "userAvatarReference": userAvatarReference,
+      "municipalReference": municipalReference,
+      "sex": sex,
+      "houseNumber": houseNumber,
+      "lastName": lastName,
+      "firstName": firstName,
+      "townDistrict": townDistrict,
+      "plz": plz,
+      "street": street,
+      "email": email,
+      "uid": uid,
+      "imagePath": imagePath,
+      "id": id,
     };
   }
 }

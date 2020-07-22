@@ -29,30 +29,28 @@ class NewsDetail extends StatelessWidget {
     return FutureBuilder<News>(
       future: _newsService.getNews(newsID),
       builder: (context, AsyncSnapshot<News> snapshot) {
-       if (snapshot.hasData) {
+        if (snapshot.hasData) {
           AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
           this.newsModel = snapshot.data;
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Color(0xFF6178a3),
                 actions: <Widget>[
-                  PopupMenuButton<String> (
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    onSelected: (value) => _choiceAction(value, context),
-                    color: Colors.white,
-                    itemBuilder: (BuildContext context) {
-                      if (_accessHandler.getUID() == this.newsModel.createdBy) {
-                        return MenuButtons.EditDelete.map((String choice) {
-                          return PopupMenuItem<String> (
-                            value: choice,
-                            child: Text(choice)
-                          );
-                        }).toList();
-                      }  else {
-                        return List();
-                      }
-                    },
-                  ),
+                  _getPopupMenuButton(_accessHandler.getUID())
+                      ? PopupMenuButton<String>(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          onSelected: (value) => _choiceAction(value, context),
+                          color: Colors.white,
+                          itemBuilder: (BuildContext context) {
+                            return MenuButtons.EditDelete.map((String choice) {
+                              return PopupMenuItem<String>(value: choice, child: Text(choice));
+                            }).toList();
+                          },
+                        )
+                      : IconButton(
+                          icon: Icon(null),
+                          onPressed: null,
+                        ),
                 ],
               ),
               body: Container(
@@ -64,8 +62,7 @@ class NewsDetail extends StatelessWidget {
                       _getImageAndTitle(),
                       _getEventInfo(),
                       Container(
-                          padding: EdgeInsets.only(
-                              left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
+                          padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
                           child: Text(
                             newsModel.description,
                             style: TextStyle(
@@ -73,44 +70,35 @@ class NewsDetail extends StatelessWidget {
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16,
                                 color: Colors.black),
-                          )
-                      ),
+                          )),
                       LikeSection(newsModel.likes, newsID, "Veranstaltung"),
-                      CommentSection(newsModel.comments),
+                      CommentSection(newsModel.comments, newsID, "Veranstaltung"),
                     ],
-                  )
-              )
-          );
-        }
-        else if(snapshot.connectionState == ConnectionState.waiting){
-          return Scaffold(
-            body: Container(
-              color: Colors.white,
-              child: Center(
-                child: CircularProgressIndicator()
-              )
-            )
-          );
+                  )));
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
         } else {
-         return Scaffold(
-             body: Container(
-               color: Colors.white,
-               child: Center(
-                 child: Text(
-                   'keine Daten ...',
-                   style: TextStyle(
-                       fontFamily: 'Raleway',
-                       fontWeight: FontWeight.normal,
-                       fontSize: 40.0,
-                       color: Colors.black
-                   ),
-                 ),
-               ),
-             )
-         );
-       }
+          return Scaffold(
+              body: Container(
+            color: Colors.white,
+            child: Center(
+              child: Text(
+                'keine Daten ...',
+                style: TextStyle(
+                    fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 40.0, color: Colors.black),
+              ),
+            ),
+          ));
+        }
       },
     );
+  }
+
+  bool _getPopupMenuButton(String uid) {
+    if (uid == this.newsModel.createdBy) {
+      return true;
+    }
+    return false;
   }
 
   _getImageAndTitle() {
@@ -121,10 +109,7 @@ class NewsDetail extends StatelessWidget {
               child: Text(newsModel.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                      color: Colors.black54))));
+                      fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 22, color: Colors.black54))));
     }
     return Stack(
       children: <Widget>[
@@ -136,9 +121,7 @@ class NewsDetail extends StatelessWidget {
           height: 100.0,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.white]),
+                begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.white]),
           ),
           child: Container(
               margin: EdgeInsets.only(top: 70.0),
@@ -146,13 +129,7 @@ class NewsDetail extends StatelessWidget {
                   child: Text(newsModel.title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22,
-                          color: Colors.black54)
-                  )
-              )
-          ),
+                          fontFamily: 'Raleway', fontWeight: FontWeight.w600, fontSize: 22, color: Colors.black54)))),
         )
       ],
     );
@@ -163,13 +140,13 @@ class NewsDetail extends StatelessWidget {
       return Container(
         padding: EdgeInsets.all(15.0),
         margin: EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-            color: Color(0xFF141e3e),
-            borderRadius: BorderRadius.circular(10.0)),
+        decoration: BoxDecoration(color: Color(0xFF141e3e), borderRadius: BorderRadius.circular(10.0)),
         child: Column(
           children: <Widget>[
-            DateDetailView(newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
-            TimeDetailView(newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
+            DateDetailView(
+                newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
+            TimeDetailView(
+                newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
             AddressDetailView(newsModel.address)
           ],
         ),
@@ -179,22 +156,14 @@ class NewsDetail extends StatelessWidget {
   }
 
   void _choiceAction(String choice, BuildContext context) {
-    if(choice == MenuButtons.EDIT){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NewsEdit(newsID)));
-    }
-    else if(choice == MenuButtons.DELETE){
+    if (choice == MenuButtons.EDIT) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit(newsID)));
+    } else if (choice == MenuButtons.DELETE) {
       Firestore.instance.collection('Veranstaltung').document(newsID).delete();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home(PageIndexes.NEWSINDEX)));
-    } else if(choice == MenuButtons.LOGOUT){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home(PageIndexes.NEWSINDEX)));
+    } else if (choice == MenuButtons.LOGOUT) {
       final accessHandler = Provider.of<AccessHandler>(context, listen: false);
       accessHandler.logout();
     }
   }
-
 }
