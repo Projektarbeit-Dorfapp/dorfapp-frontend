@@ -19,9 +19,10 @@ class User extends ChangeNotifier {
   String street;
   String email;
   String imagePath;
+
   User(
-      {@required this.userName,
-        @required this.uid,
+      {@required this.uid,
+      this.userName,
       this.admin,
       this.verificationState,
       this.age,
@@ -58,7 +59,7 @@ class User extends ChangeNotifier {
     imagePath = snapshot["imagePath"] ?? "";
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       "admin" : admin,
       "verificationState" : verificationState,

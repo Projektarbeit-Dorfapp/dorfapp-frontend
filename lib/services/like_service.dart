@@ -6,7 +6,7 @@ class LikeService {
   
   void insertLike(User user, String documentID, String collection) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("likes").document(user.uid).setData({
+    await _collectionReference.document(documentID).collection("Likes").document(user.uid).setData({
         "firstName": user.firstName,
         "lastName": user.lastName
     });
@@ -14,6 +14,6 @@ class LikeService {
 
   void deleteLike(User user, String documentID, String collection) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("likes").document(user.uid).delete();
+    await _collectionReference.document(documentID).collection("Likes").document(user.uid).delete();
   }
 }
