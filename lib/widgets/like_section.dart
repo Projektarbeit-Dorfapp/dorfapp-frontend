@@ -72,7 +72,7 @@ class _LikeSectionState extends State<LikeSection> {
               IconButton(
                   icon: Icon(Icons.thumb_up),
                   color: isLiked ? Colors.blue : Color(0xFF141e3e),
-                  onPressed: (){
+                  onPressed: () async{
                     setState(() {
                       isLiked = _addLike();
                       if (isLiked){

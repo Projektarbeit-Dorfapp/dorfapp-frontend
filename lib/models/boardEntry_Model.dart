@@ -2,15 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 ///Matthias Maxelon
 class BoardEntry{
-  String id;
+  String documentID;
   String boardCategoryReference;
   String userReference;
   Timestamp lastModifiedDate;
   Timestamp postingDate;
   String title;
   String caption;
-  String userName; //speedTest for faster query
-  String userAvatarReference; //speed test for faster query
+  String userName;
+  String firstName;
+  String lastName;
+  String userAvatarReference;
+  bool isClosed;
   int watchCount;
 
   BoardEntry({
@@ -21,10 +24,12 @@ class BoardEntry{
     this.title,
     this.userName,
     this.userAvatarReference,
-    this.watchCount});
+    this.watchCount,
+    this.lastName,
+    this.firstName});
 
-  BoardEntry.fromJson(Map snapshot, String id){
-    this.id = id;
+  BoardEntry.fromJson(Map snapshot, String documentID){
+    this.documentID = documentID;
     caption = snapshot["caption"] ?? "";
     boardCategoryReference = snapshot["boardCategoryReference"] ?? "";
     userReference = snapshot["userReference"] ?? "";
@@ -33,7 +38,10 @@ class BoardEntry{
     title = snapshot["title"] ?? "";
     userName = snapshot["userName"] ?? "";
     userAvatarReference = snapshot ["userAvatarReference"] ?? "";
-    watchCount = snapshot["watchCount"];
+    watchCount = snapshot["watchCount"] ?? 0;
+    firstName = snapshot["firstName"] ?? "";
+    lastName = snapshot["lastName"] ?? "";
+    isClosed = snapshot["isClosed"] ?? false;
   }
   Map<String, dynamic> toJson(){
     return {
@@ -46,6 +54,9 @@ class BoardEntry{
       "userName" : userName,
       "userAvatarReference" : userAvatarReference,
       "watchCount" : watchCount,
+      "firstName" : firstName,
+      "lastName" : lastName,
+      "isClosed" : isClosed,
     };
   }
 }

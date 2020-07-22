@@ -81,7 +81,7 @@ class AccessHandler extends ChangeNotifier{
         });
       });
     }
-      return this._user;
+    return this._user;
   }
 
   setIsAdmin(bool isAdmin) {
@@ -136,7 +136,6 @@ class AccessHandler extends ChangeNotifier{
   emailResetValidationError(){
     _isEmailResetValidationFailed = !_isEmailResetValidationFailed;
   }
-
   getUIDFromDatabase() {
 
   }

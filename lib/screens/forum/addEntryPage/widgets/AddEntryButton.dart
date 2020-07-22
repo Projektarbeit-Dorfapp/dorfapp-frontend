@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 class AddEntryButton extends StatelessWidget {
   final BoardCategory category;
   AddEntryButton(this.category);
+  final _entryService = BoardEntryService();
   @override
   Widget build(BuildContext context) {
     final bool showFAB = MediaQuery.of(context).viewInsets.bottom == 0.0;
@@ -26,8 +27,7 @@ class AddEntryButton extends StatelessWidget {
               FirebaseUser user = await authentication.getCurrentUser();
               User u = await userService.getUser(user.uid);
               final createdEntry = entryState.createBoardEntry(user.uid, category, u);
-              final entryService = Provider.of<BoardEntryService>(context, listen: false);
-              entryService.insertEntry(createdEntry);
+              _entryService.insertEntry(createdEntry);
               Navigator.pop(context);
             },
           )

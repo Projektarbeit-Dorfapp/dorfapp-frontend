@@ -1,12 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/addEntryPage.dart';
-import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 
-class EntryNavigationButton extends StatelessWidget {
+class AddEntryNavigationButton extends StatelessWidget {
   final BoardCategory category;
-  EntryNavigationButton({@required this.category});
+  AddEntryNavigationButton({@required this.category});
 
   @override
   Widget build(BuildContext context) {

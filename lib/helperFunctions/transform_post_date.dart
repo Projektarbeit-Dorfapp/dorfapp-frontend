@@ -1,4 +1,6 @@
 ///Matthias Maxelon
+///
+///USE relative_date.dart [RelativeDate]-Widget instead
 class TransformPostDate{
   static String transform(DateTime date) {
     DateTime entryDate = date;

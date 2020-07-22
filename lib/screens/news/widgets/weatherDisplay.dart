@@ -9,7 +9,7 @@ class WeatherDisplay extends StatefulWidget {
 }
 
 class _WeatherDisplayState extends State<WeatherDisplay> {
-  WeatherStation weatherStation;
+  WeatherFactory weatherFactory;
   final mainColor = Colors.black;
   final temperatureColor = Color(0xffdb5656);
   Timer updateCycle;
@@ -18,7 +18,7 @@ class _WeatherDisplayState extends State<WeatherDisplay> {
   @override
   void initState() {
     super.initState();
-    weatherStation = WeatherStation("c2c10f74ba4dcdbdcf10250640a08187");
+    weatherFactory = WeatherFactory("c2c10f74ba4dcdbdcf10250640a08187");
     updateState();
   }
   @override
@@ -34,7 +34,7 @@ class _WeatherDisplayState extends State<WeatherDisplay> {
     });
   }
   Future<Weather> initializeWeatherData() async {
-    return await weatherStation.currentWeather(lat, lon);
+    return await weatherFactory.currentWeatherByLocation(lat, lon);
   }
   @override
   Widget build(BuildContext context) {

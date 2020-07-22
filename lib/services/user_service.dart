@@ -64,7 +64,6 @@ class UserService extends ChangeNotifier{
         })
         .catchError((error){
           print("Developermessage ERROR: " + error);
-          throw Exception();
         });
     return user;
   }

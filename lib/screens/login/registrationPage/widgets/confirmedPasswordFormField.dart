@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 class ConfirmedPasswordFormField extends StatefulWidget {
-  final FocusNode focusNode;
+  final FocusNode focusEnd;
   final bool hidePassword;
   ConfirmedPasswordFormField({
-    @required this.focusNode,
+    @required this.focusEnd,
     @required this.hidePassword});
   @override
   _ConfirmedPasswordFormFieldState createState() =>
@@ -24,7 +24,7 @@ class _ConfirmedPasswordFormFieldState
       width: MediaQuery.of(context).size.width * 0.9,
       child: TextFormField(
         style: TextStyle(fontFamily: "Raleway"),
-        focusNode: widget.focusNode,
+        focusNode: widget.focusEnd,
         validator: (confirmedPassword){
           if(confirmedPassword != registrationValidator.currentPassword){
             return "Dein Passwort muss übereinstimmen";
