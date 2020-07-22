@@ -225,7 +225,7 @@ class _NewsEditState extends State<NewsEdit> {
                             return null;
                           },
                         ),
-                        _addOrUpdateNewsButton(widget.newsID)
+                        _addOrUpdateNewsButton(widget.newsID, context)
                       ],
                     ),
                   ),
@@ -260,15 +260,14 @@ class _NewsEditState extends State<NewsEdit> {
     });
   }
 
-  //Meike Nedwidek & Hannes Hauenstein
-  RaisedButton _addOrUpdateNewsButton(String newsID) {
+  RaisedButton _addOrUpdateNewsButton(String newsID, BuildContext context) {
     AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     return RaisedButton(
       child: newsID != null ? Text('Aktualiseren') : Text('Erstellen'),
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           _getControllerText(_accessHandler);
-          newsID != null ? _newsService.updateNews(news) : newsID = await _newsService.insertNews(news);
+          newsID != null ? _newsService.updateNews(news) : newsID = await _newsService.insertNews(news, context);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -295,7 +294,6 @@ class _NewsEditState extends State<NewsEdit> {
     return news;
   }
 
-  //Meike Nedwidek
   void _setControllerInUpdateForm(AccessHandler _accessHandler) async {
     if (widget.newsID != null) {
       news = await _newsService.getNews(widget.newsID);

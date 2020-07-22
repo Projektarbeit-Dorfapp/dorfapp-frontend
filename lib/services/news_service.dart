@@ -2,13 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class NewsService {
   CollectionReference _newsCollectionReference =
       Firestore.instance.collection("Veranstaltung");
 
-  Future<String> insertNews(News news) async {
+  Future<String> insertNews(News news, BuildContext context) async {
     try {
+      AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: true);
+      //String name = _accessHandler.getFirstName() + ' ' + _accessHandler.getLastName();
       DocumentReference ref = await _newsCollectionReference.add({
         'title': news.title,
         'description': news.description,
