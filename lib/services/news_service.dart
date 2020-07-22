@@ -54,7 +54,7 @@ class NewsService {
 
       await _newsCollectionReference
           .document(newsID)
-          .collection("likes")
+          .collection("Likes")
           .getDocuments()
           .then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {
@@ -71,7 +71,7 @@ class NewsService {
 
       await _newsCollectionReference
           .document(newsID)
-          .collection("comments")
+          .collection("Kommentare")
           .getDocuments()
           .then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {

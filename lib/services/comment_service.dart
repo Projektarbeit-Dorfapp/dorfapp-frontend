@@ -5,7 +5,7 @@ class CommentService {
 
   void insertNewComment(String documentID, String collection, Comment comment) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("comments").add({
+    await _collectionReference.document(documentID).collection("Kommentare").add({
       "firstName": comment.user.firstName,
       "lastName": comment.user.lastName,
       "userID": comment.user.uid,
@@ -18,7 +18,7 @@ class CommentService {
 
   void insertAnswerComment(String documentID, String collection, Comment comment) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("comments").add({
+    await _collectionReference.document(documentID).collection("Kommentare").add({
       "firstName": comment.user.firstName,
       "lastName": comment.user.lastName,
       "userID": comment.user.uid,
@@ -32,7 +32,7 @@ class CommentService {
 
   void updateComment(String documentID, String collection, String newContent, String commentID) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("comments").document(commentID).updateData({
+    await _collectionReference.document(documentID).collection("Kommentare").document(commentID).updateData({
       "content": newContent,
       "modifiedAt": DateTime.now(),
     });
@@ -40,7 +40,7 @@ class CommentService {
 
   void deleteComment(String documentID, String collection, String commentID) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("comments").document(commentID).updateData({
+    await _collectionReference.document(documentID).collection("Kommentare").document(commentID).updateData({
       "firstName": "",
       "lastName": "",
       "userID": "",
