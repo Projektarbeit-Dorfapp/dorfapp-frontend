@@ -16,41 +16,54 @@ import 'package:flutter/widgets.dart';
 import 'package:dorf_app/services/news_service.dart';
 import 'package:provider/provider.dart';
 
-///Meike Nedwidek
-class NewsDetail extends StatelessWidget {
+class NewsDetail extends StatefulWidget {
+  final newsID;
+  NewsDetail(this.newsID);
+  @override
+  _NewsDetailState createState() => _NewsDetailState();
+}
+
+class _NewsDetailState extends State<NewsDetail> {
   News newsModel;
-  String newsID;
+  AccessHandler _accessHandler;
+  String _userID;
   final _newsService = NewsService();
 
-  NewsDetail(this.newsID);
-
+  @override
+  void initState() {
+    _accessHandler = Provider.of<AccessHandler>(context, listen: false);
+    _accessHandler.getUID().then((uid){
+      _userID = uid;
+      setState(() {});
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<News>(
-      future: _newsService.getNews(newsID),
+      future: _newsService.getNews(widget.newsID),
       builder: (context, AsyncSnapshot<News> snapshot) {
         if (snapshot.hasData) {
-          AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
           this.newsModel = snapshot.data;
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Color(0xFF6178a3),
                 actions: <Widget>[
-                  _getPopupMenuButton(_accessHandler.getUID())
+                  _getPopupMenuButton(_userID)
                       ? PopupMenuButton<String>(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                          onSelected: (value) => _choiceAction(value, context),
-                          color: Colors.white,
-                          itemBuilder: (BuildContext context) {
-                            return MenuButtons.EditDelete.map((String choice) {
-                              return PopupMenuItem<String>(value: choice, child: Text(choice));
-                            }).toList();
-                          },
-                        )
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    onSelected: (value) => _choiceAction(value, context),
+                    color: Colors.white,
+                    itemBuilder: (BuildContext context) {
+                      return MenuButtons.EditDelete.map((String choice) {
+                        return PopupMenuItem<String>(value: choice, child: Text(choice));
+                      }).toList();
+                    },
+                  )
                       : IconButton(
-                          icon: Icon(null),
-                          onPressed: null,
-                        ),
+                    icon: Icon(null),
+                    onPressed: null,
+                  ),
                 ],
               ),
               body: Container(
@@ -71,8 +84,8 @@ class NewsDetail extends StatelessWidget {
                                 fontSize: 16,
                                 color: Colors.black),
                           )),
-                      LikeSection(newsModel.likes, newsID, "Veranstaltung"),
-                      CommentSection(newsModel.comments, newsID, "Veranstaltung"),
+                      LikeSection(newsModel.likes, widget.newsID, "Veranstaltung", _userID),
+                      CommentSection(newsModel.comments, widget.newsID, "Veranstaltung"),
                     ],
                   )));
         } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,19 +93,21 @@ class NewsDetail extends StatelessWidget {
         } else {
           return Scaffold(
               body: Container(
-            color: Colors.white,
-            child: Center(
-              child: Text(
-                'keine Daten ...',
-                style: TextStyle(
-                    fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 40.0, color: Colors.black),
-              ),
-            ),
-          ));
+                color: Colors.white,
+                child: Center(
+                  child: Text(
+                    'keine Daten ...',
+                    style: TextStyle(
+                        fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 40.0, color: Colors.black),
+                  ),
+                ),
+              ));
         }
       },
     );
-  }
+}
+
+
 
   bool _getPopupMenuButton(String uid) {
     if (uid == this.newsModel.createdBy) {
@@ -157,9 +172,9 @@ class NewsDetail extends StatelessWidget {
 
   void _choiceAction(String choice, BuildContext context) {
     if (choice == MenuButtons.EDIT) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit(newsID)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit(widget.newsID)));
     } else if (choice == MenuButtons.DELETE) {
-      Firestore.instance.collection('Veranstaltung').document(newsID).delete();
+      Firestore.instance.collection('Veranstaltung').document(widget.newsID).delete();
       Navigator.push(context, MaterialPageRoute(builder: (context) => Home(PageIndexes.NEWSINDEX)));
     } else if (choice == MenuButtons.LOGOUT) {
       final accessHandler = Provider.of<AccessHandler>(context, listen: false);
