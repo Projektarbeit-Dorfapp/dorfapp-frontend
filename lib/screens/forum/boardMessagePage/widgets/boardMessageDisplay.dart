@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 
 class BoardMessageDisplay extends StatelessWidget {
   final BoardMessage message;
-  const BoardMessageDisplay(this.message);
+  final String entryCreatorID;
+  const BoardMessageDisplay(this.message, this.entryCreatorID);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,6 +52,15 @@ class BoardMessageDisplay extends StatelessWidget {
                         userReference: message.userReference,
                       ),
                     ),
+                    message.userReference == entryCreatorID
+                        ? Padding(
+                      padding: EdgeInsets.only(top: 10),
+                          child: Icon(
+                      Icons.stars,
+                      color: Theme.of(context).buttonColor,
+                          size: 22,),
+                        )
+                        : Container()
                   ],
                 ),
                 Row(

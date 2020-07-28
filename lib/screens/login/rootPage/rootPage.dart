@@ -79,7 +79,7 @@ class _RootPageState extends State<RootPage> {
     } else { ///[AuthStatus.LOGGED_IN]
       if(!_isStreamInitiated){
         _isStreamInitiated = true;
-        _alertService.initStream(_userService);
+        _alertService.initStream(_userService, _accessHandler);
       }
       return Home(PageIndexes.NEWSINDEX);
     }

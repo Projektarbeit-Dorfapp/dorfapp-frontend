@@ -81,7 +81,7 @@ class BoardEntryDisplay extends StatelessWidget {
                             const SizedBox(width: 5),
                             entry.watchCount != 0
                                 ? Text(entry.watchCount.toString(), style: TextStyle(color: Colors.grey),)
-                                : Container(),
+                                : Text(0.toString(), style: TextStyle(color: Colors.grey)),
                             const SizedBox(width: 10),
                             const Icon(
                               Icons.date_range,
@@ -132,7 +132,7 @@ class BoardEntryDisplay extends StatelessWidget {
     BoardEntryService().incrementWatchCount(entry);
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => BoardMessagePage(
-          category: category,
-          entry: entry,),));
+          categoryDocumentID: category.documentID,
+          entryDocumentID: entry.documentID,),));
   }
 }

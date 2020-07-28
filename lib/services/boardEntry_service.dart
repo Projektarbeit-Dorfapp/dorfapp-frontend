@@ -3,23 +3,37 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/services/subscription_service.dart';
 
 
 ///Matthias Maxelon
 class BoardEntryService{
   final CollectionReference _boardRef = Firestore.instance.collection("Forumeintrag");
-  insertEntry(BoardEntry entry) async {
-    await _boardRef.add(entry.toJson());
+
+  Future<DocumentReference> insertEntry(BoardEntry entry) async {
+    return await _boardRef.add(entry.toJson());
   }
+
+  Future<BoardEntry> getEntry(String entryID) async{
+    final snapshot = await _boardRef.document(entryID).get();
+    if(snapshot.data != null){
+      return BoardEntry.fromJson(snapshot.data, snapshot.documentID);
+    } else {
+      return null;
+    }
+  }
+
   incrementWatchCount(BoardEntry entry){
     _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
   }
+
   closeBoardEntry(BoardEntry entry){
     _boardRef.document(entry.documentID).updateData({"isClosed" : true});
   }
+
   Stream<List<BoardEntry>> getBoardEntriesAsStream(BoardCategory category, int limit){
     Stream<QuerySnapshot> stream = _boardRef
-        .where("boardCategoryReference", isEqualTo: category.id)
+        .where("boardCategoryReference", isEqualTo: category.documentID)
         .orderBy("lastModifiedDate", descending: true)
         .limit(limit)
         .snapshots();

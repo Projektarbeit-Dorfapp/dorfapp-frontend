@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BoardEntry{
   String documentID;
   String boardCategoryReference;
-  String userReference;
+  String userReference; ///creator of BoardEntry
   Timestamp lastModifiedDate;
   Timestamp postingDate;
   String title;

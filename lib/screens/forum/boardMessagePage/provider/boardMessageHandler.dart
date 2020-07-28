@@ -58,18 +58,20 @@ class BoardMessageHandler extends ChangeNotifier {
         userReference: firebaseUser.uid,
         postingDate: Timestamp.fromDate(dateTime),
         lastModifiedDate: Timestamp.fromDate(dateTime),
-        boardCategoryReference: _category.id,
+        boardCategoryReference: _category.documentID,
         boardEntryReference: _entry.documentID,
       );
     });
     return boardMessage;
   }
+
   _notifySubscriptions(BoardMessage message, AlertService alertService) async {
     final subscriptionService = SubscriptionService();
     List<String> subscriber = await subscriptionService.getSubscriptions(
         topLevelDocumentID: message.boardEntryReference,
         topLevelCollection: CollectionNames.BOARD_ENTRY);
     Alert alert = Alert(
+      additionalMessage: 'Der Benutzer ${message.userName} hat eine neue Nachricht im Thema "${_entry.title}" verfasst',
       alertType: AlertType.message,
       boardEntryReference: message.boardEntryReference,
       boardCategoryReference: message.boardCategoryReference,

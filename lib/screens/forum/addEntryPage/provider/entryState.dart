@@ -16,7 +16,7 @@ class EntryState extends ChangeNotifier{
       userReference: userID,
       postingDate: Timestamp.fromDate(dateTime),
       lastModifiedDate: Timestamp.fromDate(dateTime),
-      boardCategoryReference: category.id,
+      boardCategoryReference: category.documentID,
       userName: u.userName,
       userAvatarReference: u.userAvatarReference,
   );

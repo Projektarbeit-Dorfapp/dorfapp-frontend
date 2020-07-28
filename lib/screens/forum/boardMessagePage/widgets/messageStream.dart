@@ -58,7 +58,7 @@ class _MessageStreamState extends State<MessageStream> with SingleTickerProvider
               _animationController.forward();
               return FadeScaleTransition(
                 animation: _animationController,
-                child: BoardMessageDisplay(snapshot.data[index]),
+                child: BoardMessageDisplay(snapshot.data[index], widget.entry.userReference),
               );
             },
           );

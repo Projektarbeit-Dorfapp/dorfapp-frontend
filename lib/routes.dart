@@ -8,6 +8,7 @@ import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/login/passwordResetPage/passwordResetPage.dart';
 import 'package:dorf_app/screens/login/registrationPage/registrationPage.dart';
 import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
+import 'package:dorf_app/screens/profile/alertPage/alertPage.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
@@ -30,6 +31,7 @@ class Application {
     '/boardEntryPage': (BuildContext context) => BoardEntryPage(),
     '/addEntryPage' : (BuildContext context) => AddEntryPage(),
     '/profilePage' : (BuildContext context) => ProfilePage(),
+    '/alertPage' : (BuildContext context) => AlertPage(),
   };
 
   void main() {
