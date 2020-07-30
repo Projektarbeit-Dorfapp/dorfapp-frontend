@@ -41,11 +41,16 @@ class MenuButtons {
     CANCEL_SUBSCRIPTION,
   ];
 
-  static const List<String> BoardMessagePageNotCreatorCancelSub = <String> [
-    CANCEL_SUBSCRIPTION,
-  ];
-
   static const List<String> AlertPagePopUpMenu = <String> [
     DELETE_ALERTS,
   ];
+
+  static const List<String> SubPopUpMenu = <String> [
+    SUBSCRIBE
+  ];
+
+  static const List<String> CancelSubPopUpMenu = <String> [
+    CANCEL_SUBSCRIPTION,
+  ];
+
 }

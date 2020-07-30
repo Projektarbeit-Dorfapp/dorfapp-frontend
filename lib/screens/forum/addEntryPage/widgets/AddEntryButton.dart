@@ -15,7 +15,8 @@ import 'package:provider/provider.dart';
 
 class AddEntryButton extends StatelessWidget {
   final BoardCategory category;
-  AddEntryButton(this.category);
+  final Color categoryColor;
+  AddEntryButton(this.category, this.categoryColor);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class AddEntryButton extends StatelessWidget {
     return showFAB
         ? FloatingActionButton(
             child: const Icon(Icons.check),
-            backgroundColor: Theme.of(context).buttonColor,
+            backgroundColor: categoryColor,
             onPressed: () async {
               final entryState = Provider.of<EntryState>(context, listen: false);
               final authentication = Provider.of<Authentication>(context, listen: false);
@@ -43,14 +44,16 @@ class AddEntryButton extends StatelessWidget {
   _insertionProcess(BoardEntry createdEntry, BuildContext context) async{
     final _entryService = BoardEntryService();
     DocumentReference docRef = await _entryService.insertEntry(createdEntry);
-    _subscribe(docRef, context);
+    _subscribe(docRef, context, createdEntry);
   }
 
   ///Subscribe to own content on insertion
-  _subscribe(DocumentReference docRef, BuildContext context) async{
+  _subscribe(DocumentReference docRef, BuildContext context, BoardEntry createdEntry) async{
     final _subscriptionService = SubscriptionService();
     final _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _subscriptionService.subscribe(
+        shouldNotify: false,
+        entry: createdEntry,
         loggedUser: await _accessHandler.getUser(),
         topLevelDocumentID: docRef.documentID,
         topLevelCollection: CollectionNames.BOARD_ENTRY);

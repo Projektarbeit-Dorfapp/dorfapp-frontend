@@ -1,18 +1,20 @@
-import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/screens/forum/boardEntryPage/widgets/entryPopUpMenu.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:dorf_app/widgets/showUserProfileText.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BoardEntryDisplay extends StatelessWidget {
+  final Color categoryColor;
   final BoardEntry entry;
-  final BoardCategory category;
-  const BoardEntryDisplay({@required this.entry, @required this.category});
-
+  final String boardCategoryReference;
+  const BoardEntryDisplay({@required this.entry, @required this.boardCategoryReference, @required this.categoryColor});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,16 +38,7 @@ class BoardEntryDisplay extends StatelessWidget {
                     ),
                     Positioned(
                       right: 0,
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.more_vert,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        onPressed: () {
-                          //TODO: What to do?
-                        },
-                      ),
+                      child: EntryPopUpMenu(entry),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,11 +121,12 @@ class BoardEntryDisplay extends StatelessWidget {
       ),
     );
   }
-  _showBoardMessagePage(BuildContext context){
-    BoardEntryService().incrementWatchCount(entry);
+  _showBoardMessagePage(BuildContext context) async{
+    BoardEntryService().incrementWatchCount(entry, await Provider.of<AccessHandler>(context, listen: false).getUser());
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => BoardMessagePage(
-          categoryDocumentID: category.documentID,
-          entryDocumentID: entry.documentID,),));
+          categoryColor: categoryColor,
+          categoryDocumentID: boardCategoryReference,
+          entryDocumentID: entry.originalDocReference == "" ? entry.documentID : entry.originalDocReference),));
   }
 }

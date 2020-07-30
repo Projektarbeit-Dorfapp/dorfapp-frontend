@@ -11,20 +11,23 @@ class BoardCategoryPage extends StatelessWidget {
     final separatorIndent = MediaQuery.of(context).size.width * 0.05;
 
     return Scaffold(
+      backgroundColor: Color(0xfff0f0f0),
       body: FutureBuilder(
         future: _boardCategoryService.getBoardCategories(),
         builder: (BuildContext context,
             AsyncSnapshot<List<BoardCategory>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.separated(
+            return ListView.builder(
               itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return BoardCategoryDisplay(snapshot.data[index]);
+              itemBuilder: (context, int index){
+                return Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Center(
+                    child: BoardCategoryDisplay(
+                        snapshot.data[index], _getColor(index)),
+                  ),
+                );
               },
-              separatorBuilder: (BuildContext context, int index) => Divider(
-                indent: separatorIndent,
-                endIndent: separatorIndent,
-              ),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -50,5 +53,18 @@ class BoardCategoryPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  //idk
+  Color _getColor(int index){
+    if(index == 0)
+      return Color(0xff6178A3);
+    else if (index == 1)
+      return Color(0xff548c58);
+    else if (index == 2)
+      return Color(0xffb37436);
+    else if(index == 3)
+      return Colors.deepPurpleAccent;
+    else return Colors.green;
   }
 }

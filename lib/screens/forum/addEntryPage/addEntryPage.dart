@@ -7,13 +7,15 @@ import 'package:provider/provider.dart';
 
 class AddEntryPage extends StatelessWidget {
   final BoardCategory category;
-  AddEntryPage({this.category});
+  final Color categoryColor;
+  AddEntryPage({this.category, this.categoryColor});
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => EntryState(),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: categoryColor,
           centerTitle: true,
           title: const Text("Neues Thema"),
         ),
@@ -22,8 +24,7 @@ class AddEntryPage extends StatelessWidget {
           height: 80,
           child: Padding(
             padding: EdgeInsets.only(bottom: 10, right: 10),
-            child: AddEntryButton(
-                category),
+            child: AddEntryButton(category, categoryColor),
           ),
         ),
         body: AddEntryTitleField(),

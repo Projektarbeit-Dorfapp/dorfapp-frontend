@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class AddEntryNavigationButton extends StatelessWidget {
   final BoardCategory category;
-  AddEntryNavigationButton({@required this.category});
+  final Color categoryColor;
+  AddEntryNavigationButton({@required this.category, @required this.categoryColor});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class AddEntryNavigationButton extends StatelessWidget {
             width: 63,
             height: 63,
             child: OpenContainer(
-              closedColor: Theme.of(context).buttonColor,
+              closedColor: categoryColor,
               closedElevation: 10.0,
               openElevation: 15.0,
               closedShape: const RoundedRectangleBorder(
@@ -28,6 +29,7 @@ class AddEntryNavigationButton extends StatelessWidget {
               transitionDuration: const Duration(milliseconds: 450),
               openBuilder: (context, action) {
                 return AddEntryPage(
+                  categoryColor: categoryColor,
                   category: category,
                 );
               },

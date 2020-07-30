@@ -5,6 +5,7 @@ class BoardEntry{
   String documentID;
   String boardCategoryReference;
   String userReference; ///creator of BoardEntry
+  String originalDocReference; ///needs to be used on duplicates to correctly find the original document
   Timestamp lastModifiedDate;
   Timestamp postingDate;
   String title;
@@ -15,6 +16,7 @@ class BoardEntry{
   String userAvatarReference;
   bool isClosed;
   int watchCount;
+  bool isEntry = true; ///simple identifier
 
   BoardEntry({
     this.boardCategoryReference,
@@ -30,6 +32,7 @@ class BoardEntry{
 
   BoardEntry.fromJson(Map snapshot, String documentID){
     this.documentID = documentID;
+    originalDocReference = snapshot["originalDocReference"] ?? "";
     caption = snapshot["caption"] ?? "";
     boardCategoryReference = snapshot["boardCategoryReference"] ?? "";
     userReference = snapshot["userReference"] ?? "";
@@ -42,9 +45,11 @@ class BoardEntry{
     firstName = snapshot["firstName"] ?? "";
     lastName = snapshot["lastName"] ?? "";
     isClosed = snapshot["isClosed"] ?? false;
+    isEntry = snapshot["isEntry"] ?? true;
   }
   Map<String, dynamic> toJson(){
     return {
+      "originalDocReference" : originalDocReference,
       "boardCategoryReference" : boardCategoryReference,
       "userReference" : userReference,
       "lastModifiedDate" : lastModifiedDate,
@@ -57,6 +62,7 @@ class BoardEntry{
       "firstName" : firstName,
       "lastName" : lastName,
       "isClosed" : isClosed,
+      "isEntry" : isEntry,
     };
   }
 }

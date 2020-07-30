@@ -16,9 +16,10 @@ import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 class BoardMessagePage extends StatefulWidget {
+  final Color categoryColor;
   final String categoryDocumentID;
   final String entryDocumentID;
-  BoardMessagePage({@required this.categoryDocumentID, @required this.entryDocumentID});
+  BoardMessagePage({@required this.categoryDocumentID, @required this.entryDocumentID, @required this.categoryColor});
 
   @override
   _BoardMessagePageState createState() => _BoardMessagePageState();
@@ -38,7 +39,6 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
 
   @override
   void initState() {
-
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _entryService = BoardEntryService();
     _categoryService = BoardCategoryService();
@@ -53,26 +53,25 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
       _subscriptionService
           .isUserSubscribed(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, topLevelCollection: CollectionNames.BOARD_ENTRY)
           .then((isSubscribed) {
-        if(mounted){
+        if (mounted) {
           setState(() {
             _isSubscribed = isSubscribed;
             _isDataLoaded = true;
           });
         }
       });
-      _categoryService.getCategory(widget.categoryDocumentID).then((category){
-        if(mounted){
+      _categoryService.getCategory(widget.categoryDocumentID).then((category) {
+        if (mounted) {
           setState(() {
             _category = category;
           });
         }
       });
-      _entryService.getEntry(widget.entryDocumentID).then((entry){
-        if(mounted){
+      _entryService.getEntry(widget.entryDocumentID).then((entry) {
+        if (mounted) {
           setState(() {
             _entry = entry;
-            if(entry != null)
-              _isClosed = _entry.isClosed;
+            if (entry != null) _isClosed = _entry.isClosed;
           });
         }
       });
@@ -102,7 +101,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
       }
     } else {
       if (_isSubscribed) {
-        return MenuButtons.BoardMessagePageNotCreatorCancelSub.map((String choice) {
+        return MenuButtons.CancelSubPopUpMenu.map((String choice) {
           return PopupMenuItem<String>(
             value: choice,
             child: Text(choice),
@@ -126,6 +125,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
             create: (context) => BoardMessageHandler(_entry, _category),
             child: Scaffold(
                 appBar: AppBar(
+                  backgroundColor: widget.categoryColor,
                   actions: <Widget>[
                     PopupMenuButton<String>(
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -175,9 +175,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                 actions: <Widget>[
                   IconButton(
                     icon: Icon(Icons.more_vert),
-                    onPressed: (){
-
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -218,6 +216,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     });
     service
         .subscribe(
+      shouldNotify: true,
       entry: _entry,
       loggedUser: _loggedUser,
       topLevelDocumentID: widget.entryDocumentID,
