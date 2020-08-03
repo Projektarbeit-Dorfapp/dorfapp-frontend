@@ -2,6 +2,7 @@ import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/provider/entryState.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/widgets/AddEntryButton.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/widgets/AddEntryTitleField.dart';
+import 'package:dorf_app/screens/forum/addEntryPage/widgets/addEntryDescriptionField.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,8 +10,10 @@ class AddEntryPage extends StatelessWidget {
   final BoardCategory category;
   final Color categoryColor;
   AddEntryPage({this.category, this.categoryColor});
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width * 0.05;
     return ChangeNotifierProvider(
       create: (context) => EntryState(),
       child: Scaffold(
@@ -24,10 +27,34 @@ class AddEntryPage extends StatelessWidget {
           height: 80,
           child: Padding(
             padding: EdgeInsets.only(bottom: 10, right: 10),
-            child: AddEntryButton(category, categoryColor),
+            child: AddEntryButton(category, categoryColor, _formKey),
           ),
         ),
-        body: AddEntryTitleField(),
+        body: Container(
+          height: 225,
+          width: MediaQuery.of(context).size.width,
+          child: Form(
+            key: _formKey,
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  left: width,
+                  child: AddEntryTitleField(
+
+                  ),
+                ),
+                Positioned(
+                  top: 65,
+                  left: width,
+                  //width: MediaQuery.of(context).size.width,
+                  child: AddEntryDescriptionField(
+
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

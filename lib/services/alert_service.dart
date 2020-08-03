@@ -4,8 +4,10 @@ import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/services/user_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
@@ -25,7 +27,8 @@ class AlertService extends ChangeNotifier {
 
   ///Opens stream. Is initiated in RootPage. Never call this function outside of RootPage
   initStream(UserService userService, AccessHandler accessHandler) async {
-    User u = await accessHandler.getUser();
+    FirebaseUser firebaseUser = await Authentication().getCurrentUser();
+    User u = await UserService().getUser(firebaseUser.uid);
     _loggedUserID = u.uid;
     _alertStream = _getAlertRef(u.documentID).orderBy("creationDate", descending: true).snapshots().map((snapshot) {
       List<Alert> list = [];

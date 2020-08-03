@@ -173,15 +173,18 @@ class SubscriptionService {
     }
   }
 
-  ///Returns all pinned BoardEntries
+  ///Returns all pinned BoardEntries. TODO: CURRENTLY NOT BENEFIT FROM DUPLICATION
   Stream<List<BoardEntry>> getPinnedEntries(User loggedUser, int limit){
-    final ref = _getRef(loggedUser.documentID, CollectionNames.USER);
-    Stream<QuerySnapshot> stream = ref.where("isEntry", isEqualTo: true).limit(limit).snapshots();
+    final refToUser = _getRef(loggedUser.documentID, CollectionNames.USER);
 
-    return stream.map((snapshot){
+    Stream<QuerySnapshot> stream = refToUser.where("isEntry", isEqualTo: true).limit(limit).snapshots();
+
+    return stream.asyncMap((snapshot) async{
       List<BoardEntry> list = [];
       for (var document in snapshot.documents){
-        var entry = BoardEntry.fromJson(document.data, document.documentID);
+        final refToEntry = Firestore.instance.collection(CollectionNames.BOARD_ENTRY).document(document.data["originalDocReference"]);
+        DocumentSnapshot snapshot = await refToEntry.get();
+        var entry = BoardEntry.fromJson(snapshot.data, snapshot.documentID);
         list.add(entry);
       }
       return list;

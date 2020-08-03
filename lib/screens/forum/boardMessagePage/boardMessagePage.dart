@@ -16,10 +16,9 @@ import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 class BoardMessagePage extends StatefulWidget {
-  final Color categoryColor;
   final String categoryDocumentID;
   final String entryDocumentID;
-  BoardMessagePage({@required this.categoryDocumentID, @required this.entryDocumentID, @required this.categoryColor});
+  BoardMessagePage({@required this.categoryDocumentID, @required this.entryDocumentID,});
 
   @override
   _BoardMessagePageState createState() => _BoardMessagePageState();
@@ -30,6 +29,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   SubscriptionService _subscriptionService;
   BoardCategory _category;
   BoardEntry _entry;
+  int _categoryColor;
   BoardCategoryService _categoryService;
   AccessHandler _accessHandler;
   User _loggedUser;
@@ -71,6 +71,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
         if (mounted) {
           setState(() {
             _entry = entry;
+            _categoryColor = _entry.categoryColor;
             if (entry != null) _isClosed = _entry.isClosed;
           });
         }
@@ -125,7 +126,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
             create: (context) => BoardMessageHandler(_entry, _category),
             child: Scaffold(
                 appBar: AppBar(
-                  backgroundColor: widget.categoryColor,
+                  backgroundColor: Color(_categoryColor),
                   actions: <Widget>[
                     PopupMenuButton<String>(
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),

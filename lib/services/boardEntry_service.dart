@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
@@ -24,16 +22,14 @@ class BoardEntryService{
     }
   }
 
-  incrementWatchCount(BoardEntry entry, User loggedUser) async{
-    if(entry.originalDocReference == ""){
-      _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
-      _incrementDuplicates(entry, loggedUser);
-    } else{
-      _boardRef.document(entry.originalDocReference).updateData({"watchCount" : FieldValue.increment(1)});
-      _incrementDuplicates(entry, loggedUser);
-
-    }
+  updateModifiedDate(BoardEntry entry){
+    _boardRef.document(entry.documentID).updateData({"lastModifiedDate" : Timestamp.now()});
   }
+
+  incrementWatchCount(BoardEntry entry, User loggedUser) async{
+    _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
+  }
+  /*
   _incrementDuplicates(BoardEntry entry, User loggedUser)async{
     final ref =  Firestore.instance
         .collection(CollectionNames.USER)
@@ -47,6 +43,8 @@ class BoardEntryService{
           ref.document(value.documents[0].documentID).updateData({"watchCount" : FieldValue.increment(1)});
       });
   }
+
+   */
 
   closeBoardEntry(BoardEntry entry){
     _boardRef.document(entry.documentID).updateData({"isClosed" : true});

@@ -63,7 +63,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Padding(
                 padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
                 child: Container(
-                  height: 450,
+                  height: 467,
                   width: MediaQuery.of(context).size.width,
                   child: Form(
                     key: _formKey,

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 class UserAvatarDisplay extends StatelessWidget {
+  final double height;
+  final double width;
+  UserAvatarDisplay(this.height, this.width);
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 30,
-      width: 30,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(50),

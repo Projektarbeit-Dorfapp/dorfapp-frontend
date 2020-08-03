@@ -4,11 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BoardEntry{
   String documentID;
   String boardCategoryReference;
+  int categoryColor;
   String userReference; ///creator of BoardEntry
   String originalDocReference; ///needs to be used on duplicates to correctly find the original document
   Timestamp lastModifiedDate;
   Timestamp postingDate;
   String title;
+  String description;
   String caption;
   String userName;
   String firstName;
@@ -19,8 +21,10 @@ class BoardEntry{
   bool isEntry = true; ///simple identifier
 
   BoardEntry({
+    this.categoryColor,
     this.boardCategoryReference,
     this.userReference,
+    this.description,
     this.lastModifiedDate,
     this.postingDate,
     this.title,
@@ -32,6 +36,8 @@ class BoardEntry{
 
   BoardEntry.fromJson(Map snapshot, String documentID){
     this.documentID = documentID;
+    categoryColor = snapshot["categoryColor"] ?? "";
+    description = snapshot["description"] ?? "";
     originalDocReference = snapshot["originalDocReference"] ?? "";
     caption = snapshot["caption"] ?? "";
     boardCategoryReference = snapshot["boardCategoryReference"] ?? "";
@@ -49,6 +55,8 @@ class BoardEntry{
   }
   Map<String, dynamic> toJson(){
     return {
+      "categoryColor" : categoryColor,
+      "description" : description,
       "originalDocReference" : originalDocReference,
       "boardCategoryReference" : boardCategoryReference,
       "userReference" : userReference,

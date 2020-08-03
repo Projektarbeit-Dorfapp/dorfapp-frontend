@@ -2,21 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/screens/forum/addEntryPage/provider/entryState.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/forum/addEntryPage/provider/entryState.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
-import 'package:dorf_app/services/user_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddEntryButton extends StatelessWidget {
   final BoardCategory category;
   final Color categoryColor;
-  AddEntryButton(this.category, this.categoryColor);
+  final GlobalKey<FormState> formKey;
+  AddEntryButton(this.category, this.categoryColor, this.formKey);
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +24,14 @@ class AddEntryButton extends StatelessWidget {
             child: const Icon(Icons.check),
             backgroundColor: categoryColor,
             onPressed: () async {
-              final entryState = Provider.of<EntryState>(context, listen: false);
-              final authentication = Provider.of<Authentication>(context, listen: false);
-              final userService = Provider.of<UserService>(context, listen: false);
-
-              FirebaseUser user = await authentication.getCurrentUser();
-              User u = await userService.getUser(user.uid);
-              final createdEntry = entryState.createBoardEntry(user.uid, category, u);
-              _insertionProcess(createdEntry, context);
-              Navigator.pop(context);
+              if(formKey.currentState.validate()){
+                final entryState = Provider.of<EntryState>(context, listen: false);
+                final accessHandler = Provider.of<AccessHandler>(context, listen: false);
+                User u = await accessHandler.getUser();
+                final createdEntry = entryState.createBoardEntry(category, u, categoryColor);
+                _insertionProcess(createdEntry, context);
+                Navigator.pop(context);
+              }
             },
           )
         : Container();

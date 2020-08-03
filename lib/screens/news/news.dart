@@ -34,7 +34,7 @@ class NewsOverview extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          WeatherDisplay(),
+                          WeatherDisplay(textSize: 24,),
                           Spacer(),
                           Container(
                             height: 70,

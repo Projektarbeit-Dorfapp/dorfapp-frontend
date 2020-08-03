@@ -14,25 +14,27 @@ class PinsPage extends StatefulWidget {
 
 class _PinsPageState extends State<PinsPage> {
   SubscriptionService _subscriptionService;
-  ScrollController _controller;
+  ScrollController _scrollController;
   User _loggedUser;
   int _itemLimit = 10;
+  int _snapshotItemCount;
   @override
   void initState() {
     _subscriptionService = SubscriptionService();
-    _controller = ScrollController();
+    _scrollController = ScrollController();
     Provider.of<AccessHandler>(context, listen: false).getUser().then((user) {
       if (mounted)
         setState(() {
           _loggedUser = user;
         });
     });
+    _scrollController.addListener(_increaseListSize);
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -42,12 +44,14 @@ class _PinsPageState extends State<PinsPage> {
         ? StreamBuilder<List<BoardEntry>>(
             stream: _subscriptionService.getPinnedEntries(_loggedUser, _itemLimit),
             builder: (context, snapshot) {
-
               if (snapshot.hasData) {
                 return ListView.builder(
+                  key: UniqueKey(),
+                  controller: _scrollController,
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, int index){
-                      return BoardEntryDisplay(entry: snapshot.data[index], boardCategoryReference: snapshot.data[index].boardCategoryReference,);
+                      _snapshotItemCount = snapshot.data.length;
+                      return BoardEntryDisplay(entry: snapshot.data[index], boardCategoryReference: snapshot.data[index].boardCategoryReference);
                     });
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
@@ -55,7 +59,7 @@ class _PinsPageState extends State<PinsPage> {
                 );
               } else {
                 return Center(
-                  child: Text("Etwas lief schief"),
+                  child: Text("Etwas ist schief gelaufen"),
                 );
               }
             },
@@ -63,5 +67,14 @@ class _PinsPageState extends State<PinsPage> {
         : Center(
             child: CircularProgressIndicator(),
           );
+  }
+  _increaseListSize(){
+    if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent){
+      if(_snapshotItemCount > _itemLimit){
+        setState(() {
+          _itemLimit = _itemLimit + 10;
+        });
+      }
+    }
   }
 }

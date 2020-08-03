@@ -2,7 +2,7 @@ import 'package:dorf_app/screens/forum/addEntryPage/provider/entryState.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddEntryTitleField extends StatelessWidget {
+class AddEntryDescriptionField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entryState = Provider.of<EntryState>(context, listen: false);
@@ -12,16 +12,19 @@ class AddEntryTitleField extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width * 0.9,
           child: TextFormField(
-            onChanged: (title){
-              entryState.title = title;
+            maxLines: 4,
+            maxLength: 500,
+            onChanged: (description){
+              entryState.setDescription(description);
             },
-            validator: (title){
-              if(title.isEmpty)
-                return "Gib deinem Thema einen Titel";
+            validator: (description){
+              if(description.isEmpty)
+                return "Gib deinem Thema noch eine Beschreibung";
               else return null;
             },
             decoration: const InputDecoration(
-                labelText: "Titel"
+              alignLabelWithHint: true,
+                labelText: "Beschreibung"
             ),
           ),
         ),

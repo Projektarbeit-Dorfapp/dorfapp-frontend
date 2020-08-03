@@ -21,7 +21,7 @@ class BoardMessageDisplay extends StatelessWidget {
             Positioned(
               left: 16,
               top: 13,
-              child: UserAvatarDisplay(//TODO: Fetch from storage
+              child: UserAvatarDisplay(30, 30 //TODO: Fetch from storage
               ),
             ),
             Positioned(
@@ -45,6 +45,8 @@ class BoardMessageDisplay extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: 60, top: 10),
                       child: ShowUserProfileText(
+                        firstName: message.firstName,
+                        lastName: message.lastName,
                         userName: message.userName,
                         color: Theme.of(context).primaryColor,
                         fontSize: 16,

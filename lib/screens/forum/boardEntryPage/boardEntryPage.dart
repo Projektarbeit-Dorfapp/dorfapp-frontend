@@ -64,7 +64,7 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
                       return FadeScaleTransition(
                         animation: _animationController,
                         child: BoardEntryDisplay(
-                          categoryColor: categoryWithColor.categoryColor,
+                          //categoryColor: categoryWithColor.categoryColor,
                           boardCategoryReference: categoryWithColor.category.documentID,
                           entry: snapshot.data[index],
                         ),

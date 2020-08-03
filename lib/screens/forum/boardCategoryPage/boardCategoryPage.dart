@@ -24,7 +24,7 @@ class BoardCategoryPage extends StatelessWidget {
                   padding: EdgeInsets.all(5),
                   child: Center(
                     child: BoardCategoryDisplay(
-                        snapshot.data[index], _getColor(index)),
+                        snapshot.data[index], _getColor(index, context)),
                   ),
                 );
               },
@@ -56,15 +56,15 @@ class BoardCategoryPage extends StatelessWidget {
   }
 
   //idk
-  Color _getColor(int index){
-    if(index == 0)
+  Color _getColor(int index, BuildContext context){
+    if(index == 1)
       return Color(0xff6178A3);
-    else if (index == 1)
-      return Color(0xff548c58);
+    else if (index == 0)
+      return Color(0xff70a1a0);
     else if (index == 2)
-      return Color(0xffb37436);
+      return Theme.of(context).buttonColor;
     else if(index == 3)
-      return Colors.deepPurpleAccent;
-    else return Colors.green;
+      return Color(0xff916740);
+    else return Colors.deepPurple;
   }
 }

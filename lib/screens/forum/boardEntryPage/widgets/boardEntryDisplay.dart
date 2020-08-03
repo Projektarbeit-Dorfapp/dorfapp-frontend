@@ -11,10 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BoardEntryDisplay extends StatelessWidget {
-  final Color categoryColor;
   final BoardEntry entry;
   final String boardCategoryReference;
-  const BoardEntryDisplay({@required this.entry, @required this.boardCategoryReference, @required this.categoryColor});
+  const BoardEntryDisplay({@required this.entry, @required this.boardCategoryReference});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,14 +26,12 @@ class BoardEntryDisplay extends StatelessWidget {
           elevation: 2,
           child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: 100,
                 child: Stack(
                   children: <Widget>[
                     Positioned(
                       left: 16,
                       top: 13,
-                      child: UserAvatarDisplay(//TODO: Fetch from storage
-                          ),
+                      child: UserAvatarDisplay(30, 30), //TODO: Fetch from storage
                     ),
                     Positioned(
                       right: 0,
@@ -50,6 +47,8 @@ class BoardEntryDisplay extends StatelessWidget {
                               child: ShowUserProfileText(
                                 userReference: entry.userReference,
                                 userName: entry.userName,
+                                firstName: entry.firstName,
+                                lastName: entry.lastName,
                                 color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -111,7 +110,16 @@ class BoardEntryDisplay extends StatelessWidget {
                               fontFamily: "Raleway",
                             ),
                           ),
-                        )
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 16, top: 5, bottom: 20),
+                          child: Text(
+                            entry.description,
+                            style: const TextStyle(
+                                fontSize: 12,
+                            )
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -125,8 +133,7 @@ class BoardEntryDisplay extends StatelessWidget {
     BoardEntryService().incrementWatchCount(entry, await Provider.of<AccessHandler>(context, listen: false).getUser());
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => BoardMessagePage(
-          categoryColor: categoryColor,
           categoryDocumentID: boardCategoryReference,
-          entryDocumentID: entry.originalDocReference == "" ? entry.documentID : entry.originalDocReference),));
+          entryDocumentID: entry.documentID ),));
   }
 }

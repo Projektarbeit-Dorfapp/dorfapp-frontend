@@ -6,6 +6,7 @@ import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/boardMessage_model.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/services/boardMessage_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/services/user_service.dart';
@@ -14,7 +15,7 @@ import 'package:flutter/material.dart';
 class BoardMessageHandler extends ChangeNotifier {
   final _authentication = Authentication();
   final _boardMessageService = BoardMessageService();
-
+  final _boardEntryService = BoardEntryService();
   final BoardEntry _entry;
   final BoardCategory _category;
 
@@ -41,6 +42,7 @@ class BoardMessageHandler extends ChangeNotifier {
     var message = await _createBoardMessage(userService);
     await _boardMessageService.insertBoardMessage(message);
     _message = "";
+    _boardEntryService.updateModifiedDate(_entry);
     notifyListeners();
     _notifySubscriptions(message, alertService);
   }
