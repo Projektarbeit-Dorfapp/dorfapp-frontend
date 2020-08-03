@@ -1,4 +1,6 @@
+import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/registrationPage/widgets/villageDropDownFormField.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,6 +15,7 @@ class RegistrationValidator extends ChangeNotifier{
   String _currentPassword = "";
   String _currentFirstName = "";
   String _currentLastName = "";
+  ListItem _selectedVillage;
 
   get isUserNameInUse => _userExist;
   get isEmailInvalid => _invalidEmail;
@@ -22,12 +25,19 @@ class RegistrationValidator extends ChangeNotifier{
   get currentUserName => _currentUserName;
   get currentFirstName => _currentFirstName;
   get currentLastName => _currentLastName;
+  get selectedVillage => _selectedVillage;
 
   setEmailValidation(bool isEmailInvalid){
     _invalidEmail = isEmailInvalid;
   }
+
   setEmailInUse(bool isEmailInUse){
     _emailInUse = isEmailInUse;
+  }
+
+  setVillage(ListItem item){
+    _selectedVillage = item;
+    print(item.name);
   }
   ///checkup if user name already exist in database
   validateUserName() async{
@@ -51,9 +61,10 @@ class RegistrationValidator extends ChangeNotifier{
   setPassword(String password){
     _currentPassword = password;
   }
-  ///creates User object and saves into user collection as document
+  ///creates User object and saves into [CollectionNames.USER] as a document with rng documentID.
   createUser(String uid) async{
     User user = User(
+        municipalReference: _selectedVillage.name,
         firstName: _currentFirstName,
         lastName: _currentLastName,
         email: _currentEmail,
@@ -74,5 +85,6 @@ class RegistrationValidator extends ChangeNotifier{
     _currentPassword = "";
     _currentLastName = "";
     _currentFirstName = "";
+    _selectedVillage = null;
   }
 }

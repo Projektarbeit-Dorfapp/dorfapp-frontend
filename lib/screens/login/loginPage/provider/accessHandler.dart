@@ -68,6 +68,7 @@ class AccessHandler extends ChangeNotifier {
 
   ///forces user to log out and show loginPage
   logout() {
+    _user = null; ///user information should not be saved when user logs out
     _logout.call();
   }
 

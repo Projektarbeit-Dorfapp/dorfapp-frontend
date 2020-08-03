@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather/weather_library.dart';
 
 ///Matthias Maxelon
@@ -40,7 +43,9 @@ class _WeatherDisplayState extends State<WeatherDisplay> {
     });
   }
   Future<Weather> initializeWeatherData() async {
-    return await weatherFactory.currentWeatherByLocation(lat, lon);
+    final access = Provider.of<AccessHandler>(context, listen: false);
+    User u = await access.getUser();
+    return await weatherFactory.currentWeatherByCityName(u.municipalReference);
   }
   @override
   Widget build(BuildContext context) {
@@ -127,7 +132,6 @@ class _WeatherDisplayState extends State<WeatherDisplay> {
     );
   }
   Color _getTemperatureColor(){
-
 
     if(temperature >= 20)
       return Color(0xffdb5656);

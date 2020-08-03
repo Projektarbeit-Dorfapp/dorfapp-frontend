@@ -5,6 +5,7 @@ import 'package:dorf_app/screens/login/registrationPage/widgets/confirmedPasswor
 import 'package:dorf_app/screens/login/registrationPage/widgets/emailFormField.dart';
 import 'package:dorf_app/screens/login/registrationPage/widgets/passwordFormField.dart';
 import 'package:dorf_app/screens/login/registrationPage/widgets/userNameFormField.dart';
+import 'package:dorf_app/screens/login/registrationPage/widgets/villageDropDownFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/screens/login/registrationPage/widgets/registrationButton.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Padding(
                 padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
                 child: Container(
-                  height: 467,
+                  height: 550,
                   width: MediaQuery.of(context).size.width,
                   child: Form(
                     key: _formKey,
@@ -118,6 +119,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           right: 19,
                           child: _passwordHideDisplay(
                               _PasswordType.confirmedPassword),
+                        ),
+                        Positioned(
+                          top: positionedDistance * 6,
+                          child: VillageDropDownFormField(),
                         ),
                       ],
                     ),
