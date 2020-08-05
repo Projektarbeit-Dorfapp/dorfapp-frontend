@@ -42,15 +42,15 @@ class _CommentSectionState extends State<CommentSection> {
     super.dispose();
   }
 
-  void _addNewComment(String val) {
-    AccessHandler _accessHandler =
-        Provider.of<AccessHandler>(context, listen: false);
+  void _addNewComment(String val) async{
+    AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
+    var user = await _accessHandler.getUser();
     var date = Timestamp.now();
     Comment newComment = Comment(
         user: User(
-            firstName: _accessHandler.getFirstName(),
-            lastName: _accessHandler.getLastName(),
-            uid: _accessHandler.getUID()),
+            firstName: user.firstName,
+            lastName: user.lastName,
+            uid: user.uid),
         content: val,
         createdAt: date,
         modifiedAt: date);
