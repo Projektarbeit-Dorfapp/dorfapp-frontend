@@ -7,7 +7,7 @@ class AddEntryNavigationButton extends StatelessWidget {
   final BoardCategory category;
   final Color categoryColor;
   AddEntryNavigationButton({@required this.category, @required this.categoryColor});
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return
@@ -31,6 +31,7 @@ class AddEntryNavigationButton extends StatelessWidget {
                 return AddEntryPage(
                   categoryColor: categoryColor,
                   category: category,
+                  formKey: _formKey,
                 );
               },
               closedBuilder: (context, action) {

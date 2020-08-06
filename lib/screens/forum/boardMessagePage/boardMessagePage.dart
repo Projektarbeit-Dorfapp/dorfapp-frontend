@@ -51,7 +51,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     _accessHandler.getUser().then((user) {
       _loggedUser = user;
       _subscriptionService
-          .isUserSubscribed(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, topLevelCollection: CollectionNames.BOARD_ENTRY)
+          .isUserSubscribed(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, subscriptionType: SubscriptionType.entry)
           .then((isSubscribed) {
         if (mounted) {
           setState(() {
@@ -217,15 +217,13 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     });
     service
         .subscribe(
-      shouldNotify: true,
-      entry: _entry,
       loggedUser: _loggedUser,
       topLevelDocumentID: widget.entryDocumentID,
-      topLevelCollection: CollectionNames.BOARD_ENTRY,
+      subscriptionType: SubscriptionType.entry,
     )
         .then((isInserted) {
       if (!isInserted) {
-        service.deleteSubscription(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, topLevelCollection: CollectionNames.BOARD_ENTRY);
+        service.deleteSubscription(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, subscriptionType: SubscriptionType.entry);
       }
       showSubscriptionMessage(isInserted, false);
     }).catchError((onError) {

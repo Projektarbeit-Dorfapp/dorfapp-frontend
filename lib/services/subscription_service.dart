@@ -8,7 +8,7 @@ import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
-enum NotificationType { news, entry }
+enum SubscriptionType { news, entry }
 
 class SubscriptionService {
   ///Returns a [Future] bool true if user successfully subscribed, false if already subscribed, null if error occurred.
@@ -24,31 +24,34 @@ class SubscriptionService {
   Future<bool> subscribe(
       {@required User loggedUser,
       @required String topLevelDocumentID,
-      @required String topLevelCollection,
-      News news,
-      BoardEntry entry,
-      @required shouldNotify}) async {
-
-    _checkError(shouldNotify, news, entry);
+      @required SubscriptionType subscriptionType}) async {
 
     bool isInsert;
-    var ref = _getRef(topLevelDocumentID, topLevelCollection);
 
-    bool isSubscribed = await isUserSubscribed(topLevelCollection: topLevelCollection, loggedUser: loggedUser, topLevelDocumentID: topLevelDocumentID);
+    var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
+
+    bool isSubscribed = await isUserSubscribed(subscriptionType: subscriptionType, loggedUser: loggedUser, topLevelDocumentID: topLevelDocumentID);
     if (isSubscribed) {
       isInsert = false;
     } else {
       ///Insert subscription
 
-      isInsert = await _insertSubscription(loggedUser, news, entry, shouldNotify, ref);
-      if (isInsert) _createDuplicate(news, entry, loggedUser, topLevelDocumentID);
+      isInsert = await _insertSubscription(loggedUser, ref);
+      if (isInsert) _createDuplicate(loggedUser, topLevelDocumentID, subscriptionType);
     }
     return isInsert;
   }
+  String _getCollectionName(SubscriptionType type){
+    if(type == SubscriptionType.news)
+      return CollectionNames.EVENT;
+
+    return CollectionNames.BOARD_ENTRY;
+
+  }
 
   ///Each successful subscription process will duplicate data
-  _createDuplicate(News news, BoardEntry entry, User loggedUser, String topLevelDocumentID) {
-    if (news != null || entry != null) _insertDuplicate(loggedUser, news, entry, topLevelDocumentID);
+  _createDuplicate(User loggedUser, String topLevelDocumentID, SubscriptionType subscriptionType) {
+    _insertDuplicate(loggedUser, topLevelDocumentID, subscriptionType);
   }
 
   ///Function to duplicate content of subscription.
@@ -57,80 +60,25 @@ class SubscriptionService {
   /// Duplicate data is saved in [CollectionNames.USER] -> user document -> [CollectionNames.PIN] -> duplicate document
   ///
   //This should allow us to have much fast queries if trying to display all pinned content from a specific user.
-  _insertDuplicate(User loggedUser, News news, BoardEntry entry, String topLevelDocumentID) async{
+  _insertDuplicate(User loggedUser, String topLevelDocumentID, SubscriptionType subscriptionType) async{
     final ref = _getRef(loggedUser.documentID, CollectionNames.USER);
-    if (entry != null){
-      entry.originalDocReference = topLevelDocumentID;
-      await ref.add(entry.toJson());
-    } else if (news != null) {
-      //TODO: duplicate for news?
-    }
+    ref.add({
+      "SubscriptionType" : subscriptionType.toString().split('.').last,
+      "DocumentReference": topLevelDocumentID,
+    });
   }
 
-  Future<bool> _insertSubscription(User loggedUser, News news, BoardEntry entry, bool shouldNotify, CollectionReference ref) async {
+  Future<bool> _insertSubscription(User loggedUser, CollectionReference ref) async {
     bool isInsert;
-
     await ref.document(loggedUser.uid).setData({}).then((_) {
       isInsert = true;
-      _notificationProcess(news, entry, loggedUser, shouldNotify);
     }).catchError((onError) {});
     return isInsert;
   }
 
-  _checkError(bool shouldNotify, News news, BoardEntry entry) {
-    if (shouldNotify) {
-      if (news != null && entry != null) {
-        throw Exception(
-            "The Method subscribe() in [SubscriptionService] should not get a [News]-Object and [BoardEntry]-Object at the same time when shouldNotify is true");
-      }
-    }
-  }
-
-  _notificationProcess(News news, BoardEntry entry, User loggedUser, bool shouldNotify) {
-    if (shouldNotify) {
-      if (news != null)
-        _notifyCreator(news.createdBy, news.description, loggedUser, NotificationType.news);
-      else if (entry != null) _notifyCreator(entry.userReference, entry.title, loggedUser, NotificationType.entry);
-    }
-  }
-
-  ///Notify Creator of Content that somebody subscribed to his content (creatorID must be the User that created content!)
-  _notifyCreator(String creatorID, String headline, User loggedUser, NotificationType type) {
-    if (creatorID == loggedUser.uid) {
-      return;
-    }
-    final _alertService = AlertService();
-    List<String> list = [];
-    list.add(creatorID);
-    final alert = Alert(
-      additionalMessage: _createAdditionalMessage(headline, loggedUser, type),
-      alertType: AlertType.pin_notification,
-      fromUserName: loggedUser.userName,
-      fromLastName: loggedUser.lastName,
-      fromFirstName: loggedUser.firstName,
-      creationDate: Timestamp.fromDate(DateTime.now()),
-      headline: headline,
-    );
-    _alertService.insertAlerts(list, alert);
-  }
-
-  String _createAdditionalMessage(String headline, User loggedUser, NotificationType type) {
-    String text = "";
-    String title = headline;
-
-    if (title == null || title == "") title = "[MISSING HEADLINE]";
-
-    if (type == NotificationType.entry)
-      text = "${loggedUser.userName} folgt jetzt dein Thema: " + title;
-    else
-      text = "${loggedUser.userName} folgt jetzt deiner Veranstaltung: " + title;
-
-    return text;
-  }
-
   ///Check if user already subscribed to [topLevelDocumentID].
-  Future<bool> isUserSubscribed({@required User loggedUser, @required String topLevelDocumentID, @required String topLevelCollection}) async {
-    var ref = _getRef(topLevelDocumentID, topLevelCollection);
+  Future<bool> isUserSubscribed({@required User loggedUser, @required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
+    var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
     bool isSubscribed;
     var subscriptionDoc = await ref.document(loggedUser.uid).get();
     if (subscriptionDoc.data == null) {
@@ -142,8 +90,8 @@ class SubscriptionService {
   }
 
   ///Returns a list of [User.uid] that subscribed to [topLevelDocumentID].
-  Future<List<String>> getSubscriptions({@required String topLevelDocumentID, @required String topLevelCollection}) async {
-    var ref = _getRef(topLevelDocumentID, topLevelCollection);
+  Future<List<String>> getSubscriptions({@required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
+    var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
     List<String> list = [];
     QuerySnapshot snapshot = await ref.getDocuments();
     for (DocumentSnapshot doc in snapshot.documents) {
@@ -153,39 +101,35 @@ class SubscriptionService {
   }
 
   ///Deletes a specific subscription from [topLevelDocumentID]
-  deleteSubscription({@required User loggedUser, @required String topLevelDocumentID, @required String topLevelCollection}) async {
-    final ref = _getRef(topLevelDocumentID, topLevelCollection);
-    var snapshot = await Firestore.instance.collection(CollectionNames.BOARD_ENTRY).document(topLevelDocumentID).get();
+  deleteSubscription({@required User loggedUser, @required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
+    final collectionName = _getCollectionName(subscriptionType);
+    final ref = _getRef(topLevelDocumentID, collectionName);
+
+    //var snapshot = await Firestore.instance.collection(collectionName).document(topLevelDocumentID).get();
     ref.document(loggedUser.uid).delete();
-    _deleteDuplicate(loggedUser, snapshot);
+    _deleteDuplicate(loggedUser, topLevelDocumentID);
   }
 
-  //TODO: Duplicate is only checking postingdate and userreference. Which is theoretically like a unique key to get the correct document.
-  //TODO: Any other duplicated data should have both of these fields available. Otherwise it wont work. Ask project members...
-  _deleteDuplicate(User loggedUser, DocumentSnapshot snapshot) async{
+  _deleteDuplicate(User loggedUser, String topLevelDocumentID) async{
     final ref = _getRef(loggedUser.documentID, CollectionNames.USER);
 
-    var querySnapshot = await ref.where("postingDate", isEqualTo: snapshot.data["postingDate"])
-        .where("userReference", isEqualTo: snapshot.data["userReference"])
-        .getDocuments();
+    var querySnapshot = await ref.where("DocumentReference", isEqualTo: topLevelDocumentID).getDocuments();
     for(int i = 0; i<querySnapshot.documents.length; i++){
       ref.document(querySnapshot.documents[i].documentID).delete();
     }
   }
 
-  ///Returns all pinned BoardEntries. TODO: CURRENTLY NOT BENEFIT FROM DUPLICATION
-  Stream<List<BoardEntry>> getPinnedEntries(User loggedUser, int limit){
+  Stream<List<DocumentSnapshot>> getPins(User loggedUser, int limit, SubscriptionType subscriptionType){
     final refToUser = _getRef(loggedUser.documentID, CollectionNames.USER);
 
-    Stream<QuerySnapshot> stream = refToUser.where("isEntry", isEqualTo: true).limit(limit).snapshots();
+    Stream<QuerySnapshot> stream = refToUser.where("SubscriptionType", isEqualTo: subscriptionType.toString().split(".").last).limit(limit).snapshots();
 
     return stream.asyncMap((snapshot) async{
-      List<BoardEntry> list = [];
+      List<DocumentSnapshot> list = [];
       for (var document in snapshot.documents){
-        final refToEntry = Firestore.instance.collection(CollectionNames.BOARD_ENTRY).document(document.data["originalDocReference"]);
-        DocumentSnapshot snapshot = await refToEntry.get();
-        var entry = BoardEntry.fromJson(snapshot.data, snapshot.documentID);
-        list.add(entry);
+        final refToDocument = Firestore.instance.collection(_getCollectionName(subscriptionType)).document(document.data["DocumentReference"]);
+        DocumentSnapshot snapshot = await refToDocument.get();
+        list.add(snapshot);
       }
       return list;
     });

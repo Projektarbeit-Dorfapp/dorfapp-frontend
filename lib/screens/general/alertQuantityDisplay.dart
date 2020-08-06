@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 ///
-/// Displays a number that indicates how many unread alerts the currently logged user has
+/// Displays a number that indicates how many unread alerts the currently logged user has or show icon instead
 ///
 class AlertQuantityDisplay extends StatefulWidget {
   final double borderRadius;

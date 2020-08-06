@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 class AddEntryPage extends StatelessWidget {
   final BoardCategory category;
   final Color categoryColor;
-  AddEntryPage({this.category, this.categoryColor});
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey;
+  AddEntryPage({this.category, this.categoryColor, this.formKey});
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width * 0.05;
@@ -27,14 +28,14 @@ class AddEntryPage extends StatelessWidget {
           height: 80,
           child: Padding(
             padding: EdgeInsets.only(bottom: 10, right: 10),
-            child: AddEntryButton(category, categoryColor, _formKey),
+            child: AddEntryButton(category, categoryColor, formKey),
           ),
         ),
         body: Container(
           height: 225,
           width: MediaQuery.of(context).size.width,
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Stack(
               children: <Widget>[
                 Positioned(

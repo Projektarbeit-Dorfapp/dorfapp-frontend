@@ -71,7 +71,7 @@ class BoardMessageHandler extends ChangeNotifier {
     final subscriptionService = SubscriptionService();
     List<String> subscriber = await subscriptionService.getSubscriptions(
         topLevelDocumentID: message.boardEntryReference,
-        topLevelCollection: CollectionNames.BOARD_ENTRY);
+        subscriptionType: SubscriptionType.entry);
     Alert alert = Alert(
       additionalMessage: 'Der Benutzer ${message.userName} hat eine neue Nachricht im Thema "${_entry.title}" verfasst',
       alertType: AlertType.message,

@@ -49,11 +49,10 @@ class AddEntryButton extends StatelessWidget {
     final _subscriptionService = SubscriptionService();
     final _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _subscriptionService.subscribe(
-        shouldNotify: false,
-        entry: createdEntry,
+    subscriptionType: SubscriptionType.entry,
         loggedUser: await _accessHandler.getUser(),
-        topLevelDocumentID: docRef.documentID,
-        topLevelCollection: CollectionNames.BOARD_ENTRY);
+        topLevelDocumentID: docRef.documentID,);
+
   }
 
 }

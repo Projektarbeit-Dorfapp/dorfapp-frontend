@@ -32,7 +32,7 @@ class _EntryPopUpMenuState extends State<EntryPopUpMenu> {
     _accessHandler.getUser().then((user) {
       _loggedUser = user;
       _subscriptionService
-          .isUserSubscribed(loggedUser: user, topLevelDocumentID: _getCorrectEntryReference(), topLevelCollection: CollectionNames.BOARD_ENTRY)
+          .isUserSubscribed(loggedUser: user, topLevelDocumentID: _getCorrectEntryReference(), subscriptionType: SubscriptionType.entry)
           .then((isSubscribed) {
         if (mounted) {
           setState(() {
@@ -95,18 +95,16 @@ class _EntryPopUpMenuState extends State<EntryPopUpMenu> {
     });
     service
         .subscribe(
-      shouldNotify: true,
-      entry: widget.entry,
       loggedUser: _loggedUser,
       topLevelDocumentID: _getCorrectEntryReference(),
-      topLevelCollection: CollectionNames.BOARD_ENTRY,
+      subscriptionType: SubscriptionType.entry,
     )
         .then((isInserted) {
       if (!isInserted) {
         service.deleteSubscription(
             loggedUser: _loggedUser,
             topLevelDocumentID: _getCorrectEntryReference(),
-            topLevelCollection: CollectionNames.BOARD_ENTRY);
+            subscriptionType: SubscriptionType.entry);
       }
       showSubscriptionMessage(isInserted, false);
     }).catchError((onError) {

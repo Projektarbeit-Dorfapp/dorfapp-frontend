@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.dart';
@@ -41,17 +42,19 @@ class _PinsPageState extends State<PinsPage> {
   @override
   Widget build(BuildContext context) {
     return _loggedUser != null
-        ? StreamBuilder<List<BoardEntry>>(
-            stream: _subscriptionService.getPinnedEntries(_loggedUser, _itemLimit),
-            builder: (context, snapshot) {
+        ? StreamBuilder(
+            stream: _subscriptionService.getPins(_loggedUser, _itemLimit, SubscriptionType.entry),
+            builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+
               if (snapshot.hasData) {
+               final boardEntries = _parseToEntries(snapshot);
                 return ListView.builder(
                   key: UniqueKey(),
                   controller: _scrollController,
-                    itemCount: snapshot.data.length,
+                    itemCount: boardEntries.length,
                     itemBuilder: (context, int index){
-                      _snapshotItemCount = snapshot.data.length;
-                      return BoardEntryDisplay(entry: snapshot.data[index], boardCategoryReference: snapshot.data[index].boardCategoryReference);
+                      _snapshotItemCount = boardEntries.length;
+                      return BoardEntryDisplay(entry: boardEntries[index], boardCategoryReference: boardEntries[index].boardCategoryReference);
                     });
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
@@ -76,5 +79,12 @@ class _PinsPageState extends State<PinsPage> {
         });
       }
     }
+  }
+ List<BoardEntry> _parseToEntries(AsyncSnapshot<List<DocumentSnapshot>> snapshot){
+    List<BoardEntry> list = [];
+    for(DocumentSnapshot doc in snapshot.data){
+      list.add(BoardEntry.fromJson(doc.data, doc.documentID));
+    }
+    return list;
   }
 }
