@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 
 class BoardMessageDisplay extends StatelessWidget {
   final BoardMessage message;
-  const BoardMessageDisplay(this.message);
+  final String entryCreatorID;
+  const BoardMessageDisplay(this.message, this.entryCreatorID);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,7 +21,7 @@ class BoardMessageDisplay extends StatelessWidget {
             Positioned(
               left: 16,
               top: 13,
-              child: UserAvatarDisplay(//TODO: Fetch from storage
+              child: UserAvatarDisplay(30, 30 //TODO: Fetch from storage
               ),
             ),
             Positioned(
@@ -44,6 +45,8 @@ class BoardMessageDisplay extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: 60, top: 10),
                       child: ShowUserProfileText(
+                        firstName: message.firstName,
+                        lastName: message.lastName,
                         userName: message.userName,
                         color: Theme.of(context).primaryColor,
                         fontSize: 16,
@@ -51,6 +54,15 @@ class BoardMessageDisplay extends StatelessWidget {
                         userReference: message.userReference,
                       ),
                     ),
+                    message.userReference == entryCreatorID
+                        ? Padding(
+                      padding: EdgeInsets.only(top: 10),
+                          child: Icon(
+                      Icons.stars,
+                      color: Theme.of(context).buttonColor,
+                          size: 22,),
+                        )
+                        : Container()
                   ],
                 ),
                 Row(

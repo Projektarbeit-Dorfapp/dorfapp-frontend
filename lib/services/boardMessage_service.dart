@@ -25,7 +25,7 @@ class BoardMessageService{
 
     Stream<QuerySnapshot> stream = _ref.document(entry.documentID)
         .collection("Forumbeitrag")
-        .where("boardCategoryReference", isEqualTo: category.id)
+        .where("boardCategoryReference", isEqualTo: category.documentID)
         .orderBy(_getOrderField(orderType), descending: true)
         .limit(limit)
         .snapshots();

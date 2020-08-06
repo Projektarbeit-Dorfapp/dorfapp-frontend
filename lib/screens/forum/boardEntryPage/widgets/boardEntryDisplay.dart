@@ -1,18 +1,19 @@
-import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/screens/forum/boardEntryPage/widgets/entryPopUpMenu.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:dorf_app/widgets/showUserProfileText.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BoardEntryDisplay extends StatelessWidget {
   final BoardEntry entry;
-  final BoardCategory category;
-  const BoardEntryDisplay({@required this.entry, @required this.category});
-
+  final String boardCategoryReference;
+  const BoardEntryDisplay({@required this.entry, @required this.boardCategoryReference});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,27 +26,16 @@ class BoardEntryDisplay extends StatelessWidget {
           elevation: 2,
           child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: 100,
                 child: Stack(
                   children: <Widget>[
                     Positioned(
                       left: 16,
                       top: 13,
-                      child: UserAvatarDisplay(//TODO: Fetch from storage
-                          ),
+                      child: UserAvatarDisplay(30, 30), //TODO: Fetch from storage
                     ),
                     Positioned(
                       right: 0,
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.more_vert,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        onPressed: () {
-                          //TODO: What to do?
-                        },
-                      ),
+                      child: EntryPopUpMenu(entry),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,6 +47,8 @@ class BoardEntryDisplay extends StatelessWidget {
                               child: ShowUserProfileText(
                                 userReference: entry.userReference,
                                 userName: entry.userName,
+                                firstName: entry.firstName,
+                                lastName: entry.lastName,
                                 color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -81,7 +73,7 @@ class BoardEntryDisplay extends StatelessWidget {
                             const SizedBox(width: 5),
                             entry.watchCount != 0
                                 ? Text(entry.watchCount.toString(), style: TextStyle(color: Colors.grey),)
-                                : Container(),
+                                : Text(0.toString(), style: TextStyle(color: Colors.grey)),
                             const SizedBox(width: 10),
                             const Icon(
                               Icons.date_range,
@@ -118,7 +110,16 @@ class BoardEntryDisplay extends StatelessWidget {
                               fontFamily: "Raleway",
                             ),
                           ),
-                        )
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 16, top: 5, bottom: 20),
+                          child: Text(
+                            entry.description,
+                            style: const TextStyle(
+                                fontSize: 12,
+                            )
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -128,11 +129,11 @@ class BoardEntryDisplay extends StatelessWidget {
       ),
     );
   }
-  _showBoardMessagePage(BuildContext context){
-    BoardEntryService().incrementWatchCount(entry);
+  _showBoardMessagePage(BuildContext context) async{
+    BoardEntryService().incrementWatchCount(entry, await Provider.of<AccessHandler>(context, listen: false).getUser());
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => BoardMessagePage(
-          category: category,
-          entry: entry,),));
+          categoryDocumentID: boardCategoryReference,
+          entryDocumentID: entry.documentID ),));
   }
 }

@@ -1,19 +1,22 @@
+import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
+import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/news_model.dart';
 import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
 class NewsOverview extends StatelessWidget {
-  List<News> news;
 
   final _newsService = new NewsService();
 
   @override
   Widget build(BuildContext context) {
+    List<News> news;
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: Scaffold(
@@ -31,9 +34,36 @@ class NewsOverview extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          WeatherDisplay(),
+                          WeatherDisplay(textSize: 24,),
                           Spacer(),
-                          UserAvatar(safeAreaHeight),
+                          Container(
+                            height: 70,
+                            width: 70,
+                            child: Stack(
+                              children: <Widget>[
+                                UserAvatar(safeAreaHeight, 50, 50),
+                                Consumer<AlertService>(
+                                  builder: (context, alertService, _){
+                                    return Positioned(
+                                      right: 8,
+                                      top: 8,
+                                      child: AlertQuantityDisplay(
+                                        showIcon: true,
+                                        iconSize: 18,
+                                        iconColor: Colors.white,
+                                        width: 23,
+                                        height: 23,
+                                        color: Theme.of(context).buttonColor,
+                                        borderRadius: 50,
+                                        textColor: Colors.white,
+                                      ),
+                                    );
+                                  },
+
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -130,7 +160,7 @@ class NewsOverview extends StatelessWidget {
                   future: _newsService.getAllNews(),
                   builder: (context, AsyncSnapshot<List<News>> snapshot) {
                     if (snapshot.hasData) {
-                      this.news = snapshot.data;
+                      news = snapshot.data;
                       return SingleChildScrollView(
                         child: Column(children: <Widget>[
                           Column(

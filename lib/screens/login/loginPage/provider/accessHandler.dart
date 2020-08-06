@@ -1,3 +1,4 @@
+import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,7 @@ class AccessHandler extends ChangeNotifier {
 
   ///forces user to log out and show loginPage
   logout() {
+    _user = null; ///user information should not be saved when user logs out
     _logout.call();
   }
 
@@ -77,7 +79,7 @@ class AccessHandler extends ChangeNotifier {
     _login.call();
   }
 
-  ///Sets callbacks for login and logout operations from the rootPage.
+  ///Sets callbacks for login and logout operations from the [RootPage].
   ///The rootPage decides if loginPage or user dependent homePage should be loaded.
   initCallbacks(VoidCallback login, VoidCallback logout, String userID) {
     _uid = userID;

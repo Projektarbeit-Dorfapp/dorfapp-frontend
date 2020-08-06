@@ -1,65 +1,141 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
+import 'package:dorf_app/models/alert_model.dart';
+import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
-class SubscriptionService{
+enum SubscriptionType { news, entry }
 
-  ///Returns a [Future] bool true if user successfully subscribed or false if already subscribed.
-  ///The subscription is saved as a sub collection of a document inside a top level collection
-  ///-> [TopLevelCollection] -> [topLevelDocumentID] -> Saved in sub collection with name "Gepinnt".
-  ///A subscription is saved as a Document with no values in "Gepinnt". The DocumentID is the [User.uid] from [User].
-  //missing error catch
-  Future<bool> subscribe({@required User currentUser, @required String topLevelDocumentID, @required String topLevelCollection,}) async{
+class SubscriptionService {
+  ///Returns a [Future] bool true if user successfully subscribed, false if already subscribed, null if error occurred.
+  ///The Subscription-Document is saved here:
+  ///
+  ///
+  ///-> [TopLevelCollection] -> [topLevelDocumentID] -> [CollectionNames.PIN] -> subscription document.
+  ///This document contains no values. The DocumentID is the [User.uid] from [User].
+  ///
+  ///
+  ///Additionally you must specify [shouldNotify] to notify the creator that somebody subscribed to his own content.
+  ///If true, make sure to also add a [News] or [BoardEntry] object to this function.
+  Future<bool> subscribe(
+      {@required User loggedUser,
+      @required String topLevelDocumentID,
+      @required SubscriptionType subscriptionType}) async {
+
     bool isInsert;
-    var ref = _getRef(topLevelDocumentID, topLevelCollection);
 
-    bool isSubscribed = await isUserSubscribed(
-        topLevelCollection: topLevelCollection,
-        currentUser: currentUser,
-        topLevelDocumentID: topLevelDocumentID);
-    if(isSubscribed){
+    var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
+
+    bool isSubscribed = await isUserSubscribed(subscriptionType: subscriptionType, loggedUser: loggedUser, topLevelDocumentID: topLevelDocumentID);
+    if (isSubscribed) {
       isInsert = false;
     } else {
-      await ref.document(currentUser.uid).setData({}).then((_) {
-        isInsert = true;
-      });
+      ///Insert subscription
+
+      isInsert = await _insertSubscription(loggedUser, ref);
+      if (isInsert) _createDuplicate(loggedUser, topLevelDocumentID, subscriptionType);
     }
     return isInsert;
   }
+  String _getCollectionName(SubscriptionType type){
+    if(type == SubscriptionType.news)
+      return CollectionNames.EVENT;
+
+    return CollectionNames.BOARD_ENTRY;
+
+  }
+
+  ///Each successful subscription process will duplicate data
+  _createDuplicate(User loggedUser, String topLevelDocumentID, SubscriptionType subscriptionType) {
+    _insertDuplicate(loggedUser, topLevelDocumentID, subscriptionType);
+  }
+
+  ///Function to duplicate content of subscription.
+  ///
+  ///
+  /// Duplicate data is saved in [CollectionNames.USER] -> user document -> [CollectionNames.PIN] -> duplicate document
+  ///
+  //This should allow us to have much fast queries if trying to display all pinned content from a specific user.
+  _insertDuplicate(User loggedUser, String topLevelDocumentID, SubscriptionType subscriptionType) async{
+    final ref = _getRef(loggedUser.documentID, CollectionNames.USER);
+    ref.add({
+      "SubscriptionType" : subscriptionType.toString().split('.').last,
+      "DocumentReference": topLevelDocumentID,
+    });
+  }
+
+  Future<bool> _insertSubscription(User loggedUser, CollectionReference ref) async {
+    bool isInsert;
+    await ref.document(loggedUser.uid).setData({}).then((_) {
+      isInsert = true;
+    }).catchError((onError) {});
+    return isInsert;
+  }
+
   ///Check if user already subscribed to [topLevelDocumentID].
-  //Missing Error catch
-  Future<bool> isUserSubscribed({@required User currentUser, @required String topLevelDocumentID, @required String topLevelCollection}) async{
-    var ref = _getRef(topLevelDocumentID, topLevelCollection);
+  Future<bool> isUserSubscribed({@required User loggedUser, @required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
+    var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
     bool isSubscribed;
-    var subscriptionDoc = await ref.document(currentUser.uid).get();
-    if(subscriptionDoc.data == null){
+    var subscriptionDoc = await ref.document(loggedUser.uid).get();
+    if (subscriptionDoc.data == null) {
       isSubscribed = false;
     } else {
       isSubscribed = true;
     }
     return isSubscribed;
   }
+
   ///Returns a list of [User.uid] that subscribed to [topLevelDocumentID].
-  Future<List<String>> getSubscriptions({@required String topLevelDocumentID, @required String topLevelCollection}) async {
-    var ref = _getRef(topLevelDocumentID, topLevelCollection);
+  Future<List<String>> getSubscriptions({@required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
+    var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
     List<String> list = [];
     QuerySnapshot snapshot = await ref.getDocuments();
-    for(DocumentSnapshot doc in snapshot.documents){
+    for (DocumentSnapshot doc in snapshot.documents) {
       list.add(doc.documentID);
     }
     return list;
   }
-  deleteSubscription({@required User currentUser, @required String topLevelDocumentID, @required String topLevelCollection}) async {
-    var ref = _getRef(topLevelDocumentID, topLevelCollection);
-    ref.document(currentUser.uid).delete();
+
+  ///Deletes a specific subscription from [topLevelDocumentID]
+  deleteSubscription({@required User loggedUser, @required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
+    final collectionName = _getCollectionName(subscriptionType);
+    final ref = _getRef(topLevelDocumentID, collectionName);
+
+    //var snapshot = await Firestore.instance.collection(collectionName).document(topLevelDocumentID).get();
+    ref.document(loggedUser.uid).delete();
+    _deleteDuplicate(loggedUser, topLevelDocumentID);
   }
-  CollectionReference _getRef(documentID, collection){
-    return Firestore.instance
-        .collection(collection)
-        .document(documentID)
-        .collection(CollectionNames.PIN);
+
+  _deleteDuplicate(User loggedUser, String topLevelDocumentID) async{
+    final ref = _getRef(loggedUser.documentID, CollectionNames.USER);
+
+    var querySnapshot = await ref.where("DocumentReference", isEqualTo: topLevelDocumentID).getDocuments();
+    for(int i = 0; i<querySnapshot.documents.length; i++){
+      ref.document(querySnapshot.documents[i].documentID).delete();
+    }
+  }
+
+  Stream<List<DocumentSnapshot>> getPins(User loggedUser, int limit, SubscriptionType subscriptionType){
+    final refToUser = _getRef(loggedUser.documentID, CollectionNames.USER);
+
+    Stream<QuerySnapshot> stream = refToUser.where("SubscriptionType", isEqualTo: subscriptionType.toString().split(".").last).limit(limit).snapshots();
+
+    return stream.asyncMap((snapshot) async{
+      List<DocumentSnapshot> list = [];
+      for (var document in snapshot.documents){
+        final refToDocument = Firestore.instance.collection(_getCollectionName(subscriptionType)).document(document.data["DocumentReference"]);
+        DocumentSnapshot snapshot = await refToDocument.get();
+        list.add(snapshot);
+      }
+      return list;
+    });
+  }
+
+  CollectionReference _getRef(documentID, collection) {
+    return Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.PIN);
   }
 }

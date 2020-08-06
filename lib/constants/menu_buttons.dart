@@ -7,6 +7,7 @@ class MenuButtons {
   static const String CLOSE_THREAD = 'Thema schließen';
   static const String SUBSCRIBE = "Pinnen";
   static const String CANCEL_SUBSCRIPTION = "Nicht mehr pinnen";
+  static const String DELETE_ALERTS = "Benachrichtigungen löschen";
   //edit and delete
   static const List<String> EditDeleteLogout = <String>[
     EDIT,
@@ -23,20 +24,33 @@ class MenuButtons {
   static const List<String> HomePopUpMenu = <String> [
     LOGOUT
   ];
+
   //boardMessagePage
   static const List<String> BoardMessagePageCreatorAndAdmin = <String> [
     CLOSE_THREAD,
     SUBSCRIBE,
   ];
+
   //boardMessagePage
   static const List<String> BoardMessagePageNotCreator = <String> [
     SUBSCRIBE,
   ];
+
   static const List<String> BoardMessagePageCreatorAndAdminCancelSub = <String> [
     CLOSE_THREAD,
     CANCEL_SUBSCRIPTION,
   ];
-  static const List<String> BoardMessagePageNotCreatorCancelSub = <String> [
+
+  static const List<String> AlertPagePopUpMenu = <String> [
+    DELETE_ALERTS,
+  ];
+
+  static const List<String> SubPopUpMenu = <String> [
+    SUBSCRIBE
+  ];
+
+  static const List<String> CancelSubPopUpMenu = <String> [
     CANCEL_SUBSCRIPTION,
   ];
+
 }

@@ -1,25 +1,58 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/models/user_model.dart';
 
 
 ///Matthias Maxelon
 class BoardEntryService{
   final CollectionReference _boardRef = Firestore.instance.collection("Forumeintrag");
-  insertEntry(BoardEntry entry) async {
-    await _boardRef.add(entry.toJson());
+
+  Future<DocumentReference> insertEntry(BoardEntry entry) async {
+    return await _boardRef.add(entry.toJson());
   }
-  incrementWatchCount(BoardEntry entry){
+
+  Future<BoardEntry> getEntry(String entryID) async{
+    final snapshot = await _boardRef.document(entryID).get();
+    if(snapshot.data != null){
+      return BoardEntry.fromJson(snapshot.data, snapshot.documentID);
+    } else {
+      return null;
+    }
+  }
+
+  updateModifiedDate(BoardEntry entry){
+    _boardRef.document(entry.documentID).updateData({"lastModifiedDate" : Timestamp.now()});
+  }
+
+  incrementWatchCount(BoardEntry entry, User loggedUser) async{
     _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
   }
+  /*
+  _incrementDuplicates(BoardEntry entry, User loggedUser)async{
+    final ref =  Firestore.instance
+        .collection(CollectionNames.USER)
+        .document(loggedUser.documentID)
+        .collection(CollectionNames.PIN)
+        .where("postingDate", isEqualTo: entry.postingDate)
+        .where("userReference",isEqualTo: entry.userReference).reference();
+
+      await ref.getDocuments().then((value) {
+        if(value.documents.length != 0)
+          ref.document(value.documents[0].documentID).updateData({"watchCount" : FieldValue.increment(1)});
+      });
+  }
+
+   */
+
   closeBoardEntry(BoardEntry entry){
     _boardRef.document(entry.documentID).updateData({"isClosed" : true});
   }
+
   Stream<List<BoardEntry>> getBoardEntriesAsStream(BoardCategory category, int limit){
     Stream<QuerySnapshot> stream = _boardRef
-        .where("boardCategoryReference", isEqualTo: category.id)
+        .where("boardCategoryReference", isEqualTo: category.documentID)
         .orderBy("lastModifiedDate", descending: true)
         .limit(limit)
         .snapshots();

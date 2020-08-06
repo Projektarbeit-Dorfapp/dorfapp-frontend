@@ -1,9 +1,11 @@
-import 'package:dorf_app/screens/news/widgets/userSettings.dart';
+import 'file:///C:/Users/R4pture/AndroidStudioProjects/dorfapp-frontend/lib/screens/profile/widgets/userSettings.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
-  final _safeAreaHeight;
-  UserAvatar(this._safeAreaHeight);
+  final double _safeAreaHeight;
+  final double height;
+  final double width;
+  UserAvatar(this._safeAreaHeight, this.height, this.width);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,8 +15,8 @@ class UserAvatar extends StatelessWidget {
           _showDrawer(context);
         },
         child: Container(
-          height: 50,
-          width: 50,
+          height: height,
+          width: width,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/australian-shepherd-2208371_1920.jpg'),
@@ -32,12 +34,11 @@ class UserAvatar extends StatelessWidget {
       isScrollControlled: true,
         context: context,
         builder: (context){
-          return SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height - _safeAreaHeight, //TODO: Need to subtract system bar for perfect height
-              child: UserSettings(
+          return Container(
+            height: MediaQuery.of(context).size.height - _safeAreaHeight,
+            //TODO: MediaQuery.of(context).padding.top isn't working... something is off with the context dont know why even the _safeAreaHeight doesnt work.
+            child: UserSettings(
 
-              ),
             ),
           );
         }
