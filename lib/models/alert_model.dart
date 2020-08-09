@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 ///Matthias Maxelon
-enum AlertType{message, news, pin_notification, not_defined} ///If you add new AlertTypes: make sure that inside [_convertType()] is correctly converted into new type
+enum AlertType{boardMessage, eventMessage, news, pin_notification, not_defined} ///If you add new AlertTypes: make sure that inside [_convertType()] is correctly converted into new type
 class Alert{
   String documentID;
   Timestamp creationDate;
@@ -11,14 +11,12 @@ class Alert{
   String fromUserName;
   String fromFirstName;
   String fromLastName;
-  String boardEntryReference;
-  String boardCategoryReference;
+  String documentReference;
 
   AlertType alertType;
   Alert({
     this.headline,
-    this.boardEntryReference,
-    this.boardCategoryReference,
+    this.documentReference,
     this.creationDate,
     this.fromFirstName,
     this.fromLastName,
@@ -30,8 +28,7 @@ class Alert{
     this.documentID = documentID;
     isRead = snapshot["isRead"] ?? false;
     headline = snapshot["headline"] ?? "";
-    boardEntryReference = snapshot["boardEntryReference"] ?? "";
-    boardCategoryReference = snapshot["boardCategoryReference"] ?? "";
+    documentReference = snapshot["documentReference"] ?? "";
     additionalMessage = snapshot["additionalMessage"] ?? "";
     creationDate = snapshot["creationDate"] ?? null;
     fromUserName = snapshot["fromUserName"] ?? "";
@@ -43,8 +40,7 @@ class Alert{
   Map<String, dynamic> toJson(){
     return {
       "headline" : headline,
-      "boardEntryReference" : boardEntryReference,
-      "boardCategoryReference" : boardCategoryReference,
+      "documentReference" : documentReference,
       "additionalMessage" : additionalMessage,
       "creationDate" : creationDate,
       "fromUserName" : fromUserName,
@@ -57,12 +53,14 @@ class Alert{
     return type.toString().split('.').last;
   }
   _convertType(String type){
-    if(type == _getAlertTypeString(AlertType.message))
-      alertType = AlertType.message;
+    if(type == _getAlertTypeString(AlertType.boardMessage))
+      alertType = AlertType.boardMessage;
     else if (type == _getAlertTypeString(AlertType.news))
       alertType = AlertType.news;
     else if(type == _getAlertTypeString(AlertType.pin_notification))
       alertType = AlertType.pin_notification;
+    else if (type == _getAlertTypeString(AlertType.eventMessage))
+      alertType = AlertType.eventMessage;
     else
       alertType = AlertType.not_defined;
   }

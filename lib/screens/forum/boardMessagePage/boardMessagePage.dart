@@ -2,23 +2,34 @@ import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/boardMessageHandler.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/boardMessageTextField.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/messageStream.dart';
+import 'package:dorf_app/screens/general/custom_border.dart';
+import 'package:dorf_app/screens/general/respectfulNote.dart';
+import 'package:dorf_app/screens/general/sortBar.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:dorf_app/services/boardCategory_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
+import 'package:dorf_app/services/comment_service.dart';
+import 'package:dorf_app/services/like_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
+import 'package:dorf_app/widgets/comment_section.dart';
+import 'package:dorf_app/widgets/like_section.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 class BoardMessagePage extends StatefulWidget {
-  final String categoryDocumentID;
   final String entryDocumentID;
-  BoardMessagePage({@required this.categoryDocumentID, @required this.entryDocumentID,});
+  BoardMessagePage({
+    @required this.entryDocumentID,
+  });
 
   @override
   _BoardMessagePageState createState() => _BoardMessagePageState();
@@ -27,13 +38,15 @@ class BoardMessagePage extends StatefulWidget {
 class _BoardMessagePageState extends State<BoardMessagePage> {
   BoardEntryService _entryService;
   SubscriptionService _subscriptionService;
-  BoardCategory _category;
+  LikeService _likeService;
+  CommentService _commentService;
   BoardEntry _entry;
+  List<User> _likeList;
+  int _initialCommentQuantity;
+  List<Comment> _commentList;
   int _categoryColor;
-  BoardCategoryService _categoryService;
   AccessHandler _accessHandler;
   User _loggedUser;
-  bool _isDataLoaded = false;
   bool _isSubscribed;
   bool _isClosed;
 
@@ -41,7 +54,8 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   void initState() {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _entryService = BoardEntryService();
-    _categoryService = BoardCategoryService();
+    _likeService = LikeService();
+    _commentService = CommentService();
     _loadInitialData();
     super.initState();
   }
@@ -56,14 +70,6 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
         if (mounted) {
           setState(() {
             _isSubscribed = isSubscribed;
-            _isDataLoaded = true;
-          });
-        }
-      });
-      _categoryService.getCategory(widget.categoryDocumentID).then((category) {
-        if (mounted) {
-          setState(() {
-            _category = category;
           });
         }
       });
@@ -76,11 +82,33 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
           });
         }
       });
+      _likeService.getUsersThatLiked(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((likes) {
+        if (mounted) {
+          setState(() {
+            _likeList = likes;
+          });
+        }
+      });
+
+      _commentService.getCommentQuantity(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((quantity) {
+        if (mounted) {
+          setState(() {
+            _initialCommentQuantity = quantity;
+          });
+        }
+      });
+      _commentService.getComments(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((comments){
+        if(mounted){
+          setState(() {
+            _commentList = comments;
+          });
+        }
+      });
     });
   }
 
   bool _isCreator() {
-    return _loggedUser.uid == _entry.userReference || _loggedUser.admin == true;
+    return _loggedUser.uid == _entry.createdBy || _loggedUser.admin == true;
   }
 
   List _createPopupMenuItems() {
@@ -109,7 +137,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
           );
         }).toList();
       } else {
-        return MenuButtons.BoardMessagePageNotCreator.map((String choice) {
+        return MenuButtons.SubPopUpMenu.map((String choice) {
           return PopupMenuItem<String>(
             value: choice,
             child: Text(choice),
@@ -118,14 +146,19 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    return _isDataLoaded && _entry != null && _category != null
-        ? ChangeNotifierProvider(
-            create: (context) => BoardMessageHandler(_entry, _category),
+    return _isSubscribed != null && _entry != null && _likeList != null && _initialCommentQuantity != null && _commentList != null
+        ? MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => MessageQuantity(_initialCommentQuantity),
+              ),
+            ],
             child: Scaffold(
                 appBar: AppBar(
+                  title: Text(_entry.boardCategoryTitle),
+                  centerTitle: true,
                   backgroundColor: Color(_categoryColor),
                   actions: <Widget>[
                     PopupMenuButton<String>(
@@ -139,47 +172,49 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                   ],
                 ),
                 body: Container(
-                  color: const Color(0xfff0f0f0),
-                  child: Stack(
+                  child: ListView(
                     children: <Widget>[
-                      MessageStream(
-                        category: _category,
-                        entry: _entry,
+                      ImageTitleDisplay(
+                        title: _entry.title,
+                        imagePath: null,
                       ),
-                      Align(
-                          alignment: Alignment.bottomLeft,
-                          child: !_isClosed
-                              ? BoardMessageTextField()
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                  ),
-                                  height: 50,
-                                  child: Center(
-                                    child: Text(
-                                      "Thema geschlossen",
-                                      style: TextStyle(
-                                        fontFamily: "Raleway",
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                )),
+                      DescriptionDisplay(
+                        description: _entry.description,
+                      ),
+                      LikeSection(
+                        _likeList,
+                        _entry.documentID,
+                        CollectionNames.BOARD_ENTRY,
+                        _loggedUser.uid,
+                        likedColor: Color(_categoryColor),
+                        notLikedColor: Colors.grey,
+                        likeDetailAppbarColor: Color(_categoryColor),
+                      ),
+                      CustomBorder(
+                        color: Color(_categoryColor),
+                      ),
+                      Consumer<MessageQuantity>(
+                        builder: (context, messageQuantity, _){
+                          return SortBar(
+                          barHeight: 50,
+                          barColor: Colors.white,
+                          elevation: 4,
+                          commentQuantity: messageQuantity.quantity,
+                          iconColor: Color(_categoryColor),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      RespectfulNote(),
+                      CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry),
                     ],
                   ),
                 )),
           )
         : Center(
             child: Scaffold(
-              appBar: AppBar(
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.more_vert),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
               body: Center(child: CircularProgressIndicator()),
             ),
           );

@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/alert_model.dart';
-import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,9 +16,7 @@ class SubscriptionService {
   ///-> [TopLevelCollection] -> [topLevelDocumentID] -> [CollectionNames.PIN] -> subscription document.
   ///This document contains no values. The DocumentID is the [User.uid] from [User].
   ///
-  ///
-  ///Additionally you must specify [shouldNotify] to notify the creator that somebody subscribed to his own content.
-  ///If true, make sure to also add a [News] or [BoardEntry] object to this function.
+  ///The creator of the [topLevelDocumentID] will be notified when user subscribes
   Future<bool> subscribe(
       {@required User loggedUser,
       @required String topLevelDocumentID,
@@ -37,7 +33,10 @@ class SubscriptionService {
       ///Insert subscription
 
       isInsert = await _insertSubscription(loggedUser, ref);
-      if (isInsert) _createDuplicate(loggedUser, topLevelDocumentID, subscriptionType);
+      if (isInsert){
+        _createDuplicate(loggedUser, topLevelDocumentID, subscriptionType);
+        _notifyCreator(topLevelDocumentID, loggedUser, subscriptionType);
+      }
     }
     return isInsert;
   }
@@ -47,6 +46,43 @@ class SubscriptionService {
 
     return CollectionNames.BOARD_ENTRY;
 
+  }
+
+  ///Notify creator of [topLevelDocumentID] that somebody subscribed to his content.
+  _notifyCreator(String topLevelDocumentID, User loggedUser, SubscriptionType type) async{
+    DocumentSnapshot snapshot = await Firestore.instance.collection(_getCollectionName(type)).document(topLevelDocumentID).get();
+    String creatorID = snapshot.data["createdBy"];
+    String title = snapshot.data["title"];
+    if (snapshot.data["createdBy"] == loggedUser.uid) {
+      return;
+    }
+    final _alertService = AlertService();
+    List<String> list = [];
+    list.add(creatorID);
+    final alert = Alert(
+      documentReference: topLevelDocumentID,
+      additionalMessage: _createAdditionalMessage(title, loggedUser, type),
+      alertType: AlertType.pin_notification,
+      fromUserName: loggedUser.userName,
+      fromLastName: loggedUser.lastName,
+      fromFirstName: loggedUser.firstName,
+      creationDate: Timestamp.now(),
+      headline: title,
+    );
+    _alertService.insertAlerts(list, alert);
+  }
+
+  String _createAdditionalMessage(String headline, User loggedUser, SubscriptionType type) {
+    String text = "";
+    String title = headline;
+
+    if (title == null || title == "") title = "[MISSING HEADLINE]";
+
+    if (type == SubscriptionType.entry)
+      text = "${loggedUser.userName} folgt jetzt dein Thema: " + title;
+    else
+      text = "${loggedUser.userName} folgt jetzt deiner Veranstaltung: " + title;
+    return text;
   }
 
   ///Each successful subscription process will duplicate data
@@ -59,7 +95,6 @@ class SubscriptionService {
   ///
   /// Duplicate data is saved in [CollectionNames.USER] -> user document -> [CollectionNames.PIN] -> duplicate document
   ///
-  //This should allow us to have much fast queries if trying to display all pinned content from a specific user.
   _insertDuplicate(User loggedUser, String topLevelDocumentID, SubscriptionType subscriptionType) async{
     final ref = _getRef(loggedUser.documentID, CollectionNames.USER);
     ref.add({
@@ -105,7 +140,6 @@ class SubscriptionService {
     final collectionName = _getCollectionName(subscriptionType);
     final ref = _getRef(topLevelDocumentID, collectionName);
 
-    //var snapshot = await Firestore.instance.collection(collectionName).document(topLevelDocumentID).get();
     ref.document(loggedUser.uid).delete();
     _deleteDuplicate(loggedUser, topLevelDocumentID);
   }

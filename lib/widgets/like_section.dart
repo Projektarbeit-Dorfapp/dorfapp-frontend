@@ -14,8 +14,10 @@ class LikeSection extends StatefulWidget {
   final String document;
   final String collection;
   final String userID;
-
-  LikeSection(this.likeList, this.document, this.collection, this.userID);
+  final Color likeDetailAppbarColor;
+  final Color likedColor;
+  final Color notLikedColor;
+  LikeSection(this.likeList, this.document, this.collection, this.userID, {this.likedColor, this.notLikedColor, this.likeDetailAppbarColor});
 
   @override
   _LikeSectionState createState() => _LikeSectionState(likeList, document, collection, userID);
@@ -76,17 +78,10 @@ class _LikeSectionState extends State<LikeSection> {
             children: <Widget>[
               IconButton(
                   icon: Icon(Icons.thumb_up),
-                  color: isLiked ? Colors.blue : Color(0xFF141e3e),
+                  color: _getLikeColor(),
                   onPressed: () async{
                     isLiked = await _addLike();
-                    setState(() {
-                      if (isLiked){
-                        iconColor = Colors.blue;
-                      }
-                      else {
-                        iconColor = Color(0xFF141e3e);
-                      }
-                    });
+                    setState(() {});
                   },
               ),
               Column(
@@ -107,7 +102,7 @@ class _LikeSectionState extends State<LikeSection> {
                   onPressed: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LikeDetail(likeList: likeList))
+                      MaterialPageRoute(builder: (context) => LikeDetail(likeList: likeList, appbarColor: widget.likeDetailAppbarColor,))
                     );
                   },
               ),
@@ -116,6 +111,12 @@ class _LikeSectionState extends State<LikeSection> {
         ),
       ],
     );
+  }
+  Color _getLikeColor(){
+    if(isLiked)
+      return widget.likedColor != null ? widget.likedColor : Colors.blue;
+    else
+      return widget.notLikedColor != null ? widget.notLikedColor : Color(0xFF141e3e);
   }
 
 }

@@ -2,14 +2,17 @@ import 'package:animations/animations.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/boardMessage_model.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/boardMessageDisplay.dart';
 import 'package:dorf_app/services/boardMessage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MessageStream extends StatefulWidget {
   final BoardCategory category;
   final BoardEntry entry;
-  const MessageStream({@required this.category, @required this.entry});
+
+  const MessageStream({@required this.category, @required this.entry,});
   @override
   _MessageStreamState createState() => _MessageStreamState();
 }
@@ -17,6 +20,7 @@ class MessageStream extends StatefulWidget {
 class _MessageStreamState extends State<MessageStream> with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   ScrollController _scrollController;
+  MessageQuantity _messageQuantity;
   int _listSizeLimit = 15;
   BoardMessageService _messageService;
   @override
@@ -28,6 +32,7 @@ class _MessageStreamState extends State<MessageStream> with SingleTickerProvider
     _scrollController = ScrollController();
     _scrollController.addListener(_increaseListSize);
     _messageService = BoardMessageService();
+    _messageQuantity = Provider.of<MessageQuantity>(context, listen: false);
     super.initState();
   }
 
@@ -41,26 +46,31 @@ class _MessageStreamState extends State<MessageStream> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<BoardMessage>>(
-      stream: _messageService.getBoardMessagesWithUserAsStream(
+      stream: _messageService.getBoardMessagesAsStream(
           widget.category,
           widget.entry,
           _listSizeLimit,
-          OrderType.latest),
+          OrderType.latest,
+          _messageQuantity),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return ListView.builder(
-            controller: _scrollController,
-            itemCount: snapshot.data.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == snapshot.data.length) {
-                return Container(height: 50);
-              }
-              _animationController.forward();
-              return FadeScaleTransition(
-                animation: _animationController,
-                child: BoardMessageDisplay(snapshot.data[index], widget.entry.userReference),
-              );
-            },
+
+          return Container(
+            height: 300,
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: snapshot.data.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == snapshot.data.length) {
+                  return Container(height: 50);
+                }
+                _animationController.forward();
+                return FadeScaleTransition(
+                  animation: _animationController,
+                  child: BoardMessageDisplay(snapshot.data[index], widget.entry.createdBy),
+                );
+              },
+            ),
           );
         } else if (snapshot.connectionState ==
             ConnectionState.waiting) {

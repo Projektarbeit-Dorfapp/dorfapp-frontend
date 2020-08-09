@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.dart';
+import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,6 @@ class _PinsPageState extends State<PinsPage> {
         ? StreamBuilder(
             stream: _subscriptionService.getPins(_loggedUser, _itemLimit, SubscriptionType.entry),
             builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
-
               if (snapshot.hasData) {
                final boardEntries = _parseToEntries(snapshot);
                 return ListView.builder(
@@ -54,7 +54,8 @@ class _PinsPageState extends State<PinsPage> {
                     itemCount: boardEntries.length,
                     itemBuilder: (context, int index){
                       _snapshotItemCount = boardEntries.length;
-                      return BoardEntryDisplay(entry: boardEntries[index], boardCategoryReference: boardEntries[index].boardCategoryReference);
+                      return BoardEntryDisplay(
+                          entry: boardEntries[index]);
                     });
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(

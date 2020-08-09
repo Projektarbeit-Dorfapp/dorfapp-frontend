@@ -28,13 +28,13 @@ class EntryState extends ChangeNotifier{
       firstName: u.firstName,
       lastName: u.lastName,
       description: _description,
+      boardCategoryTitle: category.title,
       categoryColor: categoryColor.value,
-      userReference: u.uid,
       postingDate: Timestamp.fromDate(dateTime),
-      lastModifiedDate: Timestamp.fromDate(dateTime),
+      lastActivity: Timestamp.fromDate(dateTime),
       boardCategoryReference: category.documentID,
       userName: u.userName,
-      userAvatarReference: u.userAvatarReference,
+      createdBy: u.uid,
   );
 
   }

@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/comment_model.dart';
+import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/comment_service.dart';
+import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/widgets/comment_card.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,8 +17,9 @@ class CommentSection extends StatefulWidget {
   final List<Comment> commentList;
   final String document;
   final String collection;
+  final SubscriptionType subscriptionType; ///where is the commentsection implemented? [SubscriptionType.news] when in news or [SubscriptionType.entry] when in Forum
 
-  CommentSection(this.commentList, this.document, this.collection);
+  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType);
 
   @override
   _CommentSectionState createState() =>
@@ -55,7 +59,7 @@ class _CommentSectionState extends State<CommentSection> {
         createdAt: date,
         modifiedAt: date);
 
-    commentService.insertNewComment(document, collection, newComment);
+    commentService.insertNewComment(document, collection, newComment, Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
 
     setState(() {
       commentList.insert(0, newComment);
@@ -64,12 +68,8 @@ class _CommentSectionState extends State<CommentSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding:
-          EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 20.0),
-      decoration: BoxDecoration(
-          border:
-              Border(top: BorderSide(color: Color(0xFF141e3e), width: 2.0))),
+    return Padding(
+      padding: EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: <Widget>[
           TextField(
@@ -100,33 +100,59 @@ class _CommentSectionState extends State<CommentSection> {
                       ? commentList
                           .map((comment) => CommentCard(comment: comment))
                           .toList()
-                      : [_getTextIfCommentListEmpty()]),
+                      : [ShowTextIfListEmpty(iconData: Icons.message, text: "Noch keine Kommentare",)]),
             ],
           )
         ],
       ),
     );
   }
+}
 
-  Container _getTextIfCommentListEmpty() {
-    return Container(
-        margin: EdgeInsets.only(top: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.message, color: Colors.grey, size: 80.0),
-            Container(
-                margin: EdgeInsets.only(left: 10.0),
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  'Noch keine Kommentare',
-                  style: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.grey),
-                ))
-          ],
-        ));
+///Matthias Maxelon
+class CommentingOverlay extends ModalRoute<void> {
+  @override
+  Duration get transitionDuration => Duration(milliseconds: 150);
+
+  @override
+  bool get opaque => false;
+
+  @override
+  bool get barrierDismissible => false;
+
+  @override
+  Color get barrierColor => Colors.black.withOpacity(0.5);
+
+  @override
+  String get barrierLabel => null;
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Widget buildPage(
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      ) {
+    // This makes sure that text and other content follows the material style
+    return Material(
+      type: MaterialType.transparency,
+      // make sure that the overlay content is not cut off
+      child: SafeArea(
+        child: _buildOverlayContent(context),
+      ),
+    );
+  }
+
+  Widget _buildOverlayContent(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 40,
+        color: Colors.red,
+      ),
+    );
   }
 }
