@@ -2,13 +2,11 @@ import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/entryPopUpMenu.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
-import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:dorf_app/widgets/showUserProfileText.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class BoardEntryDisplay extends StatelessWidget {
   final BoardEntry entry;
@@ -39,10 +37,13 @@ class BoardEntryDisplay extends StatelessWidget {
                   top: 13,
                   child: UserAvatarDisplay(30, 30), //TODO: Fetch from storage
                 ),
+                /*
                 Positioned(
                   right: 0,
                   child: EntryPopUpMenu(entry),
                 ),
+
+                 */
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -60,14 +61,6 @@ class BoardEntryDisplay extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
-                        entry.isClosed
-                            ? Padding(
-                            padding: EdgeInsets.only(left: 150, top: 15),
-                            child: Text(
-                              "Geschlossen",
-                              style: TextStyle(color: Colors.grey, fontSize: _detailTextSize, fontFamily: "Raleway"),
-                            ))
-                            : Container(),
                       ],
                     ),
                     Row(
@@ -155,7 +148,7 @@ class BoardEntryDisplay extends StatelessWidget {
         MaterialPageRoute(
           builder: (context) => BoardMessagePage(entryDocumentID: entry.documentID),
         ));
-    BoardEntryService().incrementWatchCount(entry, await Provider.of<AccessHandler>(context, listen: false).getUser());
+    BoardEntryService().incrementWatchCount(entry);
   }
 }
 

@@ -27,7 +27,8 @@ class BoardEntryService{
     _boardRef.document(documentID).updateData({"lastActivity" : Timestamp.now()});
   }
 
-  incrementWatchCount(BoardEntry entry, User loggedUser) async{
+  incrementWatchCount(BoardEntry entry) async{
+
     _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
   }
 

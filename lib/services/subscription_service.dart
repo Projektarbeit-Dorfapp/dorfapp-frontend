@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 enum SubscriptionType { news, entry }
@@ -153,20 +155,35 @@ class SubscriptionService {
     }
   }
 
-  Stream<List<DocumentSnapshot>> getPins(User loggedUser, int limit, SubscriptionType subscriptionType){
+  ///Returns a [Stream]
+  Stream<List<DocumentSnapshot>> getPinnedDocumentsAsStream(User loggedUser, int limit, SubscriptionType subscriptionType){
     final refToUser = _getRef(loggedUser.documentID, CollectionNames.USER);
 
     Stream<QuerySnapshot> stream = refToUser.where("SubscriptionType", isEqualTo: subscriptionType.toString().split(".").last).limit(limit).snapshots();
 
     return stream.asyncMap((snapshot) async{
-      List<DocumentSnapshot> list = [];
-      for (var document in snapshot.documents){
-        final refToDocument = Firestore.instance.collection(_getCollectionName(subscriptionType)).document(document.data["DocumentReference"]);
-        DocumentSnapshot snapshot = await refToDocument.get();
-        list.add(snapshot);
-      }
-      return list;
+      return await _getReferencedDocuments(subscriptionType, snapshot.documents);
     });
+  }
+
+  Future<List<DocumentSnapshot>> _getReferencedDocuments(SubscriptionType subscriptionType, List<DocumentSnapshot> documentSnapshot) async{
+    List<DocumentSnapshot> list = [];
+    for(var doc in documentSnapshot){
+      final refToDocument = Firestore.instance.collection(_getCollectionName(subscriptionType)).document(doc.data["DocumentReference"]);
+      DocumentSnapshot snapshot = await refToDocument.get();
+      list.add(snapshot);
+    }
+    return list;
+  }
+
+  ///Returns a [Future]
+  Future<List<DocumentSnapshot>> getPinnedDocuments(BuildContext context, SubscriptionType subscriptionType, int limit) async{
+    final accessHandler = Provider.of<AccessHandler>(context, listen: false);
+    User loggedUser = await accessHandler.getUser();
+    final refToUser = _getRef(loggedUser.documentID, CollectionNames.USER);
+
+    QuerySnapshot snapshot =  await refToUser.where("SubscriptionType", isEqualTo: subscriptionType.toString().split(".").last).limit(limit).getDocuments();
+    return await _getReferencedDocuments(subscriptionType, snapshot.documents);
   }
 
   CollectionReference _getRef(documentID, collection) {

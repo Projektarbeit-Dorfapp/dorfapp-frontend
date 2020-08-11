@@ -9,7 +9,7 @@ import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/boardMessageTextField.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/messageStream.dart';
 import 'package:dorf_app/screens/general/custom_border.dart';
-import 'package:dorf_app/screens/general/respectfulNote.dart';
+import 'package:dorf_app/screens/general/textNoteBar.dart';
 import 'package:dorf_app/screens/general/sortBar.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/news_detail.dart';
@@ -207,8 +207,9 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                       SizedBox(
                         height: 3,
                       ),
-                      RespectfulNote(),
-                      CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry),
+                      TextNoteBar(text: _isClosed != true ? "Bitte achte beim Schreiben von Kommentaren darauf, deine Gemeindemitglieder zu respektieren"
+                          : "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich", leftPadding: 20,),
+                      CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry, disableAddingComment: _isClosed != true ? false : true),
                     ],
                   ),
                 )),

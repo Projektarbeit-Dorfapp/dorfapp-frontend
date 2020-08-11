@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-class RespectfulNote extends StatelessWidget {
+class TextNoteBar extends StatelessWidget {
+  final String text;
   final double height;
   final Color backgroundColor;
-  RespectfulNote({this.height, this.backgroundColor});
+  final double leftPadding;
+  TextNoteBar({this.height, this.backgroundColor, @required this.text, this.leftPadding});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +15,9 @@ class RespectfulNote extends StatelessWidget {
       height: height != null ? height : 60,
       child: Center(
         child: Padding(
-          padding: EdgeInsets.all(10),
-          child: const Text(
-            "Bitte achte auf einen respektvollen Umgang beim Schreiben von Kommentaren",
+          padding: EdgeInsets.only(left: leftPadding != null ? leftPadding : 10, right: 10, bottom: 10, top: 10 ),
+          child: Text(
+            text,
             style: TextStyle(
               fontSize: 16
             ),

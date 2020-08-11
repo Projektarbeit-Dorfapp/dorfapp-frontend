@@ -17,9 +17,10 @@ class CommentSection extends StatefulWidget {
   final List<Comment> commentList;
   final String document;
   final String collection;
+  final bool disableAddingComment;
   final SubscriptionType subscriptionType; ///where is the commentsection implemented? [SubscriptionType.news] when in news or [SubscriptionType.entry] when in Forum
 
-  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType);
+  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment});
 
   @override
   _CommentSectionState createState() =>
@@ -72,7 +73,7 @@ class _CommentSectionState extends State<CommentSection> {
       padding: EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: <Widget>[
-          TextField(
+          widget.disableAddingComment != true ? TextField(
             //keyboardType: TextInputType.multiline,
             //maxLines: null,
             controller: _controller,
@@ -91,7 +92,7 @@ class _CommentSectionState extends State<CommentSection> {
                 },
               ) */
             ),
-          ),
+          ) : Container(),
           Column(
             children: <Widget>[
               Column(
