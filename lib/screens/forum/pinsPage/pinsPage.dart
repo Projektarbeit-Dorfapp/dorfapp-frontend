@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.dart';
-import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:flutter/material.dart';

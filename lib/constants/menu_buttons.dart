@@ -34,18 +34,6 @@ class MenuButtons {
   static const List<String> HomePopUpMenu = <String> [
     LOGOUT
   ];
-
-  //boardMessagePage
-  static const List<String> BoardMessagePageCreatorAndAdmin = <String> [
-    CLOSE_THREAD,
-    SUBSCRIBE,
-  ];
-
-  static const List<String> BoardMessagePageCreatorAndAdminCancelSub = <String> [
-    CLOSE_THREAD,
-    CANCEL_SUBSCRIPTION,
-  ];
-
   static const List<String> AlertPagePopUpMenu = <String> [
     DELETE_ALERTS,
   ];

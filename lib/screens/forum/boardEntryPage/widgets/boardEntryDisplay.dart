@@ -37,13 +37,6 @@ class BoardEntryDisplay extends StatelessWidget {
                   top: 13,
                   child: UserAvatarDisplay(30, 30), //TODO: Fetch from storage
                 ),
-                /*
-                Positioned(
-                  right: 0,
-                  child: EntryPopUpMenu(entry),
-                ),
-
-                 */
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -145,7 +138,7 @@ class BoardEntryDisplay extends StatelessWidget {
   _showBoardMessagePage(BuildContext context) async {
     Navigator.push(
         context,
-        MaterialPageRoute(
+        CupertinoPageRoute(
           builder: (context) => BoardMessagePage(entryDocumentID: entry.documentID),
         ));
     BoardEntryService().incrementWatchCount(entry);

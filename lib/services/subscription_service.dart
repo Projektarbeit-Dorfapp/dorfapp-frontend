@@ -42,6 +42,7 @@ class SubscriptionService {
     }
     return isInsert;
   }
+
   String _getCollectionName(SubscriptionType type){
     if(type == SubscriptionType.news)
       return CollectionNames.EVENT;

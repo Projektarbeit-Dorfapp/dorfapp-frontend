@@ -25,6 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
+
 class BoardMessagePage extends StatefulWidget {
   final String entryDocumentID;
   BoardMessagePage({
@@ -42,7 +43,6 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   CommentService _commentService;
   BoardEntry _entry;
   List<User> _likeList;
-  int _initialCommentQuantity;
   List<Comment> _commentList;
   int _categoryColor;
   AccessHandler _accessHandler;
@@ -89,14 +89,6 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
           });
         }
       });
-
-      _commentService.getCommentQuantity(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((quantity) {
-        if (mounted) {
-          setState(() {
-            _initialCommentQuantity = quantity;
-          });
-        }
-      });
       _commentService.getComments(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((comments){
         if(mounted){
           setState(() {
@@ -112,47 +104,29 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   }
 
   List _createPopupMenuItems() {
-    if (_isCreator()) {
-      if (_isSubscribed) {
-        return MenuButtons.BoardMessagePageCreatorAndAdminCancelSub.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      } else {
-        return MenuButtons.BoardMessagePageCreatorAndAdmin.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      }
-    } else {
-      if (_isSubscribed) {
-        return MenuButtons.CancelSubPopUpMenu.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      } else {
-        return MenuButtons.SubPopUpMenu.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      }
+    if(_isSubscribed){
+      return MenuButtons.CancelSubPopUpMenu.map((String choice) {
+        return PopupMenuItem<String>(
+          value: choice,
+          child: Text(choice),
+        );
+      }).toList();
+    } else{
+      return MenuButtons.SubPopUpMenu.map((String choice) {
+        return PopupMenuItem<String>(
+          value: choice,
+          child: Text(choice),
+        );
+      }).toList();
     }
   }
   @override
   Widget build(BuildContext context) {
-    return _isSubscribed != null && _entry != null && _likeList != null && _initialCommentQuantity != null && _commentList != null
+    return _isSubscribed != null && _entry != null && _likeList != null && _commentList != null
         ? MultiProvider(
             providers: [
               ChangeNotifierProvider(
-                create: (context) => MessageQuantity(_initialCommentQuantity),
+                create: (context) => MessageQuantity(_entry.commentCount),
               ),
             ],
             child: Scaffold(
@@ -161,6 +135,12 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                   centerTitle: true,
                   backgroundColor: Color(_categoryColor),
                   actions: <Widget>[
+                    _isClosed != true && _isCreator() ? IconButton(
+                      icon: Icon(Icons.lock),
+                      onPressed: (){
+                        _showCloseThreadDialog();
+                      },
+                    ) : Container(),
                     PopupMenuButton<String>(
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
                       onSelected: (value) => _choiceAction(value, context),
@@ -221,16 +201,27 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
           );
   }
 
+  _showCloseThreadDialog(){
+    showDialog(context: context,
+    builder: (BuildContext context){
+      return CloseThreadDialog();
+    }).then((dialogCommunication){
+      if(dialogCommunication == "close")
+        setState(() {
+          _closeThread();
+        });
+    });
+  }
+  _closeThread(){
+    _isClosed = true;
+    _entryService.closeBoardEntry(_entry);
+  }
+
   void _choiceAction(String choice, BuildContext context) {
     if (choice == MenuButtons.SUBSCRIBE) {
       _subscriptionEvent();
     } else if (choice == MenuButtons.CANCEL_SUBSCRIPTION) {
       _subscriptionEvent();
-    } else if (choice == MenuButtons.CLOSE_THREAD) {
-      setState(() {
-        _isClosed = true;
-        _entryService.closeBoardEntry(_entry);
-      });
     }
   }
 
@@ -267,3 +258,26 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     });
   }
 }
+class CloseThreadDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Möchtest du dein Thema schließen? Kommentieren ist dann nicht mehr möglich"),
+      actions: <Widget>[
+        FlatButton(
+          child: Text("Ja"),
+          onPressed: (){
+            Navigator.pop(context, "close");
+          },
+        ),
+        FlatButton(
+          child: Text("Nein"),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+
