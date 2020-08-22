@@ -22,7 +22,7 @@ class ChangeUserAccount extends StatelessWidget {
             ),
           ),
           Text(
-            "Mein Account wechseln",
+            "Abmelden",
             style: TextStyle(fontFamily: "Raleway", fontSize: 16),
           ),
         ],

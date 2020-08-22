@@ -2,23 +2,35 @@ import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/boardMessageHandler.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/boardMessageTextField.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/messageStream.dart';
+import 'package:dorf_app/screens/general/custom_border.dart';
+import 'package:dorf_app/screens/general/textNoteBar.dart';
+import 'package:dorf_app/screens/general/sortBar.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:dorf_app/services/boardCategory_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
+import 'package:dorf_app/services/comment_service.dart';
+import 'package:dorf_app/services/like_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
+import 'package:dorf_app/widgets/comment_section.dart';
+import 'package:dorf_app/widgets/like_section.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
+
 class BoardMessagePage extends StatefulWidget {
-  final String categoryDocumentID;
   final String entryDocumentID;
-  BoardMessagePage({@required this.categoryDocumentID, @required this.entryDocumentID,});
+  BoardMessagePage({
+    @required this.entryDocumentID,
+  });
 
   @override
   _BoardMessagePageState createState() => _BoardMessagePageState();
@@ -27,13 +39,14 @@ class BoardMessagePage extends StatefulWidget {
 class _BoardMessagePageState extends State<BoardMessagePage> {
   BoardEntryService _entryService;
   SubscriptionService _subscriptionService;
-  BoardCategory _category;
+  LikeService _likeService;
+  CommentService _commentService;
   BoardEntry _entry;
+  List<User> _likeList;
+  List<Comment> _commentList;
   int _categoryColor;
-  BoardCategoryService _categoryService;
   AccessHandler _accessHandler;
   User _loggedUser;
-  bool _isDataLoaded = false;
   bool _isSubscribed;
   bool _isClosed;
 
@@ -41,7 +54,8 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   void initState() {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _entryService = BoardEntryService();
-    _categoryService = BoardCategoryService();
+    _likeService = LikeService();
+    _commentService = CommentService();
     _loadInitialData();
     super.initState();
   }
@@ -56,14 +70,6 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
         if (mounted) {
           setState(() {
             _isSubscribed = isSubscribed;
-            _isDataLoaded = true;
-          });
-        }
-      });
-      _categoryService.getCategory(widget.categoryDocumentID).then((category) {
-        if (mounted) {
-          setState(() {
-            _category = category;
           });
         }
       });
@@ -76,58 +82,65 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
           });
         }
       });
+      _likeService.getUsersThatLiked(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((likes) {
+        if (mounted) {
+          setState(() {
+            _likeList = likes;
+          });
+        }
+      });
+      _commentService.getComments(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((comments){
+        if(mounted){
+          setState(() {
+            _commentList = comments;
+          });
+        }
+      });
     });
   }
 
   bool _isCreator() {
-    return _loggedUser.uid == _entry.userReference || _loggedUser.admin == true;
+    return _loggedUser.uid == _entry.createdBy || _loggedUser.admin == true;
   }
 
   List _createPopupMenuItems() {
-    if (_isCreator()) {
-      if (_isSubscribed) {
-        return MenuButtons.BoardMessagePageCreatorAndAdminCancelSub.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      } else {
-        return MenuButtons.BoardMessagePageCreatorAndAdmin.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      }
-    } else {
-      if (_isSubscribed) {
-        return MenuButtons.CancelSubPopUpMenu.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      } else {
-        return MenuButtons.BoardMessagePageNotCreator.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-      }
+    if(_isSubscribed){
+      return MenuButtons.CancelSubPopUpMenu.map((String choice) {
+        return PopupMenuItem<String>(
+          value: choice,
+          child: Text(choice),
+        );
+      }).toList();
+    } else{
+      return MenuButtons.SubPopUpMenu.map((String choice) {
+        return PopupMenuItem<String>(
+          value: choice,
+          child: Text(choice),
+        );
+      }).toList();
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    return _isDataLoaded && _entry != null && _category != null
-        ? ChangeNotifierProvider(
-            create: (context) => BoardMessageHandler(_entry, _category),
+    return _isSubscribed != null && _entry != null && _likeList != null && _commentList != null
+        ? MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => MessageQuantity(_entry.commentCount),
+              ),
+            ],
             child: Scaffold(
                 appBar: AppBar(
+                  title: Text(_entry.boardCategoryTitle),
+                  centerTitle: true,
                   backgroundColor: Color(_categoryColor),
                   actions: <Widget>[
+                    _isClosed != true && _isCreator() ? IconButton(
+                      icon: Icon(Icons.lock),
+                      onPressed: (){
+                        _showCloseThreadDialog();
+                      },
+                    ) : Container(),
                     PopupMenuButton<String>(
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
                       onSelected: (value) => _choiceAction(value, context),
@@ -139,50 +152,69 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                   ],
                 ),
                 body: Container(
-                  color: const Color(0xfff0f0f0),
-                  child: Stack(
+                  child: ListView(
                     children: <Widget>[
-                      MessageStream(
-                        category: _category,
-                        entry: _entry,
+                      ImageTitleDisplay(
+                        title: _entry.title,
+                        imagePath: null,
                       ),
-                      Align(
-                          alignment: Alignment.bottomLeft,
-                          child: !_isClosed
-                              ? BoardMessageTextField()
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                  ),
-                                  height: 50,
-                                  child: Center(
-                                    child: Text(
-                                      "Thema geschlossen",
-                                      style: TextStyle(
-                                        fontFamily: "Raleway",
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                )),
+                      DescriptionDisplay(
+                        description: _entry.description,
+                      ),
+                      LikeSection(
+                        _likeList,
+                        _entry.documentID,
+                        CollectionNames.BOARD_ENTRY,
+                        _loggedUser.uid,
+                        likedColor: Color(_categoryColor),
+                        notLikedColor: Colors.grey,
+                        likeDetailAppbarColor: Color(_categoryColor),
+                      ),
+                      CustomBorder(
+                        color: Color(_categoryColor),
+                      ),
+                      Consumer<MessageQuantity>(
+                        builder: (context, messageQuantity, _){
+                          return SortBar(
+                          barHeight: 50,
+                          barColor: Colors.white,
+                          elevation: 4,
+                          commentQuantity: messageQuantity.quantity,
+                          iconColor: Color(_categoryColor),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      TextNoteBar(text: _isClosed != true ? "Bitte achte beim Schreiben von Kommentaren darauf, deine Gemeindemitglieder zu respektieren"
+                          : "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich", leftPadding: 20,),
+                      CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry, disableAddingComment: _isClosed != true ? false : true),
                     ],
                   ),
                 )),
           )
         : Center(
             child: Scaffold(
-              appBar: AppBar(
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.more_vert),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
               body: Center(child: CircularProgressIndicator()),
             ),
           );
+  }
+
+  _showCloseThreadDialog(){
+    showDialog(context: context,
+    builder: (BuildContext context){
+      return CloseThreadDialog();
+    }).then((dialogCommunication){
+      if(dialogCommunication == "close")
+        setState(() {
+          _closeThread();
+        });
+    });
+  }
+  _closeThread(){
+    _isClosed = true;
+    _entryService.closeBoardEntry(_entry);
   }
 
   void _choiceAction(String choice, BuildContext context) {
@@ -190,11 +222,6 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
       _subscriptionEvent();
     } else if (choice == MenuButtons.CANCEL_SUBSCRIPTION) {
       _subscriptionEvent();
-    } else if (choice == MenuButtons.CLOSE_THREAD) {
-      setState(() {
-        _isClosed = true;
-        _entryService.closeBoardEntry(_entry);
-      });
     }
   }
 
@@ -231,3 +258,26 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     });
   }
 }
+class CloseThreadDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Möchtest du dein Thema schließen? Kommentieren ist dann nicht mehr möglich"),
+      actions: <Widget>[
+        FlatButton(
+          child: Text("Ja"),
+          onPressed: (){
+            Navigator.pop(context, "close");
+          },
+        ),
+        FlatButton(
+          child: Text("Nein"),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+

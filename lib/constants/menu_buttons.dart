@@ -8,11 +8,21 @@ class MenuButtons {
   static const String SUBSCRIBE = "Pinnen";
   static const String CANCEL_SUBSCRIPTION = "Nicht mehr pinnen";
   static const String DELETE_ALERTS = "Benachrichtigungen löschen";
+  static const String SORT_DESCENDING = "Neuste zuerst";
+  static const String SORT_ASCENDING = "Älteste zuerst";
+  static const String SORT_TOP = "Top Kommentare";
+
   //edit and delete
   static const List<String> EditDeleteLogout = <String>[
     EDIT,
     DELETE,
     LOGOUT
+  ];
+
+  static const List<String> Sorting = <String>[
+    SORT_TOP,
+    SORT_DESCENDING,
+    SORT_ASCENDING
   ];
 
   static const List<String> EditDelete = <String>[
@@ -24,23 +34,6 @@ class MenuButtons {
   static const List<String> HomePopUpMenu = <String> [
     LOGOUT
   ];
-
-  //boardMessagePage
-  static const List<String> BoardMessagePageCreatorAndAdmin = <String> [
-    CLOSE_THREAD,
-    SUBSCRIBE,
-  ];
-
-  //boardMessagePage
-  static const List<String> BoardMessagePageNotCreator = <String> [
-    SUBSCRIBE,
-  ];
-
-  static const List<String> BoardMessagePageCreatorAndAdminCancelSub = <String> [
-    CLOSE_THREAD,
-    CANCEL_SUBSCRIPTION,
-  ];
-
   static const List<String> AlertPagePopUpMenu = <String> [
     DELETE_ALERTS,
   ];

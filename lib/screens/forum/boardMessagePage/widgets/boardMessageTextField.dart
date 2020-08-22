@@ -2,7 +2,7 @@ import 'package:dorf_app/screens/forum/boardMessagePage/provider/boardMessageHan
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/sendBoardMessageButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+/*
 class BoardMessageTextField extends StatefulWidget {
   @override
   _BoardMessageTextFieldState createState() => _BoardMessageTextFieldState();
@@ -82,3 +82,5 @@ class _BoardMessageTextFieldState extends State<BoardMessageTextField> {
     );
   }
 }
+
+ */

@@ -65,7 +65,6 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
                         animation: _animationController,
                         child: BoardEntryDisplay(
                           //categoryColor: categoryWithColor.categoryColor,
-                          boardCategoryReference: categoryWithColor.category.documentID,
                           entry: snapshot.data[index],
                         ),
                       );

@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 class LikeDetail extends StatelessWidget{
 
   final List<User> likeList;
-
-  LikeDetail({this.likeList});
+  final Color appbarColor;
+  LikeDetail({this.likeList, this.appbarColor});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF6178a3),
+        backgroundColor: appbarColor != null ? appbarColor : Theme.of(context).primaryColor,
         title: Text('"Gefällt mir"'),
       ),
       body: Container(

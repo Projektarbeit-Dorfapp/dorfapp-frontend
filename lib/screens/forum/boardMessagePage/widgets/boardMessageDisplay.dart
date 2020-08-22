@@ -24,19 +24,6 @@ class BoardMessageDisplay extends StatelessWidget {
               child: UserAvatarDisplay(30, 30 //TODO: Fetch from storage
               ),
             ),
-            Positioned(
-              right: 0,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.grey,
-                  size: 25,
-                ),
-                onPressed: () {
-                  //TODO: What to do?
-                },
-              ),
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

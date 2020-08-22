@@ -1,11 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/collection_names.dart';
+import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
+import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/services/alert_service.dart';
+import 'package:dorf_app/services/boardEntry_service.dart';
+import 'package:dorf_app/services/subscription_service.dart';
 
 class CommentService {
+  SubscriptionService _subscriptionService = SubscriptionService();
 
-  void insertNewComment(String documentID, String collection, Comment comment) async {
+  void insertNewComment(String documentID, String collection, Comment comment, AlertService alertService, SubscriptionType subscriptionType) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("Kommentare").add({
+    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).add({
       "firstName": comment.user.firstName,
       "lastName": comment.user.lastName,
       "userID": comment.user.uid,
@@ -14,11 +21,45 @@ class CommentService {
       "modifiedAt": comment.modifiedAt,
       "isDeleted": false
     });
+    if(subscriptionType == SubscriptionType.entry){
+      _setEntryActivityDate(documentID);
+    }
+    _notifySubscriber(comment, documentID, collection, subscriptionType, alertService);
+    _incrementCommentCount(documentID, collection);
+  }
+
+  ///the boardEntry is displaying the time when somebody added a comment
+  ///TODO: Should this also update when somebody answers a comment? Probably yes...
+  _setEntryActivityDate(String documentID){
+    BoardEntryService service = BoardEntryService();
+    service.updateActivityDate(documentID);
+  }
+
+  ///insert commentCount to [documentID] so that the maximum amount of comments can be easily read
+  _incrementCommentCount(String documentID, String collection) async{
+    CollectionReference _collectionReference = Firestore.instance.collection(collection);
+    _collectionReference.document(documentID).updateData({"commentCount" : FieldValue.increment(1)});
+  }
+
+  ///notifies every subscriber to [documentID] that a new comment was posted
+  _notifySubscriber(Comment comment, String documentID, String collection, SubscriptionType subscriptionType, AlertService alertService) async{
+    List<String> subscriber = await _subscriptionService.getSubscriptions(topLevelDocumentID: documentID, subscriptionType: subscriptionType);
+    DocumentSnapshot snapshot = await Firestore.instance.collection(collection).document(documentID).get();
+    Alert alert = Alert(
+      additionalMessage: 'Der Benutzer ${comment.user.firstName} ${comment.user.lastName} hat eine Nachricht in "${snapshot.data["title"]}" verfasst',
+      alertType: subscriptionType == SubscriptionType.entry ? AlertType.boardMessage : AlertType.eventMessage,
+      documentReference: documentID,
+      creationDate: comment.createdAt,
+      fromFirstName: comment.user.firstName,
+      fromLastName: comment.user.lastName,
+      fromUserName: comment.user.userName,
+    );
+    alertService.insertAlerts(subscriber, alert);
   }
 
   void insertAnswerComment(String documentID, String collection, Comment comment) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("Kommentare").add({
+    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).add({
       "firstName": comment.user.firstName,
       "lastName": comment.user.lastName,
       "userID": comment.user.uid,
@@ -32,7 +73,7 @@ class CommentService {
 
   void updateComment(String documentID, String collection, String newContent, String commentID) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("Kommentare").document(commentID).updateData({
+    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(commentID).updateData({
       "content": newContent,
       "modifiedAt": DateTime.now(),
     });
@@ -40,7 +81,7 @@ class CommentService {
 
   void deleteComment(String documentID, String collection, String commentID) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection("Kommentare").document(commentID).updateData({
+    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(commentID).updateData({
       "firstName": "",
       "lastName": "",
       "userID": "",
@@ -48,5 +89,39 @@ class CommentService {
       "modifiedAt": DateTime.now(),
       "content": "Diese Nachricht wurde gelöscht."
     });
+  }
+  Future<int> getCommentQuantity (String documentID, String collection) async {
+    CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS);
+    QuerySnapshot snapshot = await _collectionReference.getDocuments();
+    return snapshot.documents.length;
+}
+
+
+  //Ich brauche die Kommentarliste um das CommentSection Widget mit Daten zu befüllen. Meike zieht das aus dem newsModel raus. Im Forum hab ich hier
+  //eine ganz andere Umgebung. Deshalb muss ich die Kommentare mit der function hier holen. Wenns eine andere Möglichkeit gibt, bitte bescheid geben - Matthias
+  Future<List<Comment>> getComments(String documentID, String collection) async {
+    List<Comment> comments = [];
+    CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS);
+    QuerySnapshot snapshot = await _collectionReference.getDocuments();
+    for(DocumentSnapshot doc in snapshot.documents){
+      final comment = Comment(
+        firstName: doc.data["firstName"],
+        lastName: doc.data["lastName"],
+        user: User(
+          uid: doc.data["userID"],
+          firstName: doc.data["firstName"],
+          lastName: doc.data["lastName"],
+        ),
+        userID: doc.data["userID"],
+        content: doc.data["content"],
+        answerTo: doc.data["answerTo"],
+        createdAt: doc.data["createdAt"],
+        modifiedAt: doc.data["modifiedAt"],
+        id: doc.documentID,
+        isDeleted: doc.data["isDeleted"],
+      );
+      comments.add(comment);
+    }
+    return comments;
   }
 }

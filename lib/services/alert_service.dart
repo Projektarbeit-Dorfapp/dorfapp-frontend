@@ -25,7 +25,7 @@ class AlertService extends ChangeNotifier {
     return _alerts;
   }
 
-  ///Opens stream. Is initiated in RootPage. Never call this function outside of RootPage
+  ///Opens stream. Is initiated in [RootPage]. Never call this function outside of [RootPage]
   initStream(UserService userService, AccessHandler accessHandler) async {
     FirebaseUser firebaseUser = await Authentication().getCurrentUser();
     User u = await UserService().getUser(firebaseUser.uid);
@@ -54,7 +54,8 @@ class AlertService extends ChangeNotifier {
     });
   }
 
-  ///Cancels subscription to stream. Is called in RootPage. Never call this function outside of RootPage
+  ///Cancels subscription to stream. Is called in [RootPage] when [RootPage.logoutCallback] is called. Never call this function outside of RootPage, otherwise
+  ///the client will lose the ability to listen to changes
   //Not sure if needed?
   disposeSubscription() async {
     if (_subscription != null) await _subscription.cancel();
@@ -77,7 +78,7 @@ class AlertService extends ChangeNotifier {
     }
   }
 
-  ///Deletes a specific [Alert]-Document of the currently logged in user. TODO: Currently not working
+  ///Deletes a specific [Alert]-Document of the currently logged in user.
   deleteAlert(String userID, Alert alert) async{
     await Firestore.instance.collection(CollectionNames.USER).where("uid", isEqualTo: userID).getDocuments().then((snapshot){
       _getAlertRef(snapshot.documents[0].documentID).document(alert.documentID).delete();

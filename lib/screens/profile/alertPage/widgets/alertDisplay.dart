@@ -23,13 +23,14 @@ class AlertDisplay extends StatelessWidget {
       ),
     );
   }
-  
+
+  ///depending on AlertType -> Navigate to a specific page
   _navigate(BuildContext context) async{
-    if(alertService.getAlerts()[builderIndex].alertType == AlertType.message){
+    if(alertService.getAlerts()[builderIndex].alertType == AlertType.boardMessage){
       Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMessagePage(
-        entryDocumentID: alertService.getAlerts()[builderIndex].boardEntryReference,
-        categoryDocumentID: alertService.getAlerts()[builderIndex].boardCategoryReference,)));
+        entryDocumentID: alertService.getAlerts()[builderIndex].documentReference,)));
     }
+
   }
   
   Icon _getLeadingIcon(BuildContext context){
@@ -37,11 +38,11 @@ class AlertDisplay extends StatelessWidget {
     Icon icon;
     Color color = Theme.of(context).buttonColor;
     switch(alertType){
-      case AlertType.message:
+      case AlertType.boardMessage:
         icon = Icon(Icons.message, color: color);
         break;
       case AlertType.pin_notification:
-        icon = Icon(Icons.pin_drop, color: color,);
+        icon = Icon(Icons.bookmark_border, color: color,);
         break;
       case AlertType.news:
         icon = Icon(Icons.event, color: color,);

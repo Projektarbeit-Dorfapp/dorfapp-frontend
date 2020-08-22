@@ -43,9 +43,8 @@ class _PinsPageState extends State<PinsPage> {
   Widget build(BuildContext context) {
     return _loggedUser != null
         ? StreamBuilder(
-            stream: _subscriptionService.getPins(_loggedUser, _itemLimit, SubscriptionType.entry),
+            stream: _subscriptionService.getPinnedDocumentsAsStream(_loggedUser, _itemLimit, SubscriptionType.entry),
             builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
-
               if (snapshot.hasData) {
                final boardEntries = _parseToEntries(snapshot);
                 return ListView.builder(
@@ -54,7 +53,8 @@ class _PinsPageState extends State<PinsPage> {
                     itemCount: boardEntries.length,
                     itemBuilder: (context, int index){
                       _snapshotItemCount = boardEntries.length;
-                      return BoardEntryDisplay(entry: boardEntries[index], boardCategoryReference: boardEntries[index].boardCategoryReference);
+                      return BoardEntryDisplay(
+                          entry: boardEntries[index]);
                     });
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(

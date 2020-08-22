@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
@@ -7,7 +8,7 @@ import 'package:dorf_app/models/user_model.dart';
 
 ///Matthias Maxelon
 class BoardEntryService{
-  final CollectionReference _boardRef = Firestore.instance.collection("Forumeintrag");
+  final CollectionReference _boardRef = Firestore.instance.collection(CollectionNames.BOARD_ENTRY);
 
   Future<DocumentReference> insertEntry(BoardEntry entry) async {
     return await _boardRef.add(entry.toJson());
@@ -22,29 +23,14 @@ class BoardEntryService{
     }
   }
 
-  updateModifiedDate(BoardEntry entry){
-    _boardRef.document(entry.documentID).updateData({"lastModifiedDate" : Timestamp.now()});
+  updateActivityDate(String documentID){
+    _boardRef.document(documentID).updateData({"lastActivity" : Timestamp.now()});
   }
 
-  incrementWatchCount(BoardEntry entry, User loggedUser) async{
+  incrementWatchCount(BoardEntry entry) async{
+
     _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
   }
-  /*
-  _incrementDuplicates(BoardEntry entry, User loggedUser)async{
-    final ref =  Firestore.instance
-        .collection(CollectionNames.USER)
-        .document(loggedUser.documentID)
-        .collection(CollectionNames.PIN)
-        .where("postingDate", isEqualTo: entry.postingDate)
-        .where("userReference",isEqualTo: entry.userReference).reference();
-
-      await ref.getDocuments().then((value) {
-        if(value.documents.length != 0)
-          ref.document(value.documents[0].documentID).updateData({"watchCount" : FieldValue.increment(1)});
-      });
-  }
-
-   */
 
   closeBoardEntry(BoardEntry entry){
     _boardRef.document(entry.documentID).updateData({"isClosed" : true});
@@ -53,7 +39,7 @@ class BoardEntryService{
   Stream<List<BoardEntry>> getBoardEntriesAsStream(BoardCategory category, int limit){
     Stream<QuerySnapshot> stream = _boardRef
         .where("boardCategoryReference", isEqualTo: category.documentID)
-        .orderBy("lastModifiedDate", descending: true)
+        .orderBy("lastActivity", descending: true)
         .limit(limit)
         .snapshots();
 
@@ -67,37 +53,3 @@ class BoardEntryService{
     });
   }
 }
-
-
-
-/*
-  ///Returns a List of all entries of a specific category. The entries are combined with
-  ///user information by returning the object [EntryWithUser]. This object will contain
-  ///all information from a document in the "Forumeintrag"-Collection and the from a document
-  ///in the "User"-Collection.
-  Future<List<EntryWithUser>> getBoardEntriesWithUser(
-      BoardCategory category) async {
-    List<EntryWithUser> list = [];
-    await _ref
-        .where("boardCategoryReference", isEqualTo: category.id)
-        //.limit(length)
-        //.orderBy("postingDate", descending: true)
-        .getDocuments()
-        .then((snapshot) async {
-      for (var document in snapshot.documents) {
-        var entry = BoardEntry.fromJson(document.data, document.documentID);
-        var user = await _userService.getUser(entry.userReference);
-        list.add(EntryWithUser(entry: entry, user: user));
-      }
-    }).timeout(_timeout, onTimeout: () {
-      print(
-          "Developermessage ERROR: timeout on Service: [BoardEntryService] in: [getBoardEntries()]");
-      throw Exception();
-    }).catchError((error) {
-      print("Developermessage ERROR: " + error);
-      throw Exception();
-    });
-    return list;
-  }
-
-   */
