@@ -8,16 +8,16 @@ import 'package:dorf_app/services/boardMessage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MessageStream extends StatefulWidget {
+class NotUsed extends StatefulWidget {
   final BoardCategory category;
   final BoardEntry entry;
 
-  const MessageStream({@required this.category, @required this.entry,});
+  const NotUsed({@required this.category, @required this.entry,});
   @override
-  _MessageStreamState createState() => _MessageStreamState();
+  _NotUsedState createState() => _NotUsedState();
 }
 
-class _MessageStreamState extends State<MessageStream> with SingleTickerProviderStateMixin {
+class _NotUsedState extends State<NotUsed> with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   ScrollController _scrollController;
   MessageQuantity _messageQuantity;

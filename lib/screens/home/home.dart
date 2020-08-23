@@ -1,5 +1,6 @@
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/screens/calendar/calendar.dart';
+import 'package:dorf_app/screens/chat/chatsPage/chatsPage.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/news.dart';
@@ -22,6 +23,7 @@ class _HomeState extends State<Home> {
     Calendar(),
     NewsOverview(),
     Forum(),
+    Chats(),
   ];
   @override
   void initState() {
@@ -56,6 +58,8 @@ class _HomeState extends State<Home> {
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.black54,
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
@@ -67,8 +71,12 @@ class _HomeState extends State<Home> {
             title: new Text('News'),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.people),
               title: Text('Forum')
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            title: Text('Chat'),
           )
         ],
       ),

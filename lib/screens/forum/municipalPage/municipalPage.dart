@@ -1,5 +1,5 @@
 import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/screens/forum/municipalPage/widgets/userChatDisplay.dart';
+import 'file:///C:/Users/h0lyh/StudioProjects/dorfapp-frontend/lib/screens/chat/chatsPage/widgets/userChatDisplay.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';

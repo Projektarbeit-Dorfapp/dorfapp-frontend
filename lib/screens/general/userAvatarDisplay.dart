@@ -12,10 +12,10 @@ class UserAvatarDisplay extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(50),
-      ),
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Icon(Icons.person, color: Colors.black38,),
+        image: DecorationImage(
+         fit: BoxFit.fill,
+         image: AssetImage("assets/avatar.png"),
+        ),
       ),
     );
   }

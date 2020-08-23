@@ -1,6 +1,5 @@
 import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/screens/forum/boardEntryPage/widgets/entryPopUpMenu.dart';
-import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
+import 'file:///C:/Users/h0lyh/StudioProjects/dorfapp-frontend/lib/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';

@@ -1,6 +1,6 @@
 
 import 'package:dorf_app/models/boardMessage_model.dart';
-import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
+import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:dorf_app/widgets/showUserProfileText.dart';
 import 'package:flutter/material.dart';

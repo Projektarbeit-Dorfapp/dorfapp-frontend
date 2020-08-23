@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
+import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -68,7 +69,7 @@ class UserService extends ChangeNotifier{
         });
     return user;
   }
-
+  ///Returns all [User] except loggedUser
   Future<List<User>> getUsers(User loggedUser) async {
     List<User> users = [];
     final snapshot = await _ref.getDocuments();
@@ -77,5 +78,19 @@ class UserService extends ChangeNotifier{
         users.add(User.fromJson(document.data, document.documentID));
     }
     return users;
+  }
+
+  //TEST ONLY -> TO CHAT SERVICE!!! IF NO CHATROOM EXIST -> CREATE CHATROOM AND RETURN IT
+  Future<String> getChatRoomID(User loggedUser, User selectedUser) async {
+    QuerySnapshot snapshot = await Firestore.instance
+        .collection(CollectionNames.USER)
+        .document(loggedUser.documentID)
+        .collection("Chats")
+        .where("userName", isEqualTo: selectedUser.userName).getDocuments();
+
+    if(snapshot.documents.length != 0){
+      return snapshot.documents[0].data["chatID"].toString();
+    } else
+      return "";
   }
 }
