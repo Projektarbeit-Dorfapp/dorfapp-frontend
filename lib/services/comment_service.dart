@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
+import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
@@ -28,8 +29,6 @@ class CommentService {
     _incrementCommentCount(documentID, collection);
   }
 
-  ///the boardEntry is displaying the time when somebody added a comment
-  ///TODO: Should this also update when somebody answers a comment? Probably yes...
   _setEntryActivityDate(String documentID){
     BoardEntryService service = BoardEntryService();
     service.updateActivityDate(documentID);
@@ -57,14 +56,13 @@ class CommentService {
     alertService.insertAlerts(subscriber, alert);
   }
 
-  void insertAnswerComment(String documentID, String collection, Comment comment) async {
+  void insertAnswerComment(String documentID, String collection, Comment comment, String answerTo) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).add({
+    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(answerTo).collection(CollectionNames.ANSWERS).add({
       "firstName": comment.user.firstName,
       "lastName": comment.user.lastName,
       "userID": comment.user.uid,
       "content": comment.content,
-      "answerTo": comment.answerTo,
       "createdAt": comment.createdAt,
       "modifiedAt": comment.modifiedAt,
       "isDeleted": false
@@ -99,8 +97,8 @@ class CommentService {
 
   //Ich brauche die Kommentarliste um das CommentSection Widget mit Daten zu befüllen. Meike zieht das aus dem newsModel raus. Im Forum hab ich hier
   //eine ganz andere Umgebung. Deshalb muss ich die Kommentare mit der function hier holen. Wenns eine andere Möglichkeit gibt, bitte bescheid geben - Matthias
-  Future<List<Comment>> getComments(String documentID, String collection) async {
-    List<Comment> comments = [];
+  Future<List<TopComment>> getComments(String documentID, String collection) async {
+    List<TopComment> comments = [];
     CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS);
     QuerySnapshot snapshot = await _collectionReference.getDocuments();
     for(DocumentSnapshot doc in snapshot.documents){
@@ -114,14 +112,42 @@ class CommentService {
         ),
         userID: doc.data["userID"],
         content: doc.data["content"],
-        answerTo: doc.data["answerTo"],
         createdAt: doc.data["createdAt"],
         modifiedAt: doc.data["modifiedAt"],
         id: doc.documentID,
         isDeleted: doc.data["isDeleted"],
       );
-      comments.add(comment);
+
+      List<Comment> answerList = await getAnswers(comment.id, collection, documentID);
+      comments.add(TopComment(comment, answerList));
     }
     return comments;
   }
+
+  Future<List<Comment>> getAnswers(String topCommentId, String collection, String documentID) async {
+    List<Comment> answerList = [];
+    CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS).document(topCommentId).collection(CollectionNames.ANSWERS);
+    QuerySnapshot snapshot = await _collectionReference.getDocuments();
+    for(DocumentSnapshot doc in snapshot.documents){
+      final comment = Comment(
+        firstName: doc.data["firstName"],
+        lastName: doc.data["lastName"],
+        user: User(
+          uid: doc.data["userID"],
+          firstName: doc.data["firstName"],
+          lastName: doc.data["lastName"],
+        ),
+        userID: doc.data["userID"],
+        content: doc.data["content"],
+        createdAt: doc.data["createdAt"],
+        modifiedAt: doc.data["modifiedAt"],
+        id: doc.documentID,
+        isDeleted: doc.data["isDeleted"],
+      );
+
+      answerList.add(comment);
+    }
+    return answerList;
+  }
+
 }

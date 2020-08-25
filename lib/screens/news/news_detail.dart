@@ -80,7 +80,7 @@ class _NewsDetailState extends State<NewsDetail> {
                       DescriptionDisplay(description: newsModel.description,), //umgeschrieben in eigenes Widget, siehe unten - Matthias
                       LikeSection(newsModel.likes, widget.newsID, CollectionNames.EVENT, _userID),
                       CustomBorder(),
-                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news),
+                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news, disableAddingComment: false),
                     ],
                   )));
         } else if (snapshot.connectionState == ConnectionState.waiting) {

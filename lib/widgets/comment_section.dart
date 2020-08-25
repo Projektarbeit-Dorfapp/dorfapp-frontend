@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/comment_model.dart';
+import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/alert_service.dart';
@@ -14,7 +15,7 @@ import 'package:provider/provider.dart';
 
 //Meike Nedwidek
 class CommentSection extends StatefulWidget {
-  final List<Comment> commentList;
+  final List<TopComment> commentList;
   final String document;
   final String collection;
   final bool disableAddingComment;
@@ -30,10 +31,12 @@ class CommentSection extends StatefulWidget {
 class _CommentSectionState extends State<CommentSection> {
   final commentService = CommentService();
 
-  List<Comment> commentList;
+  List<TopComment> commentList;
   String document;
   String collection;
   TextEditingController _controller;
+  String answerTo;
+  function(value) => setState(() => answerTo = value );
 
   _CommentSectionState(this.commentList, this.document, this.collection);
 
@@ -47,7 +50,7 @@ class _CommentSectionState extends State<CommentSection> {
     super.dispose();
   }
 
-  void _addNewComment(String val) async{
+  void _addNewComment(String val, String answerTo) async{
     AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     var user = await _accessHandler.getUser();
     var date = Timestamp.now();
@@ -60,11 +63,19 @@ class _CommentSectionState extends State<CommentSection> {
         createdAt: date,
         modifiedAt: date);
 
-    commentService.insertNewComment(document, collection, newComment, Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
+    if (answerTo != null) {
+      commentService.insertAnswerComment(document, collection, newComment, answerTo);
+    }
+    else {
+      commentService.insertNewComment(
+          document, collection, newComment, Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
 
-    setState(() {
-      commentList.insert(0, newComment);
-    });
+      setState(() {
+        TopComment newTopComment = TopComment(newComment, []);
+        commentList.insert(0, newTopComment);
+      });
+    }
+
   }
 
   @override
@@ -78,7 +89,8 @@ class _CommentSectionState extends State<CommentSection> {
             //maxLines: null,
             controller: _controller,
             onSubmitted: (String submittedStr) {
-              _addNewComment(submittedStr);
+              _addNewComment(submittedStr, answerTo);
+              answerTo = null;
               _controller.clear();
             },
             decoration: InputDecoration(
@@ -99,7 +111,7 @@ class _CommentSectionState extends State<CommentSection> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: commentList.length > 0
                       ? commentList
-                          .map((comment) => CommentCard(comment: comment))
+                          .map((comment) => CommentCard(topComment: comment, disableAddingComment: widget.disableAddingComment, emitAnswerTo: function))
                           .toList()
                       : [ShowTextIfListEmpty(iconData: Icons.message, text: "Noch keine Kommentare",)]),
             ],

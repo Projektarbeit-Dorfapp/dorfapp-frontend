@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 
 class NewsService {
@@ -75,21 +76,21 @@ class NewsService {
           .getDocuments()
           .then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {
-          var commentList = List<Comment>();
+          var commentList = List<TopComment>();
           for (var document in dataSnapshot.documents) {
-            commentList.add(new Comment(
+            Comment tempComment = new Comment(
                 id: document.documentID,
                 content: document.data["content"],
-                answerTo: document.data["answerTo"],
                 createdAt: document.data["createdAt"],
                 modifiedAt: document.data["modifiedAt"],
                 isDeleted: document.data["isDeleted"],
                 user: new User (
-                  uid: document.data["userID"],
-                  firstName: document.data["firstName"],
-                  lastName: document.data["lastName"]
-                )));
-          }
+                    uid: document.data["userID"],
+                    firstName: document.data["firstName"],
+                    lastName: document.data["lastName"]
+                ));
+            commentList.add(TopComment(tempComment, []));
+          } /// !!! Call comment service?
           newsModel.comments = commentList;
         }
       });
