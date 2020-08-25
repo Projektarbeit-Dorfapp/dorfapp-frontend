@@ -11,7 +11,9 @@ class CommentAnswer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Container(
+      padding: EdgeInsets.only(left: 60.0),
+        child: Column(
       children: <Widget>[
         Row(
           children: <Widget>[
@@ -23,10 +25,11 @@ class CommentAnswer extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage(comment.user.imagePath != null ? comment.user.imagePath : "assets/avatar.png")))),
+                        image: AssetImage(
+                            comment.user.imagePath != null ? comment.user.imagePath : "assets/avatar.png")))),
             Container(
                 margin: EdgeInsets.only(top: 10.0),
-                padding: EdgeInsets.only(right: 10.0, top: 10.0, bottom: 10.0, left: 25.0),
+                padding: EdgeInsets.all(15.0),
                 width: MediaQuery.of(context).size.width - 160,
                 decoration: BoxDecoration(color: Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(10.0)),
                 child: Column(
@@ -56,12 +59,10 @@ class CommentAnswer extends StatelessWidget {
                           ),
                         ],
                       )
-                    ]
-                )
-            ),
+                    ])),
           ],
         ),
       ],
-    );
+    ));
   }
 }

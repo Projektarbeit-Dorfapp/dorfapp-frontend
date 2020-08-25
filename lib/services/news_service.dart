@@ -4,10 +4,11 @@ import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/services/comment_service.dart';
 
 class NewsService {
-  CollectionReference _newsCollectionReference =
-      Firestore.instance.collection("Veranstaltung");
+  CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
+  final CommentService _commentService = CommentService();
 
   void insertNews(News news) async {
     await _newsCollectionReference.add({
@@ -70,30 +71,7 @@ class NewsService {
         }
       });
 
-      await _newsCollectionReference
-          .document(newsID)
-          .collection("Kommentare")
-          .getDocuments()
-          .then((dataSnapshot) {
-        if (dataSnapshot.documents.length > 0) {
-          var commentList = List<TopComment>();
-          for (var document in dataSnapshot.documents) {
-            Comment tempComment = new Comment(
-                id: document.documentID,
-                content: document.data["content"],
-                createdAt: document.data["createdAt"],
-                modifiedAt: document.data["modifiedAt"],
-                isDeleted: document.data["isDeleted"],
-                user: new User (
-                    uid: document.data["userID"],
-                    firstName: document.data["firstName"],
-                    lastName: document.data["lastName"]
-                ));
-            commentList.add(TopComment(tempComment, []));
-          } /// !!! Call comment service?
-          newsModel.comments = commentList;
-        }
-      });
+      newsModel.comments = await _commentService.getComments(newsID, "Veranstaltung");
 
     } catch (err) {
       print(err.toString());
