@@ -1,4 +1,3 @@
-import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';

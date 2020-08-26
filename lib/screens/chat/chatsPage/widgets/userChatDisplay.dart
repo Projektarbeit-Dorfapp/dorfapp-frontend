@@ -1,6 +1,6 @@
 import 'package:dorf_app/models/user_model.dart';
-import 'file:///C:/Users/h0lyh/StudioProjects/dorfapp-frontend/lib/screens/general/userAvatarDisplay.dart';
-import 'file:///C:/Users/h0lyh/StudioProjects/dorfapp-frontend/lib/screens/chat/chatRoom/widgets/chatRoom.dart';
+import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
+import 'package:dorf_app/screens/chat/chatRoom/widgets/chatRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

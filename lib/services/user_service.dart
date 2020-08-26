@@ -88,7 +88,7 @@ class UserService extends ChangeNotifier{
         .collection("Chats")
         .where("userName", isEqualTo: selectedUser.userName).getDocuments();
 
-    if(snapshot.documents.length != 0){
+    if(snapshot.documents.length != 0) {
       return snapshot.documents[0].data["chatID"].toString();
     } else
       return "";

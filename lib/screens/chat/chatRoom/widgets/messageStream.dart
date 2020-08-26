@@ -66,7 +66,7 @@ class _MessageStreamState extends State<MessageStream> {
   
   //TODO: fetch from chatservice
   Stream<QuerySnapshot> _getMessages(){
-
+    return null;
   }
   
   List<ChatMessage> _parseSnapshotToChatMessage(AsyncSnapshot<QuerySnapshot> snapshot){

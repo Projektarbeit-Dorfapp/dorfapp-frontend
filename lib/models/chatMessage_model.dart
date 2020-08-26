@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
-class ChatMessage{
+class ChatMessage {
   String documentID;
   String message;
   String messageFrom;  ///[User.uid] that created the message
   Timestamp createdAt;
 
-  ChatMessage({this.message, @required this.messageFrom});
+  ChatMessage({this.message, this.documentID, this.createdAt, @required this.messageFrom});
 
   ChatMessage.fromJson(Map snapshot, String documentID){
     this.documentID = documentID;
@@ -22,4 +23,13 @@ class ChatMessage{
       "createdAt" : Timestamp.now(),
     };
   }
+}
+
+class OpenChat {
+  String chatID;
+  User user;
+  String userID;
+
+  OpenChat({@required this.chatID, @required this.user, this.userID});
+
 }
