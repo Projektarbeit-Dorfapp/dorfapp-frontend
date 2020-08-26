@@ -13,7 +13,7 @@ class _ForumState extends State<Forum> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: Color(0xfff0f0f0),
         appBar: AppBar(
@@ -25,8 +25,7 @@ class _ForumState extends State<Forum> {
             unselectedLabelColor: Colors.grey,
             tabs: <Widget>[
               Tab(icon: Icon(Icons.chat,),text: "Themen", iconMargin: EdgeInsets.only(bottom: 1),),
-              Tab(icon: Icon(Icons.group,),text: "Gemeinde", iconMargin: EdgeInsets.only(bottom: 1),),
-              Tab(icon: Icon(Icons.star,),text: "Gepinnt", iconMargin: EdgeInsets.only(bottom: 1),
+              Tab(icon: Icon(Icons.bookmark_border,),text: "Gepinnt", iconMargin: EdgeInsets.only(bottom: 1),
               ),
             ],
           ),
@@ -34,7 +33,6 @@ class _ForumState extends State<Forum> {
         body: TabBarView(
           children: <Widget>[
             BoardCategoryPage(),
-            MunicipalPage(),
             PinsPage(),
           ],
         ),

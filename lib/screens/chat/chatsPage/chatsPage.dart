@@ -1,17 +1,20 @@
 import 'package:animations/animations.dart';
+import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/chat/chatsPage/provider/openConnectionState.dart';
 import 'package:dorf_app/screens/chat/chatsPage/widgets/userChatDisplay.dart';
 import 'package:dorf_app/screens/chat/newChat/newChatPage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/services/chat_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ChatInformation{
+class UserInfo{
   List<User> municipalUsers;
-  List<User> openConnections; //TODO: ???
-ChatInformation({this.municipalUsers, this.openConnections});
+  User loggedUser;
+UserInfo({this.municipalUsers, this.loggedUser});
 }
 class Chats extends StatelessWidget {
   @override
@@ -19,22 +22,32 @@ class Chats extends StatelessWidget {
     return Scaffold(
       body: FutureBuilder(
         future: _getInitialData(context),
-        builder: (context, AsyncSnapshot<ChatInformation> snapshot){
-          if(snapshot.hasData){
-            return Stack(
-              children: [
-                ActiveChats(snapshot.data),
-                NewChatNavigation(municipal: snapshot.data.municipalUsers,)
-              ],
+        builder: (context, AsyncSnapshot<UserInfo> municipalUsers){
+          if(municipalUsers.hasData){
+            return StreamBuilder<List<OpenChat>>(
+              stream: ChatService().getOpenConnectionsAsStream(municipalUsers.data.loggedUser),
+              builder: (context, openConnections) {
+                if(openConnections.hasData){
+                  Provider.of<OpenConnectionState>(context, listen: false).setOpenConnections(openConnections.data); /// fill list with openConnections
+                  return Stack(
+                    children: [
+                      ActiveChats(),
+                      NewChatNavigation(municipal: municipalUsers.data.municipalUsers)
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }
             );
           }
-          else if (snapshot.connectionState == ConnectionState.waiting){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+          else if (municipalUsers.connectionState == ConnectionState.waiting){
+            return Container();
           } else {
             return Center(
-              child: Text("Etwas ist schief gelaufen"),
+              child: CircularProgressIndicator(),
             );
           }
         },
@@ -42,30 +55,16 @@ class Chats extends StatelessWidget {
     );
   }
 
-  Future<ChatInformation> _getInitialData(BuildContext context) async{
+  Future<UserInfo> _getInitialData(BuildContext context) async{
     final userS = Provider.of<UserService>(context, listen: false);
     final access = Provider.of<AccessHandler>(context, listen: false);
 
     List<User> municipalUsers = await userS.getUsers(await access.getUser());
-    List<User> openConnections = [];
 
-    //TODO: Get all active chats that the user participates on
-    return ChatInformation(
+    return UserInfo(
       municipalUsers: municipalUsers,
-      openConnections: openConnections //TODO: Take correct connectionData
+      loggedUser: await access.getUser()
     );
-  }
-  //TODO: Fetch from [CollectionNames.User] -> [Collection.Chats]. The Fetched documents should have the following information:
-  //TODO: 1. userName (Needed to find selected ChatID to show correct ChatRoom) 2. The UserID that the loggedUser has an open connection
-  //TODO: Return a List<User> so that we can build a listView from that list.
-  Future<List<User>> _getOpenConnections() async{
-    //ChatService
-    /*
-    example: for(var doc in snapshot.documents){
-                userList.add(User(userName: doc.data["userName"], uid: doc.documentID) (as we stated an open connection document in [Chats] on a user collection is the userID that the user has a connection with
-             } ...
-             return userList;
-     */
   }
 }
 
@@ -107,11 +106,10 @@ class NewChatNavigation extends StatelessWidget {
   }
 }
 class ActiveChats extends StatelessWidget {
-  final ChatInformation chatInfo;
-  ActiveChats(this.chatInfo);
   @override
   Widget build(BuildContext context) {
     double indent = MediaQuery.of(context).size.width * 0.06;
+    final openConnections = Provider.of<OpenConnectionState>(context, listen: false);
     return ListView.separated(
       separatorBuilder: (BuildContext context, int index){
         return Divider(
@@ -119,9 +117,9 @@ class ActiveChats extends StatelessWidget {
           endIndent: indent,
         );
       },
-        itemCount: chatInfo.openConnections.length,
+        itemCount: openConnections.getOpenConnections().length,
         itemBuilder: (BuildContext context, int index){
-          return UserDisplay(user: chatInfo.openConnections[index]);
+          return UserDisplay(openChat: openConnections.getOpenConnections()[index]);
         });
   }
 }

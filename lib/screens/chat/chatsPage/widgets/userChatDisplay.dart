@@ -1,32 +1,29 @@
-import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/chat/chatRoom/widgets/chatRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserDisplay extends StatelessWidget {
-  final User user;
-  UserDisplay({@required this.user});
+  final OpenChat openChat;
+  UserDisplay({@required this.openChat});
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => ChatRoom(selectedUser: user,)));
+        Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => ChatRoom(selectedUser: openChat.user, chatID: openChat.chatID,)));
       },
       child: Padding(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
+        padding: EdgeInsets.only(top: 5, bottom: 5, left: 10),
         child: Container(
-          height: 40,
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: [
               UserAvatarDisplay(50, 50),
-              Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text("UserName Display", style: TextStyle(
-                    fontSize: 20
-                ),),
-              )
+              SizedBox(width: 20,),
+              Text(openChat.user.firstName + " " + openChat.user.lastName, style: TextStyle(
+                  fontSize: 20
+              ),)
             ],
           ),
         ),

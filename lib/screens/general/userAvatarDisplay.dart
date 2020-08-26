@@ -9,14 +9,11 @@ class UserAvatarDisplay extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(50),
-        image: DecorationImage(
-         fit: BoxFit.fill,
-         image: AssetImage("assets/avatar.png"),
-        ),
-      ),
+      child: CircleAvatar(
+        backgroundImage: AssetImage("assets/avatar.png"),
+        backgroundColor: Colors.white,
+
+      )
     );
   }
 }

@@ -24,7 +24,7 @@ class MunicipalPage extends StatelessWidget {
             itemCount: snapshot.data.length,
               itemBuilder: (context, int index){
                 return UserDisplay(
-                  user: snapshot.data[index],
+                  //openChat: snapshot.data[index],
                 );
               });
         } else if (snapshot.hasError){

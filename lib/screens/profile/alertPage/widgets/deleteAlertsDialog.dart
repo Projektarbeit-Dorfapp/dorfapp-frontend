@@ -10,13 +10,13 @@ class DeleteAlertsDialog extends StatelessWidget {
       title: Text("Alle Benachrichtigungen löschen?"),
       actions: <Widget>[
         FlatButton(
-          child: Text("Ja"),
+          child: Text("Ja", style: TextStyle(color: Theme.of(context).buttonColor),),
           onPressed: (){
             _cancelAlertsEvent(context);
           },
         ),
         FlatButton(
-          child: Text("Nein"),
+          child: Text("Nein", style: TextStyle(color: Theme.of(context).buttonColor),),
           onPressed: (){
             _dismiss(context);
           },

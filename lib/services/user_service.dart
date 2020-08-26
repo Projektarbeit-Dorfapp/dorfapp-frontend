@@ -80,17 +80,5 @@ class UserService extends ChangeNotifier{
     return users;
   }
 
-  //TEST ONLY -> TO CHAT SERVICE!!! IF NO CHATROOM EXIST -> CREATE CHATROOM AND RETURN IT
-  Future<String> getChatRoomID(User loggedUser, User selectedUser) async {
-    QuerySnapshot snapshot = await Firestore.instance
-        .collection(CollectionNames.USER)
-        .document(loggedUser.documentID)
-        .collection("Chats")
-        .where("userName", isEqualTo: selectedUser.userName).getDocuments();
 
-    if(snapshot.documents.length != 0) {
-      return snapshot.documents[0].data["chatID"].toString();
-    } else
-      return "";
-  }
 }

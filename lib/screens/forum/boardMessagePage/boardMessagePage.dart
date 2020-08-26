@@ -260,13 +260,13 @@ class CloseThreadDialog extends StatelessWidget {
       title: Text("Möchtest du dein Thema schließen? Kommentieren ist dann nicht mehr möglich"),
       actions: <Widget>[
         FlatButton(
-          child: Text("Ja"),
+          child: Text("Ja", style: TextStyle(color: Theme.of(context).buttonColor),),
           onPressed: (){
             Navigator.pop(context, "close");
           },
         ),
         FlatButton(
-          child: Text("Nein"),
+          child: Text("Nein", style: TextStyle(color: Theme.of(context).buttonColor),),
           onPressed: (){
             Navigator.pop(context);
           },

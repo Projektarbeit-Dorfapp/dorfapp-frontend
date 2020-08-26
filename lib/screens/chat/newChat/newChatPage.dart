@@ -1,3 +1,4 @@
+import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/chat/newChat/provider/chatSearch.dart';
 import 'package:dorf_app/screens/chat/newChat/widgets/searchField.dart';

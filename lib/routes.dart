@@ -1,5 +1,6 @@
 import 'package:dorf_app/basic_theme.dart';
 import 'package:dorf_app/screens/calendar/calendar.dart';
+import 'package:dorf_app/screens/chat/chatsPage/provider/openConnectionState.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/addEntryPage.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/boardEntryPage.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
@@ -41,6 +42,7 @@ class Application {
         ChangeNotifierProvider(create: (context) => UserService(),),
         ChangeNotifierProvider(create: (context) => AccessHandler(),),
         ChangeNotifierProvider(create: (context) => AlertService(),),
+        ChangeNotifierProvider(create: (context) => OpenConnectionState(),)
       ],
       child: MaterialApp(
         theme: basicTheme,
