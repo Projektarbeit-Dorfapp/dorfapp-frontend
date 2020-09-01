@@ -1,3 +1,4 @@
+import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/widgets/comment_answer.dart';
@@ -6,22 +7,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //Meike Nedwidek
-class CommentCard extends StatelessWidget  {
-  ///TO DO: CHANGE TO STATEFUL
-  ///richtig sortieren, hochscrollen zu kommentareingabe, @ hinzufügen, wenn @ gelöscht nicht mehr antwort schreiben,
-  ///über zwei kommentaren "alle kommentare anzeigen" machen
+class CommentCard extends StatefulWidget  {
+  ///TO DO:
+  ///hochscrollen zu kommentareingabe, @ hinzufügen, wenn @ gelöscht nicht mehr antwort schreiben,
+  ///neue Antwort direkt anzeigen, Button zum alle Kommentare anzeigen direkt alle Antworten anzeigen
   final Function emitAnswerTo;
   final TopComment topComment;
   final bool disableAddingComment;
   String answerTo;
-  CommentService _commentService;
 
   CommentCard({this.topComment, this.disableAddingComment, this.emitAnswerTo});
 
   @override
+  _CommentCardState createState() =>
+      _CommentCardState();
+}
+
+class _CommentCardState extends State<CommentCard> {
+
+  int numberOfAnswersShown = 1;
+  bool showButtonToShowAllAnswers = true;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      margin: topComment.answerList.length > 0 ? EdgeInsets.only(bottom: 20.0) : EdgeInsets.zero,
+      margin: widget.topComment.answerList.length > 0 ? EdgeInsets.only(bottom: 20.0) : EdgeInsets.zero,
       child: Column(
         children: <Widget>[
           Row(
@@ -34,7 +44,7 @@ class CommentCard extends StatelessWidget  {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           fit: BoxFit.fill,
-                          image: AssetImage(topComment.comment.user.imagePath != null ? topComment.comment.user.imagePath : "assets/avatar.png")))),
+                          image: AssetImage(widget.topComment.comment.user.imagePath != null ? widget.topComment.comment.user.imagePath : "assets/avatar.png")))),
               Container(
                   margin: EdgeInsets.only(top: 10.0),
                   padding: EdgeInsets.all(15.0),
@@ -47,14 +57,14 @@ class CommentCard extends StatelessWidget  {
                         Row(
                           children: <Widget>[
                             Text(
-                              topComment.comment.user.firstName + " " + topComment.comment.user.lastName,
+                              widget.topComment.comment.user.firstName + " " + widget.topComment.comment.user.lastName,
                               style: TextStyle(
                                   fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
                             ),
                             Expanded(
                               child: Container(
                                 alignment: Alignment.topRight,
-                                child: RelativeDate(topComment.comment.convertTimestamp(topComment.comment.createdAt), Colors.black, 12.0),
+                                child: RelativeDate(widget.topComment.comment.convertTimestamp(widget.topComment.comment.createdAt), Colors.black, 12.0),
                               ),
                             )
                           ],
@@ -62,7 +72,7 @@ class CommentCard extends StatelessWidget  {
                         Column(
                           children: <Widget>[
                             Text(
-                              topComment.comment.content,
+                              widget.topComment.comment.content,
                               style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16),
                             ),
                           ],
@@ -72,16 +82,17 @@ class CommentCard extends StatelessWidget  {
               ),
             ],
           ),
-          _answerButton(disableAddingComment, context),
+          _answerButton(widget.disableAddingComment, context),
           Column(
             children: <Widget>[
               Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: topComment.answerList.length > 0
-                      ? topComment.answerList
+                  children: widget.topComment.answerList.length > 0
+                      ? widget.topComment.answerList
                       .map((comment) => CommentAnswer(comment: comment))
-                      .toList()
+                      .toList().sublist(0, numberOfAnswersShown)
                       : []),
+              _getButtonToShowAllAnswers()
             ],
           )
         ],
@@ -102,7 +113,7 @@ class CommentCard extends StatelessWidget  {
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               onPressed: () {
-                emitAnswerTo(topComment.comment.id);
+                widget.emitAnswerTo(widget.topComment.comment.id);
               },
               child: Text(
                 "Antworten",
@@ -112,6 +123,32 @@ class CommentCard extends StatelessWidget  {
           ],
         ),
       );
+    }
+    else {
+      return Container();
+    }
+  }
+
+  _getButtonToShowAllAnswers() {
+
+    if (widget.topComment.answerList.length > 1) {
+      return Container(
+          padding: EdgeInsets.only(top: 2.0, left: 30.0),
+          width: MediaQuery.of(context).size.width,
+          child: showButtonToShowAllAnswers? FlatButton(
+            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            onPressed: () {
+              setState(() {
+                numberOfAnswersShown = widget.topComment.answerList.length;
+                showButtonToShowAllAnswers = false;
+              });
+            },
+            child: Text(
+              "Alle " + widget.topComment.answerList.length.toString() + " Antworten anzeigen",
+              style: Theme.of(context).textTheme.button,
+            ),
+          ) : Container());
     }
     else {
       return Container();

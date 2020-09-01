@@ -100,7 +100,7 @@ class CommentService {
   Future<List<TopComment>> getComments(String documentID, String collection) async {
     List<TopComment> comments = [];
     CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS);
-    QuerySnapshot snapshot = await _collectionReference.getDocuments();
+    QuerySnapshot snapshot = await _collectionReference.orderBy("createdAt", descending: false).getDocuments();
     for(DocumentSnapshot doc in snapshot.documents){
       final comment = Comment(
         firstName: doc.data["firstName"],
@@ -127,7 +127,7 @@ class CommentService {
   Future<List<Comment>> getAnswers(String topCommentId, String collection, String documentID) async {
     List<Comment> answerList = [];
     CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS).document(topCommentId).collection(CollectionNames.ANSWERS);
-    QuerySnapshot snapshot = await _collectionReference.getDocuments();
+    QuerySnapshot snapshot = await _collectionReference.orderBy("createdAt", descending: false).getDocuments();
     for(DocumentSnapshot doc in snapshot.documents){
       final comment = Comment(
         firstName: doc.data["firstName"],

@@ -3,6 +3,7 @@ import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
@@ -13,15 +14,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
+
 //Meike Nedwidek
 class CommentSection extends StatefulWidget {
   final List<TopComment> commentList;
   final String document;
   final String collection;
   final bool disableAddingComment;
+  final Function emitScrollToTop;
   final SubscriptionType subscriptionType; ///where is the commentsection implemented? [SubscriptionType.news] when in news or [SubscriptionType.entry] when in Forum
 
-  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment});
+  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, this.emitScrollToTop, {this.disableAddingComment});
 
   @override
   _CommentSectionState createState() =>
@@ -36,7 +39,12 @@ class _CommentSectionState extends State<CommentSection> {
   String collection;
   TextEditingController _controller;
   String answerTo;
-  function(value) => setState(() => answerTo = value );
+  function(value) {
+    setState(() {
+      answerTo = value;
+      widget.emitScrollToTop();
+    });
+  }
 
   _CommentSectionState(this.commentList, this.document, this.collection);
 
@@ -96,13 +104,6 @@ class _CommentSectionState extends State<CommentSection> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(20.0),
               hintText: "Schreibe einen Kommentar...",
-              /*suffixIcon: IconButton(
-                icon: Icon(Icons.send),
-                color: Color(0xFF141e3e),
-                iconSize: 28.0,
-                onPressed: () {
-                },
-              ) */
             ),
           ) : Container(),
           Column(
