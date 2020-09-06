@@ -3,12 +3,13 @@ import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/addEntryPage.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/boardEntryPage.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
-import 'package:dorf_app/screens/general/ProfilePage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/login/passwordResetPage/passwordResetPage.dart';
 import 'package:dorf_app/screens/login/registrationPage/registrationPage.dart';
 import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
 import 'package:dorf_app/screens/profile/alertPage/alertPage.dart';
+import 'package:dorf_app/screens/profile/profile.dart';
+import 'package:dorf_app/screens/profile/widgets/profile_edit.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
@@ -21,8 +22,6 @@ import 'package:flare_splash_screen/flare_splash_screen.dart';
 class Application {
 
   final String SPLASH_SCREEN_PATH = 'assets/dorf_intro.flr';
-//  'assets/dorf_intro.flr'
-//  'assets/2019-11-01_SPECT8_Splash_Animation_2_sec.flr'
 
   final routes = <String, WidgetBuilder>{
 //    '/': (BuildContext context) => RootPage(),

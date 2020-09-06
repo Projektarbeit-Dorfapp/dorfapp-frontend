@@ -3,6 +3,7 @@ import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/profile/widgets/changeUserAccount.dart';
 import 'package:dorf_app/screens/profile/widgets/myAlerts.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserSettings extends StatefulWidget {
 
@@ -80,73 +81,109 @@ class _UserSettingsState extends State<UserSettings> {
                   "Mein Profil",
                   style: TextStyle(fontFamily: "Raleway", fontSize: 16),
                 ),
-              ],
-          InkWell(
-            child: Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Row(
-                children: <Widget>[
+
+              InkWell(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Icon(Icons.accessibility_new, color: Color(0xff6FB3A9)
+                        ),
+                      ),
+                      Text("Mein Profil",
+                        style: TextStyle(
+                            fontFamily: "Raleway",
+                            fontSize: 16
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/profile');
+                },
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Icon(Icons.favorite, color: Color(0xff6FB3A9)),
+                    ),
+                    Text(
+                      "Meine Favoriten",
+                      style: TextStyle(fontFamily: "Raleway", fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                thickness: 2,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Icon(Icons.settings, color: Color(0xff6FB3A9)),
+                    ),
+                    Text(
+                      "Einstellungen",
+                      style: TextStyle(fontFamily: "Raleway", fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+
+
+              Divider(thickness: 2,),
+
                   Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Icon(Icons.accessibility_new, color: Color(0xff6FB3A9)
+                    padding: EdgeInsets.only(top: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Icon(Icons.settings, color: Color(0xff6FB3A9)
+                          ),
+                        ),
+                        Text("Einstellungen",
+                          style: TextStyle(
+                              fontFamily: "Raleway",
+                              fontSize: 16
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text("Mein Profil",
-                    style: TextStyle(
-                        fontFamily: "Raleway",
-                        fontSize: 16
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Icon(Icons.account_box, color: Color(0xff6FB3A9),
+                          ),
+                        ),
+                        Text("Mein Account wechseln",
+                          style: TextStyle(
+                              fontFamily: "Raleway",
+                              fontSize: 16
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
-              ),
             ),
-            onTap: () {
-              Navigator.pushNamed(context, '/profile');
-            },
-          ),
-
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Icon(Icons.favorite, color: Color(0xff6FB3A9)),
-                ),
-                Text(
-                  "Meine Favoriten",
-                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            thickness: 2,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Icon(Icons.settings, color: Color(0xff6FB3A9)),
-                ),
-                Text(
-                  "Einstellungen",
-                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-
-
-          Divider(thickness: 2,),
-
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: ChangeUserAccount()
           ),
         ],
+
       ),
     );
   }

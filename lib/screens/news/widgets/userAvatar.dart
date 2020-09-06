@@ -1,11 +1,13 @@
-import 'package:dorf_app/screens/news/widgets/userSettings.dart';
+import 'package:dorf_app/models/user_model.dart';
+//import 'package:dorf_app/screens/news/widgets/userSettings.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
   final double _safeAreaHeight;
+  final User _currentUser;
   final double height;
   final double width;
-  UserAvatar(this._safeAreaHeight, this.height, this.width);
+  UserAvatar(this._safeAreaHeight, this._currentUser, this.height, this.width);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,9 +40,9 @@ class UserAvatar extends StatelessWidget {
           return SafeArea(
             child: Container(
               height: MediaQuery.of(context).size.height - _safeAreaHeight, //TODO: Need to subtract system bar for perfect height
-              child: UserSettings(
-                _currentUser
-              ),
+//              child: UserSettings(
+//                _currentUser
+//              ),
             ),
           );
         }
