@@ -56,8 +56,8 @@ class RegistrationButton extends StatelessWidget {
             validator.currentEmail, validator.currentPassword);
         validator.createUser(uid);
         validator.clear();
-        Navigator.pop(context); //disabling loadingOverlay
-        Navigator.pop(context, "success"); //switching back to login screen
+        Navigator.pop(context); ///disabling loadingOverlay
+        Navigator.pop(context, "success"); ///switching back to login screen
       } catch (error) {
         switch (error.code) {
           case "ERROR_EMAIL_ALREADY_IN_USE":

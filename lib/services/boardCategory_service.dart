@@ -12,6 +12,16 @@ class BoardCategoryService{
   Stream<QuerySnapshot> getDocumentsAsStream(){
     return _ref.snapshots();
   }
+
+  Future<BoardCategory> getCategory(String categoryID) async {
+    final snapshot = await _ref.document(categoryID).get();
+    if (snapshot.data != null){
+      return BoardCategory.fromJson(snapshot.data, snapshot.documentID);
+    } else{
+      return null;
+    }
+  }
+
   Future<List<BoardCategory>> getBoardCategories() async {
 
     List<BoardCategory> boardCategories = [];
@@ -19,8 +29,7 @@ class BoardCategoryService{
     await _ref.getDocuments()
         .then((snapshot) {
       for (var document in snapshot.documents) {
-        var category = BoardCategory.fromJson(document.data);
-        category.id = document.documentID;
+        var category = BoardCategory.fromJson(document.data, document.documentID);
         boardCategories.add(category);
       }
     }).timeout(_timeout, onTimeout: () {
@@ -31,6 +40,5 @@ class BoardCategoryService{
       throw Exception();
     });
     return boardCategories;
-
   }
 }

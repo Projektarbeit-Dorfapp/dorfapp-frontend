@@ -2,10 +2,10 @@ import 'package:dorf_app/screens/news/widgets/userSettings.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
-  final _safeAreaHeight;
-  final _currentUser;
-  UserAvatar(this._safeAreaHeight, this._currentUser);
-
+  final double _safeAreaHeight;
+  final double height;
+  final double width;
+  UserAvatar(this._safeAreaHeight, this.height, this.width);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,8 +15,8 @@ class UserAvatar extends StatelessWidget {
           _showDrawer(context);
         },
         child: Container(
-          height: 50,
-          width: 50,
+          height: height,
+          width: width,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: _currentUser.imagePath != "" ? NetworkImage(_currentUser.imagePath)

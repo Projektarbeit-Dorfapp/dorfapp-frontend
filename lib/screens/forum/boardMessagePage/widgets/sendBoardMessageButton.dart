@@ -17,10 +17,10 @@ class SendBoardMessageButton extends StatelessWidget {
     );
   }
   _submitBoardMessage(BuildContext context) async{
-    final messageHandler = Provider.of<BoardMessageHandler>(context, listen: false);
+    //final messageHandler = Provider.of<BoardMessageHandler>(context, listen: false);
     final userService = Provider.of<UserService>(context, listen: false);
     final alertService = Provider.of<AlertService>(context, listen: false);
-    messageHandler.submitBoardMessage(userService, alertService);
+   // messageHandler.submitBoardMessage(userService, alertService);
     FocusScope.of(context).unfocus();
   }
 }

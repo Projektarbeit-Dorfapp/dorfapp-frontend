@@ -7,18 +7,34 @@ import 'package:flutter/cupertino.dart';
 class EntryState extends ChangeNotifier{
 
   String title;
+  String _description;
 
-
-  BoardEntry createBoardEntry(String userID, BoardCategory category, User u){
+  setDescription(String desc){
+    String s = desc;
+    s = _ltrim(s);
+    s = _rtrim(s);
+    _description = s;
+  }
+  String _ltrim(String str) {
+    return str.replaceFirst(new RegExp(r"^\s+"), "");
+  }
+  String _rtrim(String str) {
+    return str.replaceFirst(new RegExp(r"\s+$"), "");
+  }
+  BoardEntry createBoardEntry( BoardCategory category, User u, Color categoryColor){
     final dateTime = DateTime.now();
     return BoardEntry(
       title: title,
-      userReference: userID,
+      firstName: u.firstName,
+      lastName: u.lastName,
+      description: _description,
+      boardCategoryTitle: category.title,
+      categoryColor: categoryColor.value,
       postingDate: Timestamp.fromDate(dateTime),
-      lastModifiedDate: Timestamp.fromDate(dateTime),
-      boardCategoryReference: category.id,
+      lastActivity: Timestamp.fromDate(dateTime),
+      boardCategoryReference: category.documentID,
       userName: u.userName,
-      userAvatarReference: u.userAvatarReference,
+      createdBy: u.uid,
   );
 
   }

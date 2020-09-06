@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/boardMessage_model.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 ///Matthias Maxelon
 enum OrderType {latest, oldest, mostLikes,}
 
@@ -15,17 +16,17 @@ class BoardMessageService{
 
   insertBoardMessage(BoardMessage message){
     _ref.document(message.boardEntryReference)
-        .collection("Forumbeitrag")
+        .collection(CollectionNames.COMMENTS)
         .add(message.toJson());
   }
 
-  Stream<List<BoardMessage>> getBoardMessagesWithUserAsStream(
-      BoardCategory category, BoardEntry entry, int limit, OrderType orderType){
+  Stream<List<BoardMessage>> getBoardMessagesAsStream(
+      BoardCategory category, BoardEntry entry, int limit, OrderType orderType, MessageQuantity messageQuantity){
     //String orderField = "";
 
     Stream<QuerySnapshot> stream = _ref.document(entry.documentID)
-        .collection("Forumbeitrag")
-        .where("boardCategoryReference", isEqualTo: category.id)
+        .collection(CollectionNames.COMMENTS)
+        .where("boardCategoryReference", isEqualTo: category.documentID)
         .orderBy(_getOrderField(orderType), descending: true)
         .limit(limit)
         .snapshots();
@@ -36,68 +37,11 @@ class BoardMessageService{
         var message = BoardMessage.fromJson(document.data, document.documentID);
         list.add(message);
       }
+      messageQuantity.setQuantity(list.length);
       return list;
     });
   }
-  //TODO: INTO LIKE SERVICE FROM MEIKE?? DELETE METHOD USE LIKE SERVICE METHODS
-  Future<bool> insertBoardMessageLike(BoardMessage message) async{
-    var likeRef = await _getLikeRef(message);
-    if(await isLiked(message)){
-      await likeRef.delete();
-      return false;
-    } else{
-      await likeRef.setData({});
-      return true;
-    }
-  }
-  //TODO: INTO LIKE SERVICE FROM MEIKE?? DELETE METHOD USE LIKE SERVICE METHODS
-  Future<bool> isLiked(BoardMessage message) async{
 
-    var likeRef = await _getLikeRef(message);
-    try{
-      DocumentSnapshot snapshot = await likeRef.get();
-      if(snapshot.exists)
-        return true;
-      else
-        return false;
-    } catch(error){
-      print(error);
-      return true; //TODO: SHOULD IT SIMPLY RETURN TRUE SO NOTHING HAPPENS WHEN ERROR OCCURES??
-    }
-  }
-  //TODO: INTO LIKE SERVICE FROM MEIKE?? DELETE METHOD USE LIKE SERVICE METHODS
-  Future<DocumentReference> _getLikeRef(BoardMessage message) async{
-    FirebaseUser user = await _auth.getCurrentUser();
-    return _ref.document(message.boardEntryReference)
-        .collection("Forumbeitrag")
-        .document(message.documentID)
-        .collection("Likes")
-        .document(user.uid);
-  }
-  //TODO: INTO MEIKES LIKE SERVICE??? DELETE METHOD USE LIKE SERVICE METHODS
-  Future<List<dynamic>> getLikesAndIsLikedCheck(BoardMessage message) async{
-    List<dynamic> likeWithUserCheckList = [];
-    var user = await _auth.getCurrentUser();
-    await _ref.document(message.boardEntryReference)
-          .collection("Forumbeitrag")
-          .document(message.documentID)
-          .collection("Likes")
-          .getDocuments()
-          .then((snapshot){
-            likeWithUserCheckList.add(snapshot.documents.length);
-            for(var document in snapshot.documents){
-              if(document.documentID == user.uid){
-                likeWithUserCheckList.add(true);
-              }
-            }
-            if(likeWithUserCheckList.contains(true))
-              return;
-            else likeWithUserCheckList.add(false);
-        }).catchError((onError){
-          print(onError);
-        });
-      return likeWithUserCheckList;
-  }
   String _getOrderField(OrderType orderType){
     String orderField = "";
     if(OrderType.latest == orderType){

@@ -1,10 +1,12 @@
+import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
+import 'package:dorf_app/services/alert_service.dart';
+import 'package:flutter/material.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/news_model.dart';
@@ -17,7 +19,6 @@ class NewsOverview extends StatefulWidget {
 }
 
 class _NewsOverviewState extends State<NewsOverview> {
-  List<News> news;
   UserService _userService;
   Authentication _auth;
   User _currentUser;
@@ -35,6 +36,7 @@ class _NewsOverviewState extends State<NewsOverview> {
 
   @override
   Widget build(BuildContext context) {
+    List<News> news;
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: Scaffold(
@@ -52,9 +54,36 @@ class _NewsOverviewState extends State<NewsOverview> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          WeatherDisplay(),
+                          WeatherDisplay(textSize: 24,),
                           Spacer(),
-                          UserAvatar(safeAreaHeight, this._currentUser),
+                          Container(
+                            height: 70,
+                            width: 70,
+                            child: Stack(
+                              children: <Widget>[
+                                UserAvatar(safeAreaHeight, this.currentUser, 50, 50),
+                                Consumer<AlertService>(
+                                  builder: (context, alertService, _){
+                                    return Positioned(
+                                      right: 8,
+                                      top: 8,
+                                      child: AlertQuantityDisplay(
+                                        showIcon: true,
+                                        iconSize: 18,
+                                        iconColor: Colors.white,
+                                        width: 23,
+                                        height: 23,
+                                        color: Theme.of(context).buttonColor,
+                                        borderRadius: 50,
+                                        textColor: Colors.white,
+                                      ),
+                                    );
+                                  },
+
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -151,7 +180,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                   future: _newsService.getAllNews(),
                   builder: (context, AsyncSnapshot<List<News>> snapshot) {
                     if (snapshot.hasData) {
-                      this.news = snapshot.data;
+                      news = snapshot.data;
                       return SingleChildScrollView(
                         child: Column(children: <Widget>[
                           Column(

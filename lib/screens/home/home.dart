@@ -34,9 +34,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-        backgroundColor: Color(0xFF6178a3),
+        backgroundColor: Theme.of(context).primaryColor,
         actions: <Widget>[
           PopupMenuButton<String> (
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),

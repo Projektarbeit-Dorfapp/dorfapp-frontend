@@ -13,33 +13,37 @@ class LikeSection extends StatefulWidget {
   final List<User> likeList;
   final String document;
   final String collection;
-
-  LikeSection(this.likeList, this.document, this.collection);
+  final String userID;
+  final Color likeDetailAppbarColor;
+  final Color likedColor;
+  final Color notLikedColor;
+  LikeSection(this.likeList, this.document, this.collection, this.userID, {this.likedColor, this.notLikedColor, this.likeDetailAppbarColor});
 
   @override
-  _LikeSectionState createState() => _LikeSectionState(likeList, document, collection);
+  _LikeSectionState createState() => _LikeSectionState(likeList, document, collection, userID);
 
 }
 
 class _LikeSectionState extends State<LikeSection> {
   final likeService = LikeService();
+  AccessHandler _accessHandler;
   List<User> likeList;
+  String _userID;
   String document;
   String collection;
   Color iconColor = Color(0xFF141e3e);
   bool isLiked;
 
-  _LikeSectionState(this.likeList, this.document, this.collection);
 
-  bool _addLike() {
+  _LikeSectionState(this.likeList, this.document, this.collection, this._userID);
 
-    setState(() {
-      AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
-      User user = _accessHandler.getUser();
-      if (likeList.any((element) => element.uid == _accessHandler.getUID())) {
+  Future<bool> _addLike() async{
+    User user = await _accessHandler.getUser();
+    setState(()  {
+      if (likeList.any((element) => element.uid == _userID)) {
         isLiked = false;
         likeService.deleteLike(user, document, collection);
-        likeList.remove(likeList.firstWhere((element) => element.uid == _accessHandler.getUID()));
+        likeList.remove(likeList.firstWhere((element) => element.uid == _userID));
       }
       else {
         isLiked = true;
@@ -58,11 +62,14 @@ class _LikeSectionState extends State<LikeSection> {
       return "0";
     }
   }
-
+  @override
+  void initState() {
+    _accessHandler = Provider.of<AccessHandler>(context, listen: false);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
-    isLiked = likeList.any((element) => element.uid == _accessHandler.getUID());
+    isLiked = likeList.any((element) => element.uid == _userID);
     return Column(
       children: <Widget>[
         Padding(
@@ -71,18 +78,10 @@ class _LikeSectionState extends State<LikeSection> {
             children: <Widget>[
               IconButton(
                   icon: Icon(Icons.thumb_up),
-                  color: isLiked ? Colors.blue : Color(0xFF141e3e),
+                  color: _getLikeColor(),
                   onPressed: () async{
-                    setState(() {
-                      isLiked = _addLike();
-                      if (isLiked){
-                        iconColor = Colors.blue;
-                      }
-                      else {
-                        iconColor = Color(0xFF141e3e);
-                      }
-
-                    });
+                    isLiked = await _addLike();
+                    setState(() {});
                   },
               ),
               Column(
@@ -103,7 +102,7 @@ class _LikeSectionState extends State<LikeSection> {
                   onPressed: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LikeDetail(likeList: likeList))
+                      MaterialPageRoute(builder: (context) => LikeDetail(likeList: likeList, appbarColor: widget.likeDetailAppbarColor,))
                     );
                   },
               ),
@@ -112,6 +111,12 @@ class _LikeSectionState extends State<LikeSection> {
         ),
       ],
     );
+  }
+  Color _getLikeColor(){
+    if(isLiked)
+      return widget.likedColor != null ? widget.likedColor : Colors.blue;
+    else
+      return widget.notLikedColor != null ? widget.notLikedColor : Color(0xFF141e3e);
   }
 
 }

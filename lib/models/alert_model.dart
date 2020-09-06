@@ -1,24 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 ///Matthias Maxelon
-enum AlertType{message, news, not_defined}
+enum AlertType{boardMessage, eventMessage, news, pin_notification, not_defined} ///If you add new AlertTypes: make sure that inside [_convertType()] is correctly converted into new type
 class Alert{
   String documentID;
   Timestamp creationDate;
   String additionalMessage;
+  String headline; ///The name of the content, if news -> maybe save news headline here or if boardEntry -> save headline of entry
+  bool isRead; /// is true if user has read the alert
   String fromUserName;
   String fromFirstName;
   String fromLastName;
-  String boardEntryReference;
-  String boardCategoryReference;
-  String topLevelCollection;
-  String subCollection;
+  String documentReference;
+
   AlertType alertType;
   Alert({
-    this.topLevelCollection,
-    this.boardEntryReference,
-    this.boardCategoryReference,
-    this.subCollection,
+    this.headline,
+    this.documentReference,
     this.creationDate,
     this.fromFirstName,
     this.fromLastName,
@@ -28,31 +26,23 @@ class Alert{
 
   Alert.fromJson(Map snapshot, String documentID){
     this.documentID = documentID;
-    boardEntryReference = snapshot["boardEntryReference"] ?? "";
-    boardCategoryReference = snapshot["boardCategoryReference"] ?? "";
+    isRead = snapshot["isRead"] ?? false;
+    headline = snapshot["headline"] ?? "";
+    documentReference = snapshot["documentReference"] ?? "";
     additionalMessage = snapshot["additionalMessage"] ?? "";
-    topLevelCollection = snapshot["topLevelCollection"] ?? "";
-    subCollection = snapshot["subCollection"] ?? "";
     creationDate = snapshot["creationDate"] ?? null;
     fromUserName = snapshot["fromUserName"] ?? "";
     fromFirstName = snapshot["fromFirstName"] ?? "";
     fromLastName = snapshot["fromLastName"] ?? "";
     String type = snapshot["alertType"] ?? "";
-    if(type == _getAlertTypeString(AlertType.message))
-      alertType = AlertType.message;
-    else if (type == _getAlertTypeString(AlertType.news))
-      alertType = AlertType.news;
-    else
-      alertType = AlertType.not_defined;
+    _convertType(type);
   }
   Map<String, dynamic> toJson(){
     return {
-      "boardEntryReference" : boardEntryReference,
-      "boardCategoryReference" : boardCategoryReference,
+      "headline" : headline,
+      "documentReference" : documentReference,
       "additionalMessage" : additionalMessage,
       "creationDate" : creationDate,
-      "topLevelCollection" : topLevelCollection,
-      "subCollection" : subCollection,
       "fromUserName" : fromUserName,
       "fromFirstName" : fromFirstName,
       "fromLastName" : fromLastName,
@@ -62,5 +52,16 @@ class Alert{
   String _getAlertTypeString(AlertType type){
     return type.toString().split('.').last;
   }
-
+  _convertType(String type){
+    if(type == _getAlertTypeString(AlertType.boardMessage))
+      alertType = AlertType.boardMessage;
+    else if (type == _getAlertTypeString(AlertType.news))
+      alertType = AlertType.news;
+    else if(type == _getAlertTypeString(AlertType.pin_notification))
+      alertType = AlertType.pin_notification;
+    else if (type == _getAlertTypeString(AlertType.eventMessage))
+      alertType = AlertType.eventMessage;
+    else
+      alertType = AlertType.not_defined;
+  }
 }

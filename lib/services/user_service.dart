@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 ///Matthias Maxelon
 class UserService extends ChangeNotifier{
 
-  final CollectionReference _ref = Firestore.instance.collection("User");
+  final CollectionReference _ref = Firestore.instance.collection(CollectionNames.USER);
   final _timeout = Duration(seconds: 10);
 
   ///Checks in database if userName already exist in user collection
@@ -71,5 +72,15 @@ class UserService extends ChangeNotifier{
           print("Developermessage ERROR: " + error);
         });
     return user;
+  }
+
+  Future<List<User>> getUsers(User loggedUser) async {
+    List<User> users = [];
+    final snapshot = await _ref.getDocuments();
+    for(var document in snapshot.documents){
+      if(document.data["uid"] != loggedUser.uid)
+        users.add(User.fromJson(document.data, document.documentID));
+    }
+    return users;
   }
 }

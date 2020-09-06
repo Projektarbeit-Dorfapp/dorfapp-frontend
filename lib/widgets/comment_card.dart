@@ -21,51 +21,36 @@ class CommentCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage(comment.user.imagePath != null
-                        ? comment.user.imagePath
-                        : "assets/avatar.png")))),
+                    image: AssetImage(comment.user.imagePath != null ? comment.user.imagePath : "assets/avatar.png")))),
         Container(
             margin: EdgeInsets.only(top: 10.0),
             padding: EdgeInsets.all(15.0),
             width: MediaQuery.of(context).size.width - 100,
-            decoration: BoxDecoration(
-                color: Color(0xFFE6E6E6),
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            decoration: BoxDecoration(color: Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(10.0)),
+            child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+              Row(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        comment.user.firstName + " " + comment.user.lastName,
-                        style: TextStyle(
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.topRight,
-                          child: RelativeDate(
-                              comment.convertTimestamp(comment.createdAt), Colors.black, 12.0),
-                        ),
-                      )
-                    ],
+                  Text(
+                    comment.user.firstName + " " + comment.user.lastName,
+                    style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
                   ),
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        comment.content,
-                        style: TextStyle(
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16),
-                      ),
-                    ],
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.topRight,
+                      child: RelativeDate(comment.convertTimestamp(comment.createdAt), Colors.black, 12.0),
+                    ),
                   )
-                ]))
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Text(
+                    comment.content,
+                    style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16),
+                  ),
+                ],
+              )
+            ]))
       ],
     );
   }

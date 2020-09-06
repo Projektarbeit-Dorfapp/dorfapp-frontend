@@ -50,9 +50,6 @@ class _RootPageState extends State<RootPage> {
       setState(() {
           _userID = user.uid;
           _accessHandler.setUID(_userID);
-          _userService.checkIfAdmin(_userID).then((isAdmin) {
-            _accessHandler.setIsAdmin(isAdmin);
-          });
           _userService.getUser(_userID).then((user) {
             _accessHandler.setUser(user);
           });
@@ -82,7 +79,7 @@ class _RootPageState extends State<RootPage> {
     } else { ///[AuthStatus.LOGGED_IN]
       if(!_isStreamInitiated){
         _isStreamInitiated = true;
-        _alertService.initStream(_userService);
+        _alertService.initStream(_userService, _accessHandler);
       }
       return Home(PageIndexes.NEWSINDEX);
     }

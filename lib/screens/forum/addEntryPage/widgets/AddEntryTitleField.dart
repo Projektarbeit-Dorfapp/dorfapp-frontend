@@ -6,13 +6,26 @@ class AddEntryTitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entryState = Provider.of<EntryState>(context, listen: false);
-    return TextFormField(
-      onChanged: (value){
-        entryState.title = value;
-      },
-      decoration: const InputDecoration(
-          labelText: "Titel"
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: TextFormField(
+            onChanged: (title){
+              entryState.title = title;
+            },
+            validator: (title){
+              if(title.isEmpty)
+                return "Gib deinem Thema einen Titel";
+              else return null;
+            },
+            decoration: const InputDecoration(
+                labelText: "Titel"
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

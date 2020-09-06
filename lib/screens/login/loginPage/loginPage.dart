@@ -153,6 +153,7 @@ class LoadingOverlay extends ModalRoute<void> {
   }
 
   Widget _buildOverlayContent(BuildContext context) {
-    return Center(child: CircularProgressIndicator());
+
+    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white)));
   }
 }

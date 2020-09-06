@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
-import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/screens/forum/boardCategoryPage/widgets/boardCategoryDisplay.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/addEntryNavigationButton.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
@@ -35,18 +35,19 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final BoardCategory category = ModalRoute.of(context).settings.arguments;
+    final CategoryWithColor categoryWithColor = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: categoryWithColor.categoryColor,
         centerTitle: true,
-        title: Text(category.title),
+        title: Text(categoryWithColor.category.title),
       ),
       body: Container(
         color: Color(0xfff0f0f0),
         child: Stack(
           children: <Widget>[
             StreamBuilder<List<BoardEntry>>(
-              stream: _boardEntryService.getBoardEntriesAsStream(category, _listSizeLimit),
+              stream: _boardEntryService.getBoardEntriesAsStream(categoryWithColor.category, _listSizeLimit),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
@@ -63,7 +64,7 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
                       return FadeScaleTransition(
                         animation: _animationController,
                         child: BoardEntryDisplay(
-                          category: category,
+                          //categoryColor: categoryWithColor.categoryColor,
                           entry: snapshot.data[index],
                         ),
                       );
@@ -90,7 +91,7 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
                 }
               },
             ),
-            AddEntryNavigationButton(category: category,)
+            AddEntryNavigationButton(category: categoryWithColor.category, categoryColor: categoryWithColor.categoryColor,)
           ],
         ),
       ),

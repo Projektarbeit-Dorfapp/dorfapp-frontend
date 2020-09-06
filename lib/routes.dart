@@ -3,12 +3,12 @@ import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/addEntryPage.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/boardEntryPage.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
+import 'package:dorf_app/screens/general/ProfilePage.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/login/passwordResetPage/passwordResetPage.dart';
 import 'package:dorf_app/screens/login/registrationPage/registrationPage.dart';
 import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
-import 'package:dorf_app/screens/profile/profile.dart';
-import 'package:dorf_app/screens/profile/widgets/profile_edit.dart';
+import 'package:dorf_app/screens/profile/alertPage/alertPage.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
@@ -36,6 +36,7 @@ class Application {
     '/addEntryPage' : (BuildContext context) => AddEntryPage(),
     '/profile' : (BuildContext context) => Profile(),
     '/profile_edit' : (BuildContext context) => ProfileEdit(),
+    '/alertPage' : (BuildContext context) => AlertPage(),
   };
 
   void main() {
@@ -58,17 +59,6 @@ class Application {
 
         ),
       ),
-//      SplashScreen.navigate(
-//        name: 'assets/dorf_intro.flr',
-//        until: () => Future.delayed(Duration(seconds: 3)),
-//        startAnimation: 'icon',
-//        backgroundColor: Colors.white,
-//        next: (_) => MaterialApp(
-//          theme: basicTheme,
-//          routes: routes,
-//        ),
-//
-//      ),
     ));
   }
 }
