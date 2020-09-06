@@ -5,12 +5,8 @@ import 'package:dorf_app/screens/profile/widgets/myAlerts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class UserSettings extends StatefulWidget {
-
-  final currentUser;
-
-  UserSettings(this.currentUser);
-
   @override
   _UserSettingsState createState() => _UserSettingsState();
 }
@@ -22,14 +18,18 @@ class _UserSettingsState extends State<UserSettings> {
   void initState() {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _accessHandler.getUser().then((user) {
-      _loggedUser = user;
+      if(mounted){
+        setState(() {
+          _loggedUser = user;
+        });
+      }
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _loggedUser != null ? Scaffold(
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
@@ -52,7 +52,7 @@ class _UserSettingsState extends State<UserSettings> {
                   width: 50,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: widget.currentUser.imagePath != "" ? NetworkImage(widget.currentUser.imagePath)
+                      image: _loggedUser.imagePath != "" ? NetworkImage(_loggedUser.imagePath)
                           : AssetImage("assets/avatar.png"),
                       fit: BoxFit.fill,
                     ),
@@ -73,118 +73,74 @@ class _UserSettingsState extends State<UserSettings> {
             padding: EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Icon(Icons.accessibility_new, color: Color(0xff6FB3A9)),
-                ),
-                Text(
-                  "Mein Profil",
-                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                ),
-
-              InkWell(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
-                        child: Icon(Icons.accessibility_new, color: Color(0xff6FB3A9)
-                        ),
-                      ),
-                      Text("Mein Profil",
-                        style: TextStyle(
-                            fontFamily: "Raleway",
-                            fontSize: 16
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, '/profile');
-                },
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Icon(Icons.favorite, color: Color(0xff6FB3A9)),
-                    ),
-                    Text(
-                      "Meine Favoriten",
-                      style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 2,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Icon(Icons.settings, color: Color(0xff6FB3A9)),
-                    ),
-                    Text(
-                      "Einstellungen",
-                      style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-
-
-              Divider(thickness: 2,),
-
-                  Padding(
+                InkWell(
+                  child: Padding(
                     padding: EdgeInsets.only(top: 20),
                     child: Row(
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(left: 20, right: 20),
-                          child: Icon(Icons.settings, color: Color(0xff6FB3A9)
-                          ),
+                          child: Icon(Icons.accessibility_new, color: Theme.of(context).buttonColor),
                         ),
-                        Text("Einstellungen",
-                          style: TextStyle(
-                              fontFamily: "Raleway",
-                              fontSize: 16
+                        InkWell(
+                          child: Row(
+                            children: <Widget>[
+                              Text("Mein Profil",
+                                style: TextStyle(
+                                    fontFamily: "Raleway",
+                                    fontSize: 16
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, right: 20),
-                          child: Icon(Icons.account_box, color: Color(0xff6FB3A9),
-                          ),
-                        ),
-                        Text("Mein Account wechseln",
-                          style: TextStyle(
-                              fontFamily: "Raleway",
-                              fontSize: 16
-                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/profile');
+                          },
                         ),
                       ],
                     ),
                   ),
-                ],
+                )
+              ],
             ),
           ),
+          Padding(padding: EdgeInsets.only(top: 20), child: MyAlerts()),
+          Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Icon(Icons.favorite, color: Color(0xff6FB3A9)),
+                ),
+                Text(
+                  "Meine Favoriten",
+                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            thickness: 2,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Icon(Icons.settings, color: Color(0xff6FB3A9)),
+                ),
+                Text(
+                  "Einstellungen",
+                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(top: 20), child: ChangeUserAccount()),
         ],
-
       ),
-    );
+    ) : Center(child: CircularProgressIndicator());
   }
 }
