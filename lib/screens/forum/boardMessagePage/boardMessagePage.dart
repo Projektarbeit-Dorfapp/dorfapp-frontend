@@ -190,7 +190,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                       ),
                       TextNoteBar(text: _isClosed != true ? "Bitte achte beim Schreiben von Kommentaren darauf, deine Gemeindemitglieder zu respektieren"
                           : "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich", leftPadding: 20,),
-                      CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry, null, disableAddingComment: _isClosed != true ? false : true),
+                      CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry, disableAddingComment: _isClosed != true ? false : true),
                     ],
                   ),
                 )),

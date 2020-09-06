@@ -113,7 +113,7 @@ class _CommentCardState extends State<CommentCard> {
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               onPressed: () {
-                widget.emitAnswerTo(widget.topComment.comment.id);
+                widget.emitAnswerTo(widget.topComment);
               },
               child: Text(
                 "Antworten",

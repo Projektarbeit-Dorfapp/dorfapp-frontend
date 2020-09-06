@@ -31,12 +31,6 @@ class _NewsDetailState extends State<NewsDetail> {
   AccessHandler _accessHandler;
   String _userID;
   final _newsService = NewsService();
-  final ScrollController _scrollController = ScrollController(initialScrollOffset: 50.0);
-  function() {
-    if(_scrollController.hasClients){
-      _scrollController.animateTo(0.0, duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-    }
-  }
 
 
   @override
@@ -81,14 +75,13 @@ class _NewsDetailState extends State<NewsDetail> {
                   constraints: new BoxConstraints.expand(),
                   child: ListView(
                     shrinkWrap: true,
-                    controller: _scrollController,
                     children: <Widget>[
                       ImageTitleDisplay(title: newsModel.title, imagePath: newsModel.imagePath,),
                       _getEventInfo(),
                       DescriptionDisplay(description: newsModel.description,), //umgeschrieben in eigenes Widget, siehe unten - Matthias
                       LikeSection(newsModel.likes, widget.newsID, CollectionNames.EVENT, _userID),
                       CustomBorder(),
-                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news, function(),disableAddingComment: false),
+                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news, disableAddingComment: false),
                     ],
                   )));
         } else if (snapshot.connectionState == ConnectionState.waiting) {

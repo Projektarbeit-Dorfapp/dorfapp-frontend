@@ -21,10 +21,9 @@ class CommentSection extends StatefulWidget {
   final String document;
   final String collection;
   final bool disableAddingComment;
-  final Function emitScrollToTop;
   final SubscriptionType subscriptionType; ///where is the commentsection implemented? [SubscriptionType.news] when in news or [SubscriptionType.entry] when in Forum
 
-  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, this.emitScrollToTop, {this.disableAddingComment});
+  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment});
 
   @override
   _CommentSectionState createState() =>
@@ -39,10 +38,13 @@ class _CommentSectionState extends State<CommentSection> {
   String collection;
   TextEditingController _controller;
   String answerTo;
-  function(value) {
+  FocusNode myFocusNode;
+
+  function(TopComment topComment) {
     setState(() {
-      answerTo = value;
-      widget.emitScrollToTop();
+      answerTo = topComment.comment.id;
+      myFocusNode.requestFocus();
+      _controller.text = topComment.comment.firstName + " " + topComment.comment.lastName + " ";
     });
   }
 
@@ -51,10 +53,12 @@ class _CommentSectionState extends State<CommentSection> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    myFocusNode = FocusNode();
   }
 
   void dispose() {
     _controller.dispose();
+    myFocusNode.dispose();
     super.dispose();
   }
 
@@ -89,36 +93,40 @@ class _CommentSectionState extends State<CommentSection> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        children: <Widget>[
-          widget.disableAddingComment != true ? TextField(
-            //keyboardType: TextInputType.multiline,
-            //maxLines: null,
-            controller: _controller,
-            onSubmitted: (String submittedStr) {
-              _addNewComment(submittedStr, answerTo);
-              answerTo = null;
-              _controller.clear();
-            },
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(20.0),
-              hintText: "Schreibe einen Kommentar...",
-            ),
-          ) : Container(),
-          Column(
-            children: <Widget>[
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: commentList.length > 0
-                      ? commentList
-                          .map((comment) => CommentCard(topComment: comment, disableAddingComment: widget.disableAddingComment, emitAnswerTo: function))
-                          .toList()
-                      : [ShowTextIfListEmpty(iconData: Icons.message, text: "Noch keine Kommentare",)]),
-            ],
-          )
-        ],
-      ),
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          children: <Widget>[
+            widget.disableAddingComment != true ? TextField(
+              focusNode: myFocusNode,
+              controller: _controller,
+              onChanged: (text) {
+                if(text.isEmpty) {
+                  answerTo = null;
+                }
+              },
+              onSubmitted: (String submittedStr) {
+                _addNewComment(submittedStr, answerTo);
+                answerTo = null;
+                _controller.clear();
+              },
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(20.0),
+                hintText: "Schreibe einen Kommentar...",
+              ),
+            ) : Container(),
+            Column(
+              children: <Widget>[
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: commentList.length > 0
+                        ? commentList
+                        .map((comment) => CommentCard(topComment: comment, disableAddingComment: widget.disableAddingComment, emitAnswerTo: function))
+                        .toList()
+                        : [ShowTextIfListEmpty(iconData: Icons.message, text: "Noch keine Kommentare",)]),
+              ],
+            )
+          ],
+        ),
     );
   }
 }
