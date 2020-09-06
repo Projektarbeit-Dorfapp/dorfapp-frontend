@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class UserSettings extends StatefulWidget {
+
+  final currentUser;
+
+  UserSettings(this.currentUser);
+
   @override
   _UserSettingsState createState() => _UserSettingsState();
 }
@@ -32,7 +37,8 @@ class _UserSettingsState extends State<UserSettings> {
                   width: 50,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/australian-shepherd-2208371_1920.jpg'),
+                      image: widget.currentUser.imagePath != "" ? NetworkImage(widget.currentUser.imagePath)
+                          : AssetImage("assets/avatar.png"),
                       fit: BoxFit.fill,
                     ),
                     color: Colors.black,
@@ -40,32 +46,36 @@ class _UserSettingsState extends State<UserSettings> {
                   ),
                 ),
               ),
-              Text("[Username]",
+              Text(widget.currentUser.userName,
               style: TextStyle(
                 fontFamily: "Raleway",
                 fontSize: 16
               ),),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Icon(Icons.accessibility_new, color: Color(0xff6FB3A9)
+          InkWell(
+            child: Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Icon(Icons.accessibility_new, color: Color(0xff6FB3A9)
+                    ),
                   ),
-                ),
-                Text("Mein Profil",
-                  style: TextStyle(
-                      fontFamily: "Raleway",
-                      fontSize: 16
+                  Text("Mein Profil",
+                    style: TextStyle(
+                        fontFamily: "Raleway",
+                        fontSize: 16
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
+            onTap: () {
+              Navigator.pushNamed(context, '/profile');
+            },
           ),
-
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: Row(

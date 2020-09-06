@@ -1,23 +1,44 @@
+import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/news_model.dart';
 import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
-class NewsOverview extends StatelessWidget {
+class NewsOverview extends StatefulWidget {
+  @override
+  _NewsOverviewState createState() => _NewsOverviewState();
+}
+
+class _NewsOverviewState extends State<NewsOverview> {
   List<News> news;
+  UserService _userService;
+  Authentication _auth;
+  User _currentUser;
+  bool _isDataLoaded = false;
 
   final _newsService = new NewsService();
+
+  @override
+  void initState() {
+    _userService = Provider.of<UserService>(context, listen: false);
+    _auth = Provider.of<Authentication>(context, listen: false);
+    _loadUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: Scaffold(
-        body: CustomScrollView(
+        body: _isDataLoaded ? CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               floating: true,
@@ -33,7 +54,7 @@ class NewsOverview extends StatelessWidget {
                         children: <Widget>[
                           WeatherDisplay(),
                           Spacer(),
-                          UserAvatar(safeAreaHeight),
+                          UserAvatar(safeAreaHeight, this._currentUser),
                         ],
                       ),
                     ],
@@ -168,7 +189,7 @@ class NewsOverview extends StatelessWidget {
               }, childCount: 1),
             ),
           ],
-        ),
+        ) : SizedBox.shrink(),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
@@ -207,5 +228,16 @@ class NewsOverview extends StatelessWidget {
                         color: Colors.grey),
                   ))
             ]));
+  }
+
+  _loadUserData() {
+    _auth.getCurrentUser().then((firebaseUser) {
+      _userService.getUser(firebaseUser.uid).then((fullUser) {
+        _currentUser = fullUser;
+        setState(() {
+          _isDataLoaded = true;
+        });
+      });
+    });
   }
 }

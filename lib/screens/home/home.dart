@@ -1,8 +1,11 @@
 import 'package:dorf_app/constants/menu_buttons.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/news.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +28,7 @@ class _HomeState extends State<Home> {
   ];
   @override
   void initState() {
+
     super.initState();
   }
   @override
