@@ -28,6 +28,7 @@ import 'package:provider/provider.dart';
 
 class BoardMessagePage extends StatefulWidget {
   final String entryDocumentID;
+
   BoardMessagePage({
     @required this.entryDocumentID,
   });
@@ -65,7 +66,10 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     _accessHandler.getUser().then((user) {
       _loggedUser = user;
       _subscriptionService
-          .isUserSubscribed(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, subscriptionType: SubscriptionType.entry)
+          .isUserSubscribed(
+              loggedUser: _loggedUser,
+              topLevelDocumentID: widget.entryDocumentID,
+              subscriptionType: SubscriptionType.entry)
           .then((isSubscribed) {
         if (mounted) {
           setState(() {
@@ -89,8 +93,8 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
           });
         }
       });
-      _commentService.getComments(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((comments){
-        if(mounted){
+      _commentService.getComments(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((comments) {
+        if (mounted) {
           setState(() {
             _commentList = comments;
           });
@@ -104,14 +108,14 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   }
 
   List _createPopupMenuItems() {
-    if(_isSubscribed){
+    if (_isSubscribed) {
       return MenuButtons.CancelSubPopUpMenu.map((String choice) {
         return PopupMenuItem<String>(
           value: choice,
           child: Text(choice),
         );
       }).toList();
-    } else{
+    } else {
       return MenuButtons.SubPopUpMenu.map((String choice) {
         return PopupMenuItem<String>(
           value: choice,
@@ -120,6 +124,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
       }).toList();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return _isSubscribed != null && _entry != null && _likeList != null && _commentList != null
@@ -135,12 +140,14 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                   centerTitle: true,
                   backgroundColor: Color(_categoryColor),
                   actions: <Widget>[
-                    _isClosed != true && _isCreator() ? IconButton(
-                      icon: Icon(Icons.lock),
-                      onPressed: (){
-                        _showCloseThreadDialog();
-                      },
-                    ) : Container(),
+                    _isClosed != true && _isCreator()
+                        ? IconButton(
+                            icon: Icon(Icons.lock),
+                            onPressed: () {
+                              _showCloseThreadDialog();
+                            },
+                          )
+                        : Container(),
                     PopupMenuButton<String>(
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
                       onSelected: (value) => _choiceAction(value, context),
@@ -174,22 +181,28 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                         color: Color(_categoryColor),
                       ),
                       Consumer<MessageQuantity>(
-                        builder: (context, messageQuantity, _){
+                        builder: (context, messageQuantity, _) {
                           return SortBar(
-                          barHeight: 50,
-                          barColor: Colors.white,
-                          elevation: 4,
-                          commentQuantity: messageQuantity.quantity,
-                          iconColor: Color(_categoryColor),
+                            barHeight: 50,
+                            barColor: Colors.white,
+                            elevation: 4,
+                            commentQuantity: messageQuantity.quantity,
+                            iconColor: Color(_categoryColor)
                           );
                         },
                       ),
                       SizedBox(
                         height: 3,
                       ),
-                      TextNoteBar(text: _isClosed != true ? "Bitte achte beim Schreiben von Kommentaren darauf, deine Gemeindemitglieder zu respektieren"
-                          : "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich", leftPadding: 20,),
-                      CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry, disableAddingComment: _isClosed != true ? false : true),
+                      TextNoteBar(
+                        text: _isClosed != true
+                            ? "Bitte achte beim Schreiben von Kommentaren darauf, deine Gemeindemitglieder zu respektieren"
+                            : "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich",
+                        leftPadding: 20,
+                      ),
+                      CommentSection(
+                          _commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry,
+                          disableAddingComment: _isClosed != true ? false : true),
                     ],
                   ),
                 )),
@@ -201,18 +214,20 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
           );
   }
 
-  _showCloseThreadDialog(){
-    showDialog(context: context,
-    builder: (BuildContext context){
-      return CloseThreadDialog();
-    }).then((dialogCommunication){
-      if(dialogCommunication == "close")
+  _showCloseThreadDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CloseThreadDialog();
+        }).then((dialogCommunication) {
+      if (dialogCommunication == "close")
         setState(() {
           _closeThread();
         });
     });
   }
-  _closeThread(){
+
+  _closeThread() {
     _isClosed = true;
     _entryService.closeBoardEntry(_entry);
   }
@@ -229,7 +244,9 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     Flushbar(
       messageText: Center(
         child: Text(
-          isError == true ? "Etwas ist schief gelaufen. Überprüfe deine Internetverbindung" : isInserted ? "Gepinnt" : "Nicht mehr gepinnt",
+          isError == true
+              ? "Etwas ist schief gelaufen. Überprüfe deine Internetverbindung"
+              : isInserted ? "Gepinnt" : "Nicht mehr gepinnt",
           style: TextStyle(fontSize: 15, fontFamily: "Raleway", color: Colors.white),
         ),
       ),
@@ -250,7 +267,10 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     )
         .then((isInserted) {
       if (!isInserted) {
-        service.deleteSubscription(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, subscriptionType: SubscriptionType.entry);
+        service.deleteSubscription(
+            loggedUser: _loggedUser,
+            topLevelDocumentID: widget.entryDocumentID,
+            subscriptionType: SubscriptionType.entry);
       }
       showSubscriptionMessage(isInserted, false);
     }).catchError((onError) {
@@ -258,6 +278,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     });
   }
 }
+
 class CloseThreadDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -266,13 +287,13 @@ class CloseThreadDialog extends StatelessWidget {
       actions: <Widget>[
         FlatButton(
           child: Text("Ja"),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context, "close");
           },
         ),
         FlatButton(
           child: Text("Nein"),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
@@ -280,4 +301,3 @@ class CloseThreadDialog extends StatelessWidget {
     );
   }
 }
-

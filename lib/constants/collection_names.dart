@@ -1,4 +1,4 @@
-class CollectionNames{
+class CollectionNames {
   static const String POST = "Beitrag";
   static const String NOTIFICATION = "Benachrichtigung";
   static const String FOLLOW = "Follow";

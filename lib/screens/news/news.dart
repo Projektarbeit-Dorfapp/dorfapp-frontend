@@ -1,4 +1,6 @@
+import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
+import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
@@ -10,9 +12,27 @@ import '../../models/news_model.dart';
 import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
-class NewsOverview extends StatelessWidget {
+class NewsOverview extends StatefulWidget {
+  @override
+  _NewsOverviewState createState() => _NewsOverviewState();
+}
 
+class _NewsOverviewState extends State<NewsOverview> {
   final _newsService = new NewsService();
+  TextEditingController _searchController;
+  String _searchTerm;
+  String _sortMode = "Newest";
+  bool _loading = false;
+
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +54,9 @@ class NewsOverview extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          WeatherDisplay(textSize: 24,),
+                          WeatherDisplay(
+                            textSize: 24,
+                          ),
                           Spacer(),
                           Container(
                             height: 70,
@@ -43,7 +65,7 @@ class NewsOverview extends StatelessWidget {
                               children: <Widget>[
                                 UserAvatar(safeAreaHeight, 50, 50),
                                 Consumer<AlertService>(
-                                  builder: (context, alertService, _){
+                                  builder: (context, alertService, _) {
                                     return Positioned(
                                       right: 8,
                                       top: 8,
@@ -59,7 +81,6 @@ class NewsOverview extends StatelessWidget {
                                       ),
                                     );
                                   },
-
                                 ),
                               ],
                             ),
@@ -81,10 +102,7 @@ class NewsOverview extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         "Deine ",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blueGrey,
-                            fontFamily: 'Raleway'),
+                        style: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Raleway'),
                       ),
                       Icon(
                         Icons.pin_drop,
@@ -121,8 +139,7 @@ class NewsOverview extends StatelessWidget {
                               child: Center(
                                 child: Text(
                                   "Philcard",
-                                  style: TextStyle(
-                                      fontSize: 30, color: Colors.white),
+                                  style: TextStyle(fontSize: 30, color: Colors.white),
                                 ),
                               ),
                             ),
@@ -137,16 +154,56 @@ class NewsOverview extends StatelessWidget {
               ),
             ),
             SliverToBoxAdapter(
+                child: Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.only(bottom: 10.0),
+                    padding: EdgeInsets.only(left: 15.0, right: 10.0, bottom: 10.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.only(left: 10.0),
+                              hintText: "Suche...",
+                            ),
+                            controller: _searchController,
+                            onSubmitted: (String submittedStr) {
+                              FocusManager.instance.primaryFocus.unfocus();
+                              setState(() {
+                                _searchTerm = submittedStr;
+                              });
+                            },
+                          ),
+                        ),
+                        PopupMenuButton(
+                          icon: Icon(Icons.tune, color: Theme.of(context).primaryColor),
+                          onSelected: (value) {
+                            FocusManager.instance.primaryFocus.unfocus();
+                            setState(() {
+                              _sortMode = value;
+                            });
+                          },
+                          color: Colors.white,
+                          itemBuilder: (BuildContext context) {
+                            return MenuButtons.NewsSorting.map((String choice) {
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ],
+                    ))),
+            SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.only(right: 10.0),
+                padding: EdgeInsets.only(right: 20.0),
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "Neuigkeiten auf einem Blick",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.blueGrey,
-                        fontFamily: "Raleway"),
+                    "Neuigkeiten auf einen Blick",
+                    style: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: "Raleway"),
                   ),
                 ),
               ),
@@ -154,30 +211,23 @@ class NewsOverview extends StatelessWidget {
 
             ///Neuigkeiten
             SliverList(
-              delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
+              delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return FutureBuilder(
-                  future: _newsService.getAllNews(),
+                  future: _newsService.getAllNews(_sortMode, _searchTerm),
                   builder: (context, AsyncSnapshot<List<News>> snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return Container(padding: EdgeInsets.all(100.0),child: Center(child: CircularProgressIndicator()));
+                    } else if (snapshot.hasData) {
                       news = snapshot.data;
                       return SingleChildScrollView(
                         child: Column(children: <Widget>[
                           Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: news.length > 0
-                                  ? news
-                                      .map<Widget>((newsModel) =>
-                                          prepareNewsCards(newsModel))
-                                      .toList()
+                                  ? news.map<Widget>((newsModel) => prepareNewsCards(newsModel)).toList()
                                   : [_getTextIfNewsListEmpty()])
                         ]),
                       );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return Container(
-                          color: Colors.white,
-                          child: Center(child: CircularProgressIndicator()));
                     } else {
                       return Container(
                         color: Colors.white,
@@ -201,41 +251,30 @@ class NewsOverview extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NewsEdit()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit()));
             },
             child: Icon(Icons.add),
-            backgroundColor: Color(0xFF548c58)
-        ),
+            backgroundColor: Color(0xFF548c58)),
       ),
     );
   }
 
   prepareNewsCards(News newsModel) {
-    return new NewsCard(newsModel.id, newsModel.title, newsModel.description,
-        newsModel.imagePath, newsModel.createdAt);
+    return new NewsCard(newsModel.id, newsModel.title, newsModel.description, newsModel.imagePath, newsModel.createdAt);
   }
 
   Container _getTextIfNewsListEmpty() {
     return Container(
         margin: EdgeInsets.only(top: 20.0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(Icons.message, color: Colors.grey, size: 80.0),
-              Container(
-                  margin: EdgeInsets.only(left: 10.0),
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: Text(
-                    'Noch keine Neuigkeiten',
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.grey),
-                  ))
-            ]));
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          Icon(Icons.message, color: Colors.grey, size: 80.0),
+          Container(
+              margin: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                'Noch keine Neuigkeiten',
+                style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.grey),
+              ))
+        ]));
   }
 }
