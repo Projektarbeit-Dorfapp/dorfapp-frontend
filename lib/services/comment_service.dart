@@ -7,8 +7,9 @@ import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
+import 'package:flutter/cupertino.dart';
 
-class CommentService {
+class CommentService extends ChangeNotifier {
   SubscriptionService _subscriptionService = SubscriptionService();
 
   void insertNewComment(String documentID, String collection, Comment comment, AlertService alertService, SubscriptionType subscriptionType) async {
@@ -67,6 +68,8 @@ class CommentService {
       "modifiedAt": comment.modifiedAt,
       "isDeleted": false
     });
+
+    notifyListeners();
   }
 
   void updateComment(String documentID, String collection, String newContent, String commentID) async {

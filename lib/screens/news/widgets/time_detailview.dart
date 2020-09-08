@@ -40,13 +40,12 @@ class TimeDetailView extends StatelessWidget {
     if (this.start == null && this.end == null) {
       return '-';
     }
-    if (this.end == null) {
-      String formattedTime = DateFormat('HH:mm').format(start);
-      return formattedTime;
-    }
     String formattedStartTime = DateFormat('HH:mm').format(start);
     String formattedEndTime = DateFormat('HH:mm').format(end);
 
+    if (this.end == null || formattedStartTime == formattedEndTime) {
+      return formattedStartTime;
+    }
     String time = formattedStartTime + ' - ' + formattedEndTime;
     return time;
   }

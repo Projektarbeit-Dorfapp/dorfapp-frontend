@@ -47,8 +47,7 @@ class NewsService {
             imagePath: null,
             comments: List(),
             likes: List(),
-            //isNews: dataSnapshot.data['isNews'],
-            isNews: false,
+            isNews: dataSnapshot.data['isNews'],
             createdAt: dataSnapshot.data['createdAt'],
             modifiedAt: dataSnapshot.data['modifiedAt'],
             createdBy: dataSnapshot.data['createdBy']);

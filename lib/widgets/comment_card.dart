@@ -5,25 +5,24 @@ import 'package:dorf_app/widgets/comment_answer.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //Meike Nedwidek
-class CommentCard extends StatefulWidget  {
-  ///TO DO:
-  ///hochscrollen zu kommentareingabe, @ hinzufügen, wenn @ gelöscht nicht mehr antwort schreiben,
-  ///neue Antwort direkt anzeigen, Button zum alle Kommentare anzeigen direkt alle Antworten anzeigen
+class CommentCard extends StatefulWidget {
   final Function emitAnswerTo;
   final TopComment topComment;
+  final String document;
+  final String collection;
   final bool disableAddingComment;
   String answerTo;
 
-  CommentCard({this.topComment, this.disableAddingComment, this.emitAnswerTo});
+  CommentCard({this.topComment, this.collection, this.document, this.disableAddingComment, this.emitAnswerTo});
 
   @override
-  _CommentCardState createState() =>
-      _CommentCardState();
+  CommentCardState createState() => CommentCardState();
 }
 
-class _CommentCardState extends State<CommentCard> {
+class CommentCardState extends State<CommentCard> {
 
   int numberOfAnswersShown = 1;
   bool showButtonToShowAllAnswers = true;
@@ -44,41 +43,46 @@ class _CommentCardState extends State<CommentCard> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           fit: BoxFit.fill,
-                          image: AssetImage(widget.topComment.comment.user.imagePath != null ? widget.topComment.comment.user.imagePath : "assets/avatar.png")))),
+                          image: AssetImage(widget.topComment.comment.user.imagePath != null
+                              ? widget.topComment.comment.user.imagePath
+                              : "assets/avatar.png")))),
               Container(
-                  margin: EdgeInsets.only(top: 10.0),
-                  padding: EdgeInsets.all(15.0),
-                  width: MediaQuery.of(context).size.width - 100,
-                  decoration: BoxDecoration(color: Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(10.0)),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                margin: EdgeInsets.only(top: 10.0),
+                padding: EdgeInsets.all(15.0),
+                width: MediaQuery.of(context).size.width - 100,
+                decoration: BoxDecoration(color: Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(10.0)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              widget.topComment.comment.user.firstName + " " + widget.topComment.comment.user.lastName,
-                              style: TextStyle(
-                                  fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
-                            ),
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.topRight,
-                                child: RelativeDate(widget.topComment.comment.convertTimestamp(widget.topComment.comment.createdAt), Colors.black, 12.0),
-                              ),
-                            )
-                          ],
+                        Text(
+                          widget.topComment.comment.user.firstName + " " + widget.topComment.comment.user.lastName,
+                          style: TextStyle(
+                              fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
                         ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              widget.topComment.comment.content,
-                              style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16),
-                            ),
-                          ],
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.topRight,
+                            child: RelativeDate(
+                                widget.topComment.comment.convertTimestamp(widget.topComment.comment.createdAt),
+                                Colors.black,
+                                12.0),
+                          ),
                         )
-                      ]
-                  )
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          widget.topComment.comment.content,
+                          style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ],
           ),
@@ -89,8 +93,9 @@ class _CommentCardState extends State<CommentCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: widget.topComment.answerList.length > 0
                       ? widget.topComment.answerList
-                      .map((comment) => CommentAnswer(comment: comment))
-                      .toList().sublist(0, numberOfAnswersShown)
+                          .map((comment) => CommentAnswer(comment: comment))
+                          .toList()
+                          .sublist(0, numberOfAnswersShown)
                       : []),
               _getButtonToShowAllAnswers()
             ],
@@ -123,34 +128,33 @@ class _CommentCardState extends State<CommentCard> {
           ],
         ),
       );
-    }
-    else {
+    } else {
       return Container();
     }
   }
 
   _getButtonToShowAllAnswers() {
-
     if (widget.topComment.answerList.length > 1) {
       return Container(
           padding: EdgeInsets.only(top: 2.0, left: 30.0),
           width: MediaQuery.of(context).size.width,
-          child: showButtonToShowAllAnswers? FlatButton(
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            onPressed: () {
-              setState(() {
-                numberOfAnswersShown = widget.topComment.answerList.length;
-                showButtonToShowAllAnswers = false;
-              });
-            },
-            child: Text(
-              "Alle " + widget.topComment.answerList.length.toString() + " Antworten anzeigen",
-              style: Theme.of(context).textTheme.button,
-            ),
-          ) : Container());
-    }
-    else {
+          child: showButtonToShowAllAnswers
+              ? FlatButton(
+                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  onPressed: () {
+                    setState(() {
+                      numberOfAnswersShown = widget.topComment.answerList.length;
+                      showButtonToShowAllAnswers = false;
+                    });
+                  },
+                  child: Text(
+                    "Alle " + widget.topComment.answerList.length.toString() + " Antworten anzeigen",
+                    style: Theme.of(context).textTheme.button,
+                  ),
+                )
+              : Container());
+    } else {
       return Container();
     }
   }

@@ -3,7 +3,6 @@ import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
@@ -27,15 +26,12 @@ class CommentSection extends StatefulWidget {
 
   @override
   _CommentSectionState createState() =>
-      _CommentSectionState(commentList, document, collection);
+      _CommentSectionState();
 }
 
 class _CommentSectionState extends State<CommentSection> {
-  final commentService = CommentService();
 
-  List<TopComment> commentList;
-  String document;
-  String collection;
+  final commentService = CommentService();
   TextEditingController _controller;
   String answerTo;
   FocusNode myFocusNode;
@@ -48,7 +44,7 @@ class _CommentSectionState extends State<CommentSection> {
     });
   }
 
-  _CommentSectionState(this.commentList, this.document, this.collection);
+  _CommentSectionState();
 
   void initState() {
     super.initState();
@@ -76,15 +72,15 @@ class _CommentSectionState extends State<CommentSection> {
         modifiedAt: date);
 
     if (answerTo != null) {
-      commentService.insertAnswerComment(document, collection, newComment, answerTo);
+      commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo);
     }
     else {
       commentService.insertNewComment(
-          document, collection, newComment, Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
+          widget.document, widget.collection, newComment, Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
 
       setState(() {
         TopComment newTopComment = TopComment(newComment, []);
-        commentList.insert(0, newTopComment);
+        widget.commentList.insert(0, newTopComment);
       });
     }
 
@@ -110,17 +106,17 @@ class _CommentSectionState extends State<CommentSection> {
                 _controller.clear();
               },
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(20.0),
-                hintText: "Schreibe einen Kommentar...",
-              ),
+              contentPadding: const EdgeInsets.all(20.0),
+              hintText: "Schreibe einen Kommentar...",
+            ),
             ) : Container(),
             Column(
               children: <Widget>[
                 Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: commentList.length > 0
-                        ? commentList
-                        .map((comment) => CommentCard(topComment: comment, disableAddingComment: widget.disableAddingComment, emitAnswerTo: function))
+                    children: widget.commentList.length > 0
+                        ? widget.commentList
+                        .map((comment) => CommentCard(topComment: comment, collection: widget.collection, document: widget.document, disableAddingComment: widget.disableAddingComment, emitAnswerTo: function))
                         .toList()
                         : [ShowTextIfListEmpty(iconData: Icons.message, text: "Noch keine Kommentare",)]),
               ],

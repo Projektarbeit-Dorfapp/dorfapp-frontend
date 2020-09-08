@@ -2,7 +2,6 @@ import 'package:dorf_app/models/news_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
-
 import '../news_detail.dart';
 
 class NewsCard extends StatelessWidget {
@@ -74,12 +73,9 @@ class NewsCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                           child: RelativeDate(
-                              this
-                                  .newsCard
-                                  .convertTimestamp(this.newsCard.createdAt),
+                              this.newsCard.convertTimestamp(this.newsCard.createdAt),
                               Colors.white,
                               12.0),
                         ),
