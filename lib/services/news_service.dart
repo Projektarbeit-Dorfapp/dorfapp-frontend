@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+
+import 'comment_service.dart';
 
 class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
@@ -61,19 +65,19 @@ class NewsService {
 
       await _newsCollectionReference.document(newsID).collection("Kommentare").getDocuments().then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {
-          var commentList = List<Comment>();
+          var commentList = List<TopComment>();
           for (var document in dataSnapshot.documents) {
-            commentList.add(new Comment(
+            commentList.add(new TopComment(
+              new Comment(
                 id: document.documentID,
                 content: document.data["content"],
-                answerTo: document.data["answerTo"],
                 createdAt: document.data["createdAt"],
                 modifiedAt: document.data["modifiedAt"],
                 isDeleted: document.data["isDeleted"],
                 user: new User(
                     uid: document.data["userID"],
                     firstName: document.data["firstName"],
-                    lastName: document.data["lastName"])));
+                    lastName: document.data["lastName"])), []));
           }
           newsModel.comments = commentList;
         }
@@ -117,7 +121,8 @@ class NewsService {
 
       for (var document in querySnapshot.documents) {
         if (searchTerm != null) {
-          if (!document.data['title'].toString().contains(searchTerm)) {
+          var lowerString = document.data['title'].toString().toLowerCase();
+          if (!lowerString.contains(searchTerm)) {
               continue;
           }
         }
@@ -174,11 +179,5 @@ class NewsService {
           district: ds.data['address']['district'].toString());
     }
     return address;
-  }
-
-  List<User> convertLikeListToUserList(DocumentSnapshot ds) {
-    List<User> userList = new List<User>();
-
-    if (ds.data['likes'] != null) {}
   }
 }

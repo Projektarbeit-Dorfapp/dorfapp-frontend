@@ -43,7 +43,7 @@ class _CommentSectionState extends State<CommentSection> {
     setState(() {
       answerTo = topComment.comment.id;
       myFocusNode.requestFocus();
-      _controller.text = topComment.comment.firstName + " " + topComment.comment.lastName + " ";
+      _controller.text = topComment.comment.firstName.toString() + " " + topComment.comment.lastName.toString() + " ";
     });
   }
 
