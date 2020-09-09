@@ -38,8 +38,11 @@ class SortBar extends StatelessWidget {
               child: PopupMenuButton(
                 icon: Icon(Icons.tune, color: iconColor != null ? iconColor : Theme.of(context).primaryColor,),
                 color: Colors.white,
+                onSelected: (value) {
+
+                },
                 itemBuilder: (BuildContext context){
-                  return MenuButtons.Sorting.map((String choice) {
+                  return MenuButtons.CommentSorting.map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
                       child: Text(choice),
