@@ -19,10 +19,16 @@ class MenuButtons {
     LOGOUT
   ];
 
-  static const List<String> Sorting = <String>[
+  static const List<String> CommentSorting = <String>[
     SORT_TOP,
     SORT_DESCENDING,
     SORT_ASCENDING
+  ];
+
+  static const List<String> NewsSorting = <String>[
+    SORT_DESCENDING,
+    SORT_ASCENDING,
+    SORT_TOP
   ];
 
   static const List<String> EditDelete = <String>[
