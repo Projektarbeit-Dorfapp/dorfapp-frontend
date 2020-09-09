@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
@@ -7,6 +6,7 @@ import 'package:dorf_app/models/user_model.dart';
 
 class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
+  final CommentService _commentService = CommentService();
 
   void insertNews(News news) async {
     await _newsCollectionReference.add({
@@ -42,8 +42,7 @@ class NewsService {
             imagePath: null,
             comments: List(),
             likes: List(),
-            //isNews: dataSnapshot.data['isNews'],
-            isNews: false,
+            isNews: dataSnapshot.data['isNews'],
             createdAt: dataSnapshot.data['createdAt'],
             modifiedAt: dataSnapshot.data['modifiedAt'],
             createdBy: dataSnapshot.data['createdBy']);

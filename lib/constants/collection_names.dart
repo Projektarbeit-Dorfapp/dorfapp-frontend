@@ -12,4 +12,5 @@ class CollectionNames {
   static const String EVENT = "Veranstaltung";
   static const String LIKES = "Likes";
   static const String COMMENTS = "Kommentare";
+  static const String ANSWERS = "Antworten";
 }

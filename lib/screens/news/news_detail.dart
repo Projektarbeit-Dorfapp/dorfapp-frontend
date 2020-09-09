@@ -32,6 +32,7 @@ class _NewsDetailState extends State<NewsDetail> {
   String _userID;
   final _newsService = NewsService();
 
+
   @override
   void initState() {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
@@ -80,7 +81,7 @@ class _NewsDetailState extends State<NewsDetail> {
                       DescriptionDisplay(description: newsModel.description,), //umgeschrieben in eigenes Widget, siehe unten - Matthias
                       LikeSection(newsModel.likes, widget.newsID, CollectionNames.EVENT, _userID),
                       CustomBorder(),
-                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news),
+                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news, disableAddingComment: false),
                     ],
                   )));
         } else if (snapshot.connectionState == ConnectionState.waiting) {

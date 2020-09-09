@@ -12,6 +12,7 @@ import 'package:dorf_app/screens/profile/profile.dart';
 import 'package:dorf_app/screens/profile/widgets/profile_edit.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class Application {
         ChangeNotifierProvider(create: (context) => UserService(),),
         ChangeNotifierProvider(create: (context) => AccessHandler(),),
         ChangeNotifierProvider(create: (context) => AlertService(),),
+        ChangeNotifierProvider(create: (context) => CommentService(),)
       ],
       child: MaterialApp(
         theme: basicTheme,

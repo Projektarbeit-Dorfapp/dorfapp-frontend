@@ -3,6 +3,7 @@ import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/comment_model.dart';
+import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/boardMessageHandler.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
@@ -44,7 +45,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   CommentService _commentService;
   BoardEntry _entry;
   List<User> _likeList;
-  List<Comment> _commentList;
+  List<TopComment> _commentList;
   int _categoryColor;
   AccessHandler _accessHandler;
   User _loggedUser;
