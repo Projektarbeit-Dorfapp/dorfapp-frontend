@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
@@ -35,6 +37,7 @@ class _CommentSectionState extends State<CommentSection> {
   TextEditingController _controller;
   String answerTo;
   FocusNode myFocusNode;
+  List<TopComment> curCommentList;
 
   function(TopComment topComment) {
     setState(() {
@@ -44,10 +47,9 @@ class _CommentSectionState extends State<CommentSection> {
     });
   }
 
-  _CommentSectionState();
-
   void initState() {
     super.initState();
+    curCommentList = widget.commentList;
     _controller = TextEditingController();
     myFocusNode = FocusNode();
   }
@@ -58,7 +60,7 @@ class _CommentSectionState extends State<CommentSection> {
     super.dispose();
   }
 
-  void _addNewComment(String val, String answerTo) async{
+  Future<void> _addNewComment(String val, String answerTo) async{
     AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     var user = await _accessHandler.getUser();
     var date = Timestamp.now();
@@ -73,6 +75,9 @@ class _CommentSectionState extends State<CommentSection> {
 
     if (answerTo != null) {
       commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo);
+      setState(() {
+        curCommentList.firstWhere((element) => element.comment.id == answerTo).answerList.add(newComment);
+      });
     }
     else {
       commentService.insertNewComment(
@@ -80,7 +85,7 @@ class _CommentSectionState extends State<CommentSection> {
 
       setState(() {
         TopComment newTopComment = TopComment(newComment, []);
-        widget.commentList.insert(0, newTopComment);
+        curCommentList.insert(0, newTopComment);
       });
     }
 
@@ -100,8 +105,9 @@ class _CommentSectionState extends State<CommentSection> {
                   answerTo = null;
                 }
               },
-              onSubmitted: (String submittedStr) {
-                _addNewComment(submittedStr, answerTo);
+              onSubmitted: (String submittedStr) async {
+                await _addNewComment(submittedStr, answerTo);
+                //Provider.of<UpdateCommentCard>(context, listen: false).update();
                 answerTo = null;
                 _controller.clear();
               },
@@ -114,8 +120,8 @@ class _CommentSectionState extends State<CommentSection> {
               children: <Widget>[
                 Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: widget.commentList.length > 0
-                        ? widget.commentList
+                    children: curCommentList.length > 0
+                        ? curCommentList
                         .map((comment) => CommentCard(topComment: comment, collection: widget.collection, document: widget.document, disableAddingComment: widget.disableAddingComment, emitAnswerTo: function))
                         .toList()
                         : [ShowTextIfListEmpty(iconData: Icons.message, text: "Noch keine Kommentare",)]),
@@ -123,54 +129,6 @@ class _CommentSectionState extends State<CommentSection> {
             )
           ],
         ),
-    );
-  }
-}
-
-///Matthias Maxelon
-class CommentingOverlay extends ModalRoute<void> {
-  @override
-  Duration get transitionDuration => Duration(milliseconds: 150);
-
-  @override
-  bool get opaque => false;
-
-  @override
-  bool get barrierDismissible => false;
-
-  @override
-  Color get barrierColor => Colors.black.withOpacity(0.5);
-
-  @override
-  String get barrierLabel => null;
-
-  @override
-  bool get maintainState => true;
-
-  @override
-  Widget buildPage(
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      ) {
-    // This makes sure that text and other content follows the material style
-    return Material(
-      type: MaterialType.transparency,
-      // make sure that the overlay content is not cut off
-      child: SafeArea(
-        child: _buildOverlayContent(context),
-      ),
-    );
-  }
-
-  Widget _buildOverlayContent(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 40,
-        color: Colors.red,
-      ),
     );
   }
 }

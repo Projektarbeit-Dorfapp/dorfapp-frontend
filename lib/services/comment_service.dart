@@ -57,7 +57,7 @@ class CommentService extends ChangeNotifier {
     alertService.insertAlerts(subscriber, alert);
   }
 
-  void insertAnswerComment(String documentID, String collection, Comment comment, String answerTo) async {
+  Future<void> insertAnswerComment(String documentID, String collection, Comment comment, String answerTo) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
     await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(answerTo).collection(CollectionNames.ANSWERS).add({
       "firstName": comment.user.firstName,
@@ -69,7 +69,6 @@ class CommentService extends ChangeNotifier {
       "isDeleted": false
     });
 
-    notifyListeners();
   }
 
   void updateComment(String documentID, String collection, String newContent, String commentID) async {
