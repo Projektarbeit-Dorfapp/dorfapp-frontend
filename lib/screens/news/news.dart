@@ -21,21 +21,14 @@ class NewsOverview extends StatefulWidget {
 }
 
 class _NewsOverviewState extends State<NewsOverview> {
+  final _newsService = new NewsService();
   UserService _userService;
   Authentication _auth;
   User _currentUser;
   bool _isDataLoaded = false;
-
-  final _newsService = new NewsService();
   TextEditingController _searchController;
   String _searchTerm;
-  String _sortMode = "Newest";
-  bool _loading = false;
-
-  void initState() {
-    super.initState();
-    _searchController = TextEditingController();
-  }
+  String _sortMode = MenuButtons.SORT_DESCENDING;
 
   void dispose() {
     _searchController.dispose();
@@ -44,6 +37,7 @@ class _NewsOverviewState extends State<NewsOverview> {
 
   @override
   void initState() {
+    _searchController = TextEditingController();
     _userService = Provider.of<UserService>(context, listen: false);
     _auth = Provider.of<Authentication>(context, listen: false);
     _loadUserData();
