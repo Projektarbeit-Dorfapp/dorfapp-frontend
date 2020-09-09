@@ -1,11 +1,14 @@
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
 import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/material.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/user_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/news_model.dart';
@@ -18,6 +21,11 @@ class NewsOverview extends StatefulWidget {
 }
 
 class _NewsOverviewState extends State<NewsOverview> {
+  UserService _userService;
+  Authentication _auth;
+  User _currentUser;
+  bool _isDataLoaded = false;
+
   final _newsService = new NewsService();
   TextEditingController _searchController;
   String _searchTerm;
@@ -35,12 +43,20 @@ class _NewsOverviewState extends State<NewsOverview> {
   }
 
   @override
+  void initState() {
+    _userService = Provider.of<UserService>(context, listen: false);
+    _auth = Provider.of<Authentication>(context, listen: false);
+    _loadUserData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<News> news;
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: Scaffold(
-        body: CustomScrollView(
+        body: _isDataLoaded ? CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               floating: true,
@@ -63,7 +79,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                             width: 70,
                             child: Stack(
                               children: <Widget>[
-                                UserAvatar(safeAreaHeight, 50, 50),
+                                UserAvatar(safeAreaHeight, this._currentUser, 50, 50),
                                 Consumer<AlertService>(
                                   builder: (context, alertService, _) {
                                     return Positioned(
@@ -248,7 +264,7 @@ class _NewsOverviewState extends State<NewsOverview> {
               }, childCount: 1),
             ),
           ],
-        ),
+        ) : SizedBox.shrink(),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit()));
@@ -276,5 +292,16 @@ class _NewsOverviewState extends State<NewsOverview> {
                 style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.grey),
               ))
         ]));
+  }
+
+  _loadUserData() {
+    _auth.getCurrentUser().then((firebaseUser) {
+      _userService.getUser(firebaseUser.uid).then((fullUser) {
+        _currentUser = fullUser;
+        setState(() {
+          _isDataLoaded = true;
+        });
+      });
+    });
   }
 }

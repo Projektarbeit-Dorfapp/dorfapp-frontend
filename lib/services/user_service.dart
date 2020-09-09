@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/services/auth/authentication_service.dart';
 import 'package:flutter/cupertino.dart';
 
 ///Matthias Maxelon
@@ -37,6 +38,10 @@ class UserService extends ChangeNotifier{
   ///add User into user collection as document
   Future<void> insertUser(User user) async{
     await _ref.document().setData(user.toJson());
+  }
+  
+  Future<void> updateUser(User user) async{
+    await _ref.document(user.documentID).updateData(user.toJson());
   }
 
   ///check if user is admin
