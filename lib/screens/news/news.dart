@@ -223,7 +223,7 @@ class _NewsOverviewState extends State<NewsOverview> {
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return FutureBuilder(
-                  future: _newsService.getAllNews(_sortMode, _searchTerm.toLowerCase()),
+                  future: _newsService.getAllNews(_sortMode, _searchTerm?.toLowerCase()),
                   builder: (context, AsyncSnapshot<List<News>> snapshot) {
                     if (snapshot.connectionState != ConnectionState.done) {
                       return Container(padding: EdgeInsets.all(100.0),child: Center(child: CircularProgressIndicator()));
