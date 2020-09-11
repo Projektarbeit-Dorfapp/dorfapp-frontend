@@ -172,7 +172,6 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                         builder: (context, messageQuantity, _){
                           return SortBar(
                           barHeight: 50,
-                          barColor: Colors.white,
                           elevation: 4,
                           commentQuantity: messageQuantity.quantity,
                           iconColor: Color(_categoryColor),
@@ -182,8 +181,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                       SizedBox(
                         height: 3,
                       ),
-                      TextNoteBar(text: _isClosed != true ? "Bitte achte beim Schreiben von Kommentaren darauf, deine Gemeindemitglieder zu respektieren"
-                          : "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich", leftPadding: 20,),
+                      _isClosed == true ? TextNoteBar(text: "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich", leftPadding: 20,) : Container(),
                       CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry, disableAddingComment: _isClosed != true ? false : true),
                     ],
                   ),

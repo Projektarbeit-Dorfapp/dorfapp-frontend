@@ -26,11 +26,10 @@ class AlertDisplay extends StatelessWidget {
 
   ///depending on AlertType -> Navigate to a specific page
   _navigate(BuildContext context) async{
-    if(alertService.getAlerts()[builderIndex].alertType == AlertType.boardMessage){
+    if(alertService.getAlerts()[builderIndex].alertType == AlertType.boardMessage || alertService.getAlerts()[builderIndex].alertType == AlertType.entry){
       Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMessagePage(
         entryDocumentID: alertService.getAlerts()[builderIndex].documentReference,)));
     }
-
   }
   
   Icon _getLeadingIcon(BuildContext context){
@@ -46,6 +45,9 @@ class AlertDisplay extends StatelessWidget {
         break;
       case AlertType.news:
         icon = Icon(Icons.event, color: color,);
+        break;
+      case AlertType.entry:
+        icon = Icon(Icons.forum, color: color,);
         break;
       default:
         icon = Icon(Icons.notification_important, color: color,);

@@ -46,10 +46,13 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               height: _safeArea,
             ),
-            Container(
-              height: _pictureScreenHeight,
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: LoginPicture(),
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+              child: Container(
+                height: _pictureScreenHeight,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: LoginPicture(),
+              ),
             ),
             Align(
               alignment: Alignment.centerRight,

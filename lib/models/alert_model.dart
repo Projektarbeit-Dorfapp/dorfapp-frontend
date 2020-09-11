@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 ///Matthias Maxelon
-enum AlertType{boardMessage, eventMessage, news, pin_notification, not_defined} ///If you add new AlertTypes: make sure that inside [_convertType()] is correctly converted into new type
+enum AlertType{boardMessage, eventMessage, news, pin_notification, not_defined, entry} ///If you add new AlertTypes: make sure that inside [_convertType()] is correctly converted into new type
 class Alert{
   String documentID;
   Timestamp creationDate;
@@ -61,6 +61,8 @@ class Alert{
       alertType = AlertType.pin_notification;
     else if (type == _getAlertTypeString(AlertType.eventMessage))
       alertType = AlertType.eventMessage;
+    else if (type == _getAlertTypeString(AlertType.entry))
+      alertType = AlertType.entry;
     else
       alertType = AlertType.not_defined;
   }
