@@ -137,7 +137,7 @@ class BoardEntryDisplay extends StatelessWidget {
   _showBoardMessagePage(BuildContext context) async {
     Navigator.push(
         context,
-        CupertinoPageRoute(
+        MaterialPageRoute(
           builder: (context) => BoardMessagePage(entryDocumentID: entry.documentID),
         ));
     BoardEntryService().incrementWatchCount(entry);
