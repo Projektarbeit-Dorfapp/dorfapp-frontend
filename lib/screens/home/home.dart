@@ -1,10 +1,7 @@
 import 'package:animations/animations.dart';
-import 'package:dorf_app/constants/menu_buttons.dart';
-import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/chat/chatsPage/chatsPage.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
-import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/news.dart';
 import 'package:dorf_app/screens/profile/alertPage/alertPage.dart';
 import 'package:dorf_app/services/alert_service.dart';
@@ -23,9 +20,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   final List<Widget> _children = [
-    Calendar(),
     NewsOverview(),
     Forum(),
     Chats(),
@@ -33,7 +29,7 @@ class _HomeState extends State<Home> {
   ];
   @override
   void initState() {
-    _children[1] = NewsOverview(safeAreaHight: widget.safeAreaHight,);
+    _children[0] = NewsOverview(safeAreaHight: widget.safeAreaHight,);
     super.initState();
   }
   @override
@@ -59,12 +55,8 @@ class _HomeState extends State<Home> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-              icon: new Icon(Icons.home),
-              title: new Text('Calendar')
-          ),
-          BottomNavigationBarItem(
             icon: new Icon(Icons.mail),
-            title: new Text('News'),
+            title: new Text('Neuigkeiten'),
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.people),
