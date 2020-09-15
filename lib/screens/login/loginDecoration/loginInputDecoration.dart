@@ -28,7 +28,7 @@ class LoginInputDecoration {
             borderSide: BorderSide(width: 2, color: Colors.red)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(width: 2,color: Colors.blueAccent),
+          borderSide: BorderSide(width: 2,color: Theme.of(context).primaryColor),
         ),
         labelText: labelText != null ? labelText : null,
         prefixIcon: icon != null && color != null
