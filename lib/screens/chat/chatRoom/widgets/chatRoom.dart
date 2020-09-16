@@ -4,13 +4,15 @@ import 'package:dorf_app/screens/chat/chatRoom/widgets/messageStream.dart';
 import 'package:dorf_app/screens/chat/chatRoom/widgets/sendMessageField.dart';
 import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatRoom extends StatefulWidget {
   final User selectedUser;
   final String chatID;
-  ChatRoom({@required this.selectedUser, @required this.chatID});
+  final String role;
+  ChatRoom({@required this.selectedUser, @required this.chatID, @required this.role});
 
   @override
   _ChatRoomState createState() => _ChatRoomState();
@@ -21,9 +23,11 @@ class _ChatRoomState extends State<ChatRoom> {
   User _loggedUser;
   @override
   void initState() {
+    final chatS = ChatService();
     Provider.of<AccessHandler>(context, listen: false).getUser().then((value){
       if(mounted){
         setState(() {
+          chatS.goOnline(value, widget.selectedUser, widget.chatID, widget.role);
           _loggedUser = value;
         });
       }
