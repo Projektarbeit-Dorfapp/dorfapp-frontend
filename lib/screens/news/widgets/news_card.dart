@@ -31,7 +31,7 @@ class NewsCard extends StatelessWidget {
                         builder: (context) => NewsDetail(this.newsCard.id)));
               },
               child: Container(
-                height: 125,
+                height: 130,
                 margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
                 decoration: BoxDecoration(
                   color: Color(0xFF141e3e),

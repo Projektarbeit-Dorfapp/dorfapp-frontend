@@ -16,10 +16,13 @@ class TextNoteBar extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: EdgeInsets.only(left: leftPadding != null ? leftPadding : 10, right: 10, bottom: 10, top: 10 ),
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 16
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 16
+              ),
             ),
           ),
         ),

@@ -20,7 +20,6 @@ class MenuButtons {
   ];
 
   static const List<String> CommentSorting = <String>[
-    SORT_TOP,
     SORT_DESCENDING,
     SORT_ASCENDING
   ];

@@ -1,5 +1,7 @@
 import 'package:dorf_app/constants/menu_buttons.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 ///Matthias Maxelon
@@ -32,25 +34,7 @@ class SortBar extends StatelessWidget {
                 ),
               ),
             ) : Container(),
-            Spacer(),
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: PopupMenuButton(
-                icon: Icon(Icons.tune, color: iconColor != null ? iconColor : Theme.of(context).primaryColor,),
-                color: Colors.white,
-                onSelected: (value) {
-
-                },
-                itemBuilder: (BuildContext context){
-                  return MenuButtons.CommentSorting.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                },
-              ),
-            ),
+            Spacer()
           ],
         ),
       ),
