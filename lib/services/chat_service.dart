@@ -114,7 +114,7 @@ class ChatService {
         .document(loggedUser.documentID)
         .collection(CollectionNames.CHATS)
         .document(selectedUser.documentID)
-        .setData({"unreadMessages": 0});
+        .updateData({"unreadMessages": 0});
 
     switch (role) {
       case "partner":
@@ -126,6 +126,8 @@ class ChatService {
       default:
         break;
     }
+  }
+
   ///Matthias
   Stream<DocumentSnapshot> chatDocumentStream(String chatID){
     return Firestore.instance.collection(CollectionNames.CHAT).document(chatID).snapshots();
