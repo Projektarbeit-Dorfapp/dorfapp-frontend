@@ -30,13 +30,20 @@ class _ChatRoomState extends State<ChatRoom> {
           if(widget.chatID != null){
             chatS.goOnline(value, widget.selectedUser, widget.chatID, widget.role);
           }
-
-
           _loggedUser = value;
         });
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    final chatS = ChatService();
+    if(widget.chatID != null){
+      chatS.goOffline(_loggedUser, widget.selectedUser, widget.chatID, widget.role);
+    }
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
