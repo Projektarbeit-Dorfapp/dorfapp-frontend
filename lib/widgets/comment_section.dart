@@ -39,6 +39,7 @@ class _CommentSectionState extends State<CommentSection> {
   String answerTo;
   FocusNode myFocusNode;
   List<TopComment> curCommentList;
+  String sortMode = MenuButtons.SORT_DESCENDING;
 
   function(TopComment topComment) {
     setState(() {
@@ -82,7 +83,11 @@ class _CommentSectionState extends State<CommentSection> {
 
       setState(() {
         TopComment newTopComment = TopComment(newComment, []);
-        curCommentList.insert(0, newTopComment);
+        if (sortMode == MenuButtons.SORT_DESCENDING) {
+          curCommentList.insert(0, newTopComment);
+        } else {
+          curCommentList.insert(curCommentList.length, newTopComment);
+        }
       });
     }
   }
@@ -130,16 +135,19 @@ class _CommentSectionState extends State<CommentSection> {
                     case MenuButtons.SORT_ASCENDING:
                       {
                         tempCommentList.sort((a, b) => (a.comment.createdAt.compareTo(b.comment.createdAt)));
+                        sortMode = MenuButtons.SORT_ASCENDING;
                       }
                       break;
                     case MenuButtons.SORT_DESCENDING:
                       {
                         tempCommentList.sort((a, b) => (b.comment.createdAt.compareTo(a.comment.createdAt)));
+                        sortMode = MenuButtons.SORT_DESCENDING;
                       }
                       break;
                     default:
                       {
                         tempCommentList.sort((a, b) => (b.comment.createdAt.compareTo(a.comment.createdAt)));
+                        sortMode = MenuButtons.SORT_DESCENDING;
                       }
                       break;
                   }
@@ -149,7 +157,7 @@ class _CommentSectionState extends State<CommentSection> {
                 },
                 color: Colors.white,
                 itemBuilder: (BuildContext context) {
-                  return MenuButtons.NewsSorting.map((String choice) {
+                  return MenuButtons.CommentSorting.map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
                       child: Text(choice),

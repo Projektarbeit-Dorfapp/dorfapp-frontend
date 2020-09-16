@@ -1,6 +1,5 @@
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
-import 'package:dorf_app/screens/login/loginPage/loginPage.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
