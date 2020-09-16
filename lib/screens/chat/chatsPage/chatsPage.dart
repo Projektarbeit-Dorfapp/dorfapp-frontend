@@ -32,6 +32,8 @@ class Chats extends StatelessWidget {
             return StreamBuilder<List<OpenChat>>(
               stream: ChatService().getOpenConnectionsAsStream(municipalUsers.data.loggedUser),
               builder: (context, openConnections) {
+
+
                 if(openConnections.hasData){
                   Provider.of<OpenConnectionState>(context, listen: false).setOpenConnections(openConnections.data); /// fill list with openConnections
                   return Stack(
@@ -58,6 +60,27 @@ class Chats extends StatelessWidget {
         },
       )
     );
+  }
+  
+  List<User> getUnique(List<User> user, List<OpenChat> openChats){
+    List<User> newList = [];
+    newList.addAll(user);
+    newList.addAll(openChats.whereType<User>());
+    Map<User, int> map = Map();
+    newList.forEach((element) {
+      if(!map.containsKey(element)){
+        map[element] = 1;
+      } else{
+        map[element] += 1;
+      }
+    });
+    map.removeWhere((key, value) => value > 1);
+    List<User> anotherNewList = [];
+    map.forEach((key, value) {
+      anotherNewList.add(key);
+    });
+    return anotherNewList;
+
   }
 
   Future<UserInfo> _getInitialData(BuildContext context) async{
