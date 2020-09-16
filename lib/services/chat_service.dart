@@ -14,13 +14,13 @@ class ChatService {
 
     return stream.map((snapshot) {
       List<OpenChat> openChats = [];
-      for (var doc in snapshot.documents) {
+      for (DocumentSnapshot doc in snapshot.documents) {
         final openChat = OpenChat(
             chatID: doc.data["chatID"],
             role: doc.data["role"],
             unreadMessages: doc.data["unreadMessages"],
             user: User(
-              uid: doc.documentID,
+              documentID: doc.documentID,
               userName: doc.data["userName"],
               firstName: doc.data["firstName"],
               lastName: doc.data["lastName"],

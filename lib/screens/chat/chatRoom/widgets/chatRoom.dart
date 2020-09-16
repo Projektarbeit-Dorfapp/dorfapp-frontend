@@ -27,7 +27,11 @@ class _ChatRoomState extends State<ChatRoom> {
     Provider.of<AccessHandler>(context, listen: false).getUser().then((value){
       if(mounted){
         setState(() {
-          chatS.goOnline(value, widget.selectedUser, widget.chatID, widget.role);
+          if(widget.chatID != null){
+            chatS.goOnline(value, widget.selectedUser, widget.chatID, widget.role);
+          }
+
+
           _loggedUser = value;
         });
       }
