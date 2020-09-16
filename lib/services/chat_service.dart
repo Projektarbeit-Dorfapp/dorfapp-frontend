@@ -115,4 +115,9 @@ class ChatService {
     } else
       return "";
   }
+
+  ///Matthias
+  Stream<DocumentSnapshot> chatDocumentStream(String chatID){
+    return Firestore.instance.collection(CollectionNames.CHAT).document(chatID).snapshots();
+  }
 }

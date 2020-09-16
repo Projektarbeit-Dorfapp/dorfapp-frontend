@@ -40,7 +40,6 @@ class AlertService extends ChangeNotifier {
       return list;
     }).handleError((onError) {
       print(onError); //???
-      print("okoko");
     });
     _listenStream();
   }
