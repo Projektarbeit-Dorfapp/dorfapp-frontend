@@ -118,10 +118,23 @@ class ChatService {
 
     switch (role) {
       case "partner":
-        Firestore.instance.collection(CollectionNames.CHAT).document(chatID).setData({"isPartnerOnline": true});
+        Firestore.instance.collection(CollectionNames.CHAT).document(chatID).updateData({"isPartnerOnline": true});
         break;
       case "creator":
-        Firestore.instance.collection(CollectionNames.CHAT).document(chatID).setData({"isCreatorOnline": true});
+        Firestore.instance.collection(CollectionNames.CHAT).document(chatID).updateData({"isCreatorOnline": true});
+        break;
+      default:
+        break;
+    }
+  }
+
+  void goOffline(User loggedUser, User selectedUser, String chatID, String role) {
+    switch (role) {
+      case "partner":
+        Firestore.instance.collection(CollectionNames.CHAT).document(chatID).updateData({"isPartnerOnline": false});
+        break;
+      case "creator":
+        Firestore.instance.collection(CollectionNames.CHAT).document(chatID).updateData({"isCreatorOnline": false});
         break;
       default:
         break;
