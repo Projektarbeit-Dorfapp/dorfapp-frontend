@@ -29,7 +29,9 @@ class OpenChat {
   String chatID;
   User user;
   String userID;
+  String role; ///creator or partner
+  int unreadMessages;
 
-  OpenChat({@required this.chatID, @required this.user, this.userID});
+  OpenChat({@required this.chatID, @required this.user, this.userID, this.role});
 
 }

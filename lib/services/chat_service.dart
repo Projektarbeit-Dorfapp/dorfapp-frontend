@@ -30,31 +30,6 @@ class ChatService {
     });
   }
 
-  Future<List<OpenChat>> getOpenConnections(User user) async {
-    CollectionReference _chatroomsCollectionReference =
-        Firestore.instance.collection(CollectionNames.USER).document(user.documentID).collection(CollectionNames.CHATS);
-    List<OpenChat> openChats = [];
-    try {
-      QuerySnapshot snapshot = await _chatroomsCollectionReference.getDocuments();
-      for (DocumentSnapshot doc in snapshot.documents) {
-        final openChat = OpenChat(
-          chatID: doc.data["chatID"],
-          user: User(
-            uid: doc.documentID,
-            userName: doc.data["userName"],
-            firstName: doc.data["firstName"],
-            lastName: doc.data["lastName"],
-          ),
-        );
-        openChats.add(openChat);
-      }
-    } catch (err) {
-      print(err.toString());
-    }
-
-    return openChats;
-  }
-
   Stream<List<ChatMessage>> getMessages(String chatID) {
     CollectionReference _chatMessagesCollectionReference =
         Firestore.instance.collection(CollectionNames.CHAT).document(chatID).collection(CollectionNames.CHAT_MESSAGES);
