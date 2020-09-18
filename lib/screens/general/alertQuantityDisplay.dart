@@ -41,11 +41,14 @@ class _AlertQuantityDisplayState extends State<AlertQuantityDisplay> {
         borderRadius: BorderRadius.circular(widget.borderRadius),
       ),
       child: Center(
-        child: widget.showIcon == false || widget.showIcon == null ? Text(_unreadAlerts.toString(),
-        style: TextStyle(
-          color: widget.textColor != null ? widget.textColor : Colors.black,
-          fontSize: 17,
-        ),
+        child: widget.showIcon == false || widget.showIcon == null ? FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(_unreadAlerts.toString(),
+          style: TextStyle(
+            color: widget.textColor != null ? widget.textColor : Colors.black,
+            fontSize: 17,
+          ),
+          ),
         ) : Icon(Icons.notification_important,
           color: widget.iconColor != null ? widget.iconColor : Colors.black,
           size: widget.iconSize != null ? widget.iconSize : 20,)

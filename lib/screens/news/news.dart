@@ -94,10 +94,10 @@ class _NewsOverviewState extends State<NewsOverview> {
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -123,6 +123,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                 ),
               ),
             ),
+          ),
 
             ///Gepinnte Karte
             SliverToBoxAdapter(
@@ -154,12 +155,12 @@ class _NewsOverviewState extends State<NewsOverview> {
                             ),
                           ),
                         ),
-                        color: Color(0xff6FB3A9),
-                        elevation: 2,
                       ),
-                    );
-                  },
-                ),
+                      color: Color(0xff6FB3A9),
+                      elevation: 2,
+                    ),
+                  );
+                },
               ),
             ),
             SliverToBoxAdapter(
@@ -217,6 +218,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                 ),
               ),
             ),
+          ),
 
             ///Neuigkeiten
             SliverList(
@@ -240,15 +242,18 @@ class _NewsOverviewState extends State<NewsOverview> {
                     } else {
                       return Container(
                         color: Colors.white,
-                        child: Center(
-                          child: Text(
-                            'keine Daten ...',
-                            style: TextStyle(
-                                fontFamily: 'Raleway',
-                                fontWeight: FontWeight.normal,
-                                fontSize: 40.0,
-                                color: Colors.black),
-                          ),
+                        child: Center(child: CircularProgressIndicator()));
+                  } else {
+                    return Container(
+                      color: Colors.white,
+                      child: Center(
+                        child: Text(
+                          'keine Daten ...',
+                          style: TextStyle(
+                              fontFamily: 'Raleway',
+                              fontWeight: FontWeight.normal,
+                              fontSize: 40.0,
+                              color: Colors.black),
                         ),
                       );
                     }

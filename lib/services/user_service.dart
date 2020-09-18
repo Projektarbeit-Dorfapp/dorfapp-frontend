@@ -73,7 +73,7 @@ class UserService extends ChangeNotifier{
         });
     return user;
   }
-
+  ///Returns all [User] except loggedUser
   Future<List<User>> getUsers(User loggedUser) async {
     List<User> users = [];
     final snapshot = await _ref.getDocuments();
@@ -83,4 +83,6 @@ class UserService extends ChangeNotifier{
     }
     return users;
   }
+
+
 }

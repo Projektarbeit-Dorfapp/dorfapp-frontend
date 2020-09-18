@@ -11,6 +11,8 @@ import 'package:dorf_app/services/boardMessage_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
+
+///Matthias Maxelon
 /*
 class BoardMessageHandler extends ChangeNotifier {
   final _authentication = Authentication();

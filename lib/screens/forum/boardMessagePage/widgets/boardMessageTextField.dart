@@ -2,6 +2,7 @@ import 'package:dorf_app/screens/forum/boardMessagePage/provider/boardMessageHan
 import 'package:dorf_app/screens/forum/boardMessagePage/widgets/sendBoardMessageButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+///Matthias Maxelon
 /*
 class BoardMessageTextField extends StatefulWidget {
   @override

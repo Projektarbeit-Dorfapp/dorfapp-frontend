@@ -1,10 +1,11 @@
 import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/screens/forum/municipalPage/widgets/userChatDisplay.dart';
+import 'package:dorf_app/screens/chat/chatsPage/widgets/userChatDisplay.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon //NOT USED
 class MunicipalPage extends StatelessWidget {
   final UserService _userService = UserService();
   @override
@@ -24,7 +25,7 @@ class MunicipalPage extends StatelessWidget {
             itemCount: snapshot.data.length,
               itemBuilder: (context, int index){
                 return UserDisplay(
-                  user: snapshot.data[index],
+                  //openChat: snapshot.data[index],
                 );
               });
         } else if (snapshot.hasError){

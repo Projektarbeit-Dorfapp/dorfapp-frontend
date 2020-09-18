@@ -41,8 +41,8 @@ class RelativeDate extends StatelessWidget {
       return 'Vor ' + dateDiff.inHours.toString() + ' Std.';
     }
     if (dateDiff.inDays == 1) {
-      return 'Vor ' + dateDiff.inDays.toString() + ' Tag';
+      return 'Vor ' + dateDiff.inDays.toString() + ' T.';
     }
-    return 'Vor ' + dateDiff.inDays.toString() + ' Tagen';
+    return 'Vor ' + dateDiff.inDays.toString() + ' T.';
   }
 }

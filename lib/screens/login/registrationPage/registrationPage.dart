@@ -19,7 +19,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final _formKey = GlobalKey<FormState>();
-  final double positionedDistance = 80;
+  final double positionedDistance = 70;
   FocusNode _nodeUser;
   FocusNode _nodeEmail;
   FocusNode _nodePassword;
@@ -55,16 +55,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return ChangeNotifierProvider(
       create: (context) => RegistrationValidator(),
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               Container(
-                height: safeArea + MediaQuery.of(context).size.height*0.05,
+                height: safeArea + MediaQuery.of(context).size.height*0.01,
               ),
               Padding(
                 padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
                 child: Container(
-                  height: 550,
+                  height: 530,
                   width: MediaQuery.of(context).size.width,
                   child: Form(
                     key: _formKey,
@@ -129,9 +130,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                 ),
               ),
-              Container(
-                height: (MediaQuery.of(context).size.height - safeArea) * 0.09,
-              ),
+
               RegistrationButton(_formKey),
               Padding(
                 padding: EdgeInsets.only(top: 30, bottom: 20),

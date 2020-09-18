@@ -18,11 +18,10 @@ class _UserSettingsState extends State<UserSettings> {
   void initState() {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _accessHandler.getUser().then((user) {
-      if(mounted){
+      if(mounted)
         setState(() {
           _loggedUser = user;
         });
-      }
     });
     super.initState();
   }

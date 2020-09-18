@@ -1,4 +1,3 @@
-import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
@@ -8,6 +7,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class EntryPopUpMenu extends StatefulWidget {
   final BoardEntry entry;
   EntryPopUpMenu(this.entry);

@@ -20,7 +20,7 @@ class SortBar extends StatelessWidget {
       height: barHeight != null ? barHeight : 50,
       child: Material(
         elevation: elevation != null ? elevation : 0,
-        color: barColor != null ? barColor : Colors.grey,
+       color: barColor,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[

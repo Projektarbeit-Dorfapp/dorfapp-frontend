@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class AccountExistText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

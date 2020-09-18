@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
@@ -13,7 +14,8 @@ class PinsPage extends StatefulWidget {
   _PinsPageState createState() => _PinsPageState();
 }
 
-class _PinsPageState extends State<PinsPage> {
+class _PinsPageState extends State<PinsPage> with TickerProviderStateMixin{
+  AnimationController _animationController;
   SubscriptionService _subscriptionService;
   ScrollController _scrollController;
   User _loggedUser;
@@ -21,6 +23,10 @@ class _PinsPageState extends State<PinsPage> {
   int _snapshotItemCount;
   @override
   void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 350),
+    );
     _subscriptionService = SubscriptionService();
     _scrollController = ScrollController();
     Provider.of<AccessHandler>(context, listen: false).getUser().then((user) {
@@ -36,6 +42,7 @@ class _PinsPageState extends State<PinsPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -53,8 +60,12 @@ class _PinsPageState extends State<PinsPage> {
                     itemCount: boardEntries.length,
                     itemBuilder: (context, int index){
                       _snapshotItemCount = boardEntries.length;
-                      return BoardEntryDisplay(
-                          entry: boardEntries[index]);
+                      _animationController.forward();
+                      return FadeScaleTransition(
+                        animation: _animationController,
+                        child: BoardEntryDisplay(
+                            entry: boardEntries[index]),
+                      );
                     });
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(

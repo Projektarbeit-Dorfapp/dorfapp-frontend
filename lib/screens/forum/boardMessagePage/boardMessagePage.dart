@@ -1,20 +1,15 @@
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
-import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/screens/forum/boardMessagePage/provider/boardMessageHandler.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
-import 'package:dorf_app/screens/forum/boardMessagePage/widgets/boardMessageTextField.dart';
-import 'package:dorf_app/screens/forum/boardMessagePage/widgets/messageStream.dart';
 import 'package:dorf_app/screens/general/custom_border.dart';
 import 'package:dorf_app/screens/general/textNoteBar.dart';
 import 'package:dorf_app/screens/general/sortBar.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/news_detail.dart';
-import 'package:dorf_app/services/boardCategory_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/services/like_service.dart';
@@ -29,10 +24,9 @@ import 'package:provider/provider.dart';
 
 class BoardMessagePage extends StatefulWidget {
   final String entryDocumentID;
-
-  BoardMessagePage({
-    @required this.entryDocumentID,
-  });
+  final String boardCategoryHeadline;
+  final int boardCategoryColor;
+  BoardMessagePage({@required this.entryDocumentID, this.boardCategoryColor, this.boardCategoryHeadline});
 
   @override
   _BoardMessagePageState createState() => _BoardMessagePageState();
@@ -129,81 +123,79 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   @override
   Widget build(BuildContext context) {
     return _isSubscribed != null && _entry != null && _likeList != null && _commentList != null
-        ? MultiProvider(
-            providers: [
-              ChangeNotifierProvider(
-                create: (context) => MessageQuantity(_entry.commentCount),
-              ),
-            ],
-            child: Scaffold(
-                appBar: AppBar(
-                  title: Text(_entry.boardCategoryTitle),
-                  centerTitle: true,
-                  backgroundColor: Color(_categoryColor),
-                  actions: <Widget>[
-                    _isClosed != true && _isCreator()
-                        ? IconButton(
-                            icon: Icon(Icons.lock),
-                            onPressed: () {
-                              _showCloseThreadDialog();
-                            },
-                          )
-                        : Container(),
-                    PopupMenuButton<String>(
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                      onSelected: (value) => _choiceAction(value, context),
-                      color: Colors.white,
-                      itemBuilder: (BuildContext context) {
-                        return _createPopupMenuItems();
-                      },
-                    )
-                  ],
-                ),
-                body: Container(
-                  child: ListView(
-                    children: <Widget>[
-                      ImageTitleDisplay(
-                        title: _entry.title,
-                        imagePath: null,
-                      ),
-                      DescriptionDisplay(
-                        description: _entry.description,
-                      ),
-                      LikeSection(
-                        _likeList,
-                        _entry.documentID,
-                        CollectionNames.BOARD_ENTRY,
-                        _loggedUser.uid,
-                        likedColor: Color(_categoryColor),
-                        notLikedColor: Colors.grey,
-                        likeDetailAppbarColor: Color(_categoryColor),
-                      ),
-                      CustomBorder(
-                        color: Color(_categoryColor),
-                      ),
-                      Consumer<MessageQuantity>(
-                        builder: (context, messageQuantity, _) {
-                          return SortBar(
-                            barHeight: 50,
-                            barColor: Colors.white,
-                            elevation: 4,
-                            commentQuantity: messageQuantity.quantity,
-                            iconColor: Color(_categoryColor)
-                          );
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text(_entry.boardCategoryTitle),
+              centerTitle: true,
+              backgroundColor: widget.boardCategoryColor != null ? Color(widget.boardCategoryColor) : Color(_categoryColor),
+              actions: <Widget>[
+                _isClosed != true && _isCreator()
+                    ? IconButton(
+                        icon: Icon(Icons.lock),
+                        onPressed: () {
+                          _showCloseThreadDialog();
                         },
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      CommentSection(
-                          _commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry,
-                          disableAddingComment: _isClosed != true ? false : true),
-                    ],
+                      )
+                    : Container(),
+                PopupMenuButton<String>(
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  onSelected: (value) => _choiceAction(value, context),
+                  color: Colors.white,
+                  itemBuilder: (BuildContext context) {
+                    return _createPopupMenuItems();
+                  },
+                )
+              ],
+            ),
+            body: Container(
+              child: ListView(
+                children: <Widget>[
+                  ImageTitleDisplay(
+                    title: _entry.title,
+                    imagePath: null,
                   ),
-                )),
-          )
+                  DescriptionDisplay(
+                    description: _entry.description,
+                  ),
+                  LikeSection(
+                    _likeList,
+                    _entry.documentID,
+                    CollectionNames.BOARD_ENTRY,
+                    _loggedUser.uid,
+                    likedColor: Color(_categoryColor),
+                    notLikedColor: Colors.grey,
+                    likeDetailAppbarColor: Color(_categoryColor),
+                  ),
+                  CustomBorder(
+                    color: Color(_categoryColor),
+                  ),
+                  SortBar(
+                    barHeight: 50,
+                    elevation: 4,
+                    commentQuantity: _entry.commentCount,
+                    iconColor: Color(_categoryColor),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  _isClosed == true
+                      ? TextNoteBar(
+                          text: "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich",
+                          leftPadding: 20,
+                        )
+                      : Container(),
+                  CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry,
+                      disableAddingComment: _isClosed != true ? false : true),
+                ],
+              ),
+            ))
         : Center(
             child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: widget.boardCategoryColor != null ? Color(widget.boardCategoryColor) : Theme.of(context).primaryColor,
+                centerTitle: true,
+                title: Text(widget.boardCategoryHeadline),
+              ),
               body: Center(child: CircularProgressIndicator()),
             ),
           );
@@ -281,13 +273,19 @@ class CloseThreadDialog extends StatelessWidget {
       title: Text("Möchtest du dein Thema schließen? Kommentieren ist dann nicht mehr möglich"),
       actions: <Widget>[
         FlatButton(
-          child: Text("Ja"),
+          child: Text(
+            "Ja",
+            style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 17),
+          ),
           onPressed: () {
             Navigator.pop(context, "close");
           },
         ),
         FlatButton(
-          child: Text("Nein"),
+          child: Text(
+            "Nein",
+            style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 17),
+          ),
           onPressed: () {
             Navigator.pop(context);
           },

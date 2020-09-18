@@ -38,10 +38,10 @@ class UserAvatar extends StatelessWidget {
       isScrollControlled: true,
         context: context,
         builder: (context){
-          return SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height - _safeAreaHeight, //TODO: Need to subtract system bar for perfect height
-             child: UserSettings(),
+          return Container(
+            height: MediaQuery.of(context).size.height - _safeAreaHeight,
+            child: UserSettings(
+
             ),
           );
         }

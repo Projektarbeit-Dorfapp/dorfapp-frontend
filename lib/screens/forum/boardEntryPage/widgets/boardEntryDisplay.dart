@@ -1,6 +1,5 @@
 import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/screens/forum/boardEntryPage/widgets/entryPopUpMenu.dart';
-import 'package:dorf_app/screens/forum/boardEntryPage/widgets/userAvatarDisplay.dart';
+import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
@@ -8,9 +7,11 @@ import 'package:dorf_app/widgets/showUserProfileText.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class BoardEntryDisplay extends StatelessWidget {
   final BoardEntry entry;
-  BoardEntryDisplay({@required this.entry});
+  final Color categoryColor;
+  BoardEntryDisplay({@required this.entry, this.categoryColor});
 
   @override
   Widget build(BuildContext context) {
@@ -138,10 +139,10 @@ class BoardEntryDisplay extends StatelessWidget {
   _showBoardMessagePage(BuildContext context) async {
     Navigator.push(
         context,
-        CupertinoPageRoute(
-          builder: (context) => BoardMessagePage(entryDocumentID: entry.documentID),
+        MaterialPageRoute(
+          builder: (context) => BoardMessagePage(entryDocumentID: entry.documentID, boardCategoryColor: entry.categoryColor, boardCategoryHeadline: entry.boardCategoryTitle,),
         ));
-    BoardEntryService().incrementWatchCount(entry);
+    BoardEntryService().incrementWatchCount(entry.documentID);
   }
 }
 

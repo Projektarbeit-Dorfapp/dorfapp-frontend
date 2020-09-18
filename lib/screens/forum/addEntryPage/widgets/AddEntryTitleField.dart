@@ -2,6 +2,7 @@ import 'package:dorf_app/screens/forum/addEntryPage/provider/entryState.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class AddEntryTitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -3,10 +3,12 @@ import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/screens/forum/addEntryPage/addEntryPage.dart';
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class AddEntryNavigationButton extends StatelessWidget {
   final BoardCategory category;
   final Color categoryColor;
-  AddEntryNavigationButton({@required this.category, @required this.categoryColor});
+  final ScrollController boardEntryScrollController;
+  AddEntryNavigationButton({@required this.category, @required this.categoryColor, @required this.boardEntryScrollController});
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class AddEntryNavigationButton extends StatelessWidget {
               transitionDuration: const Duration(milliseconds: 450),
               openBuilder: (context, action) {
                 return AddEntryPage(
+                  boardEntryScrollController: boardEntryScrollController,
                   categoryColor: categoryColor,
                   category: category,
                   formKey: _formKey,

@@ -5,6 +5,7 @@ import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class CategoryWithColor {
   final BoardCategory category;
   final Color categoryColor;

@@ -3,7 +3,7 @@ import 'package:dorf_app/screens/forum/boardCategoryPage/widgets/boardCategoryDi
 import 'package:dorf_app/services/boardCategory_service.dart';
 import 'package:flutter/material.dart';
 
-
+///Matthias Maxelon
 class BoardCategoryPage extends StatelessWidget {
   final _boardCategoryService = BoardCategoryService();
   @override
@@ -36,18 +36,7 @@ class BoardCategoryPage extends StatelessWidget {
           } else {
             ///ERROR
             return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("Etwas ist schief gelaufen :("),
-                  RaisedButton(
-                    onPressed: () {
-                      //TODO: NEED TO REFRESH
-                    },
-                    child: Text("Wiederholen"),
-                  ),
-                ],
-              ),
+              child: CircularProgressIndicator()
             );
           }
         },

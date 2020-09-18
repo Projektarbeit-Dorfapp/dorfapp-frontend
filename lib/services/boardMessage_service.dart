@@ -49,7 +49,6 @@ class BoardMessageService{
     } else if (OrderType.oldest == orderType){
       orderField = "postingDate";
     } else {
-      //TODO: ORDER BY COMMENTS WITH MOST LIKES
     }
     return orderField;
   }

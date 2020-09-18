@@ -4,6 +4,7 @@ import 'package:dorf_app/screens/login/registrationPage/widgets/villageDropDownF
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 
+///Matthias Maxelon
 class RegistrationValidator extends ChangeNotifier{
   final userService = UserService();
 

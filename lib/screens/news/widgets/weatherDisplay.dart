@@ -4,8 +4,6 @@ import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/weather.dart';
-//import 'package:weather/weather_library.dart';
-
 
 ///Matthias Maxelon
 class WeatherDisplay extends StatefulWidget {

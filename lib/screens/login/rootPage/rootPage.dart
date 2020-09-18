@@ -81,7 +81,7 @@ class _RootPageState extends State<RootPage> {
         _isStreamInitiated = true;
         _alertService.initStream(_userService, _accessHandler);
       }
-      return Home(PageIndexes.NEWSINDEX);
+      return Home(PageIndexes.NEWSINDEX, safeAreaHight: MediaQuery.of(context).padding.top,);
     }
   }
 }

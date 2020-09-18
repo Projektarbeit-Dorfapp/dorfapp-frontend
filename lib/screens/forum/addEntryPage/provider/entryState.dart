@@ -4,6 +4,7 @@ import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
+///Matthias Maxelon
 class EntryState extends ChangeNotifier{
 
   String title;

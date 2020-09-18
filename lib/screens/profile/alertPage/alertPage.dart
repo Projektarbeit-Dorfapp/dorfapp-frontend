@@ -9,6 +9,7 @@ class AlertPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Meine Benachrichtigungen"),
+        centerTitle: true,
         actions: <Widget>[
 
           IconButton(

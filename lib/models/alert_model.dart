@@ -1,20 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 ///Matthias Maxelon
-enum AlertType{boardMessage, eventMessage, news, pin_notification, not_defined} ///If you add new AlertTypes: make sure that inside [_convertType()] is correctly converted into new type
+enum AlertType{boardMessage, eventMessage, news, pin_notification, not_defined, entry} ///If you add new AlertTypes: make sure that inside [_convertType()] is correctly converted into new type
 class Alert{
   String documentID;
   Timestamp creationDate;
   String additionalMessage;
   String headline; ///The name of the content, if news -> maybe save news headline here or if boardEntry -> save headline of entry
+  String secondHeadline;
   bool isRead; /// is true if user has read the alert
   String fromUserName;
   String fromFirstName;
   String fromLastName;
   String documentReference;
+  int alertColor;
 
   AlertType alertType;
   Alert({
+    this.secondHeadline,
+    this.alertColor,
     this.headline,
     this.documentReference,
     this.creationDate,
@@ -26,6 +30,8 @@ class Alert{
 
   Alert.fromJson(Map snapshot, String documentID){
     this.documentID = documentID;
+    secondHeadline = snapshot["secondHeadline"] ?? "";
+    alertColor = snapshot["alertColor"] ?? 0;
     isRead = snapshot["isRead"] ?? false;
     headline = snapshot["headline"] ?? "";
     documentReference = snapshot["documentReference"] ?? "";
@@ -39,6 +45,8 @@ class Alert{
   }
   Map<String, dynamic> toJson(){
     return {
+      "secondHeadline" : secondHeadline,
+      "alertColor" : alertColor,
       "headline" : headline,
       "documentReference" : documentReference,
       "additionalMessage" : additionalMessage,
@@ -61,6 +69,8 @@ class Alert{
       alertType = AlertType.pin_notification;
     else if (type == _getAlertTypeString(AlertType.eventMessage))
       alertType = AlertType.eventMessage;
+    else if (type == _getAlertTypeString(AlertType.entry))
+      alertType = AlertType.entry;
     else
       alertType = AlertType.not_defined;
   }

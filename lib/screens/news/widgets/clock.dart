@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class Clock extends StatefulWidget {
   @override
   _ClockState createState() => _ClockState();
