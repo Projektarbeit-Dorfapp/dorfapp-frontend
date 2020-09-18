@@ -82,9 +82,9 @@ class SubscriptionService {
     if (title == null || title == "") title = "[MISSING HEADLINE]";
 
     if (type == SubscriptionType.entry)
-      text = "${loggedUser.userName} folgt jetzt dein Thema: " + title;
+      text = "${loggedUser.firstName} ${loggedUser.lastName} folgt jetzt dein Thema: " + title;
     else
-      text = "${loggedUser.userName} folgt jetzt deiner Veranstaltung: " + title;
+      text = "${loggedUser.firstName} ${loggedUser.lastName} folgt jetzt deiner Veranstaltung: " + title;
     return text;
   }
 

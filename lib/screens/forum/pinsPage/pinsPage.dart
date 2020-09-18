@@ -94,7 +94,12 @@ class _PinsPageState extends State<PinsPage> with TickerProviderStateMixin{
  List<BoardEntry> _parseToEntries(AsyncSnapshot<List<DocumentSnapshot>> snapshot){
     List<BoardEntry> list = [];
     for(DocumentSnapshot doc in snapshot.data){
-      list.add(BoardEntry.fromJson(doc.data, doc.documentID));
+      try{
+        list.add(BoardEntry.fromJson(doc.data, doc.documentID));
+      }catch(e){
+        print(e);
+      }
+
     }
     return list;
   }

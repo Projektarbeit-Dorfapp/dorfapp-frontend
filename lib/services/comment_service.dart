@@ -46,7 +46,7 @@ class CommentService extends ChangeNotifier {
     List<String> subscriber = await _subscriptionService.getSubscriptions(topLevelDocumentID: documentID, subscriptionType: subscriptionType);
     DocumentSnapshot snapshot = await Firestore.instance.collection(collection).document(documentID).get();
     Alert alert = Alert(
-      additionalMessage: 'Der Benutzer ${comment.user.firstName} ${comment.user.lastName} hat eine Nachricht in "${snapshot.data["title"]}" verfasst',
+      additionalMessage: '${comment.user.firstName} ${comment.user.lastName} hat eine Nachricht in "${snapshot.data["title"]}" verfasst',
       alertType: subscriptionType == SubscriptionType.entry ? AlertType.boardMessage : AlertType.eventMessage,
       documentReference: documentID,
       creationDate: comment.createdAt,
