@@ -47,7 +47,7 @@ class Application {
         ChangeNotifierProvider(create: (context) => UserService(),),
         ChangeNotifierProvider(create: (context) => AccessHandler(),),
         ChangeNotifierProvider(create: (context) => AlertService(),),
-        ChangeNotifierProvider(create: (context) => OpenConnectionState(),)
+        ChangeNotifierProvider(create: (context) => OpenConnectionState(),),
         ChangeNotifierProvider(create: (context) => CommentService(),)
       ],
       child: MaterialApp(

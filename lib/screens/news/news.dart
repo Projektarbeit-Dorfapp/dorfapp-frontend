@@ -15,6 +15,8 @@ import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
 class NewsOverview extends StatefulWidget {
+  final double safeAreaHeight;
+  NewsOverview({@required this.safeAreaHeight});
   @override
   _NewsOverviewState createState() => _NewsOverviewState();
 }
@@ -46,7 +48,6 @@ class _NewsOverviewState extends State<NewsOverview> {
   @override
   Widget build(BuildContext context) {
     List<News> news;
-    double safeAreaHeight = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: Scaffold(
         body: _isDataLoaded ? CustomScrollView(
@@ -72,7 +73,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                             width: 70,
                             child: Stack(
                               children: <Widget>[
-                                UserAvatar(safeAreaHeight, this._currentUser, 50, 50),
+                                UserAvatar(widget.safeAreaHeight, this._currentUser, 50, 50),
                                 Consumer<AlertService>(
                                   builder: (context, alertService, _) {
                                     return Positioned(
@@ -94,10 +95,10 @@ class _NewsOverviewState extends State<NewsOverview> {
                               ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -123,7 +124,6 @@ class _NewsOverviewState extends State<NewsOverview> {
                 ),
               ),
             ),
-          ),
 
             ///Gepinnte Karte
             SliverToBoxAdapter(
@@ -155,12 +155,12 @@ class _NewsOverviewState extends State<NewsOverview> {
                             ),
                           ),
                         ),
+                        color: Color(0xff6FB3A9),
+                        elevation: 2,
                       ),
-                      color: Color(0xff6FB3A9),
-                      elevation: 2,
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
             SliverToBoxAdapter(
@@ -218,7 +218,6 @@ class _NewsOverviewState extends State<NewsOverview> {
                 ),
               ),
             ),
-          ),
 
             ///Neuigkeiten
             SliverList(
@@ -242,18 +241,15 @@ class _NewsOverviewState extends State<NewsOverview> {
                     } else {
                       return Container(
                         color: Colors.white,
-                        child: Center(child: CircularProgressIndicator()));
-                  } else {
-                    return Container(
-                      color: Colors.white,
-                      child: Center(
-                        child: Text(
-                          'keine Daten ...',
-                          style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontWeight: FontWeight.normal,
-                              fontSize: 40.0,
-                              color: Colors.black),
+                        child: Center(
+                          child: Text(
+                            'keine Daten ...',
+                            style: TextStyle(
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.normal,
+                                fontSize: 40.0,
+                                color: Colors.black),
+                          ),
                         ),
                       );
                     }

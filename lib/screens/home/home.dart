@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
   ];
   @override
   void initState() {
-    _children[0] = NewsOverview(safeAreaHight: widget.safeAreaHight,);
+    _children[0] = NewsOverview(safeAreaHeight: widget.safeAreaHight,);
     super.initState();
   }
   @override
