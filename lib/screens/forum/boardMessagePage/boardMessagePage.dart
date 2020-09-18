@@ -2,6 +2,7 @@ import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/comment_model.dart';
+import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/screens/general/custom_border.dart';
@@ -38,7 +39,7 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   CommentService _commentService;
   BoardEntry _entry;
   List<User> _likeList;
-  List<Comment> _commentList;
+  List<TopComment> _commentList;
   int _categoryColor;
   AccessHandler _accessHandler;
   User _loggedUser;
@@ -60,7 +61,10 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     _accessHandler.getUser().then((user) {
       _loggedUser = user;
       _subscriptionService
-          .isUserSubscribed(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, subscriptionType: SubscriptionType.entry)
+          .isUserSubscribed(
+              loggedUser: _loggedUser,
+              topLevelDocumentID: widget.entryDocumentID,
+              subscriptionType: SubscriptionType.entry)
           .then((isSubscribed) {
         if (mounted) {
           setState(() {
@@ -227,7 +231,9 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     Flushbar(
       messageText: Center(
         child: Text(
-          isError == true ? "Etwas ist schief gelaufen. Überprüfe deine Internetverbindung" : isInserted ? "Gepinnt" : "Nicht mehr gepinnt",
+          isError == true
+              ? "Etwas ist schief gelaufen. Überprüfe deine Internetverbindung"
+              : isInserted ? "Gepinnt" : "Nicht mehr gepinnt",
           style: TextStyle(fontSize: 15, fontFamily: "Raleway", color: Colors.white),
         ),
       ),
@@ -248,7 +254,10 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
     )
         .then((isInserted) {
       if (!isInserted) {
-        service.deleteSubscription(loggedUser: _loggedUser, topLevelDocumentID: widget.entryDocumentID, subscriptionType: SubscriptionType.entry);
+        service.deleteSubscription(
+            loggedUser: _loggedUser,
+            topLevelDocumentID: widget.entryDocumentID,
+            subscriptionType: SubscriptionType.entry);
       }
       showSubscriptionMessage(isInserted, false);
     }).catchError((onError) {

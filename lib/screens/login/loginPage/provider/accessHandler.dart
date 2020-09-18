@@ -55,7 +55,6 @@ class AccessHandler extends ChangeNotifier {
 
   Future<User> getUser() async {
     if (this._user == null) {
-      ///this._uid = getUIDFromDatabase();
       final Authentication _auth = Authentication();
       await _auth.getCurrentUser().then((firebaseUser) async {
         this._uid = firebaseUser.uid;

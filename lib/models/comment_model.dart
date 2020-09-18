@@ -12,10 +12,9 @@ class Comment{
   User user; //firstName, lastName, userID in DB speichern
   Timestamp createdAt;
   Timestamp modifiedAt;
-  String answerTo;
   bool isDeleted;
 
-  Comment({this.id, this.content, this.user, this.createdAt, this.modifiedAt, this.answerTo, this.isDeleted, this.firstName, this.lastName, this.userID});
+  Comment({this.id, this.content, this.user, this.createdAt, this.modifiedAt, this.isDeleted, this.firstName, this.lastName, this.userID});
 
   DateTime convertTimestamp(Timestamp timestamp) {
     if (timestamp != null) return DateTime.parse(timestamp.toDate().toString());

@@ -40,13 +40,12 @@ class DateDetailView extends StatelessWidget {
     if (this.start == null && this.end == null) {
       return '-';
     }
-    if (this.end == null) {
-      String formattedDate = DateFormat('dd.MM.yyyy').format(start);
-      return formattedDate;
-    }
     String formattedStartDate = DateFormat('dd.MM.yyyy').format(start);
     String formattedEndDate = DateFormat('dd.MM.yyyy').format(end);
 
+    if (this.end == null || formattedStartDate == formattedEndDate) {
+      return formattedStartDate;
+    }
     String date = formattedStartDate + ' - ' + formattedEndDate;
     return date;
   }

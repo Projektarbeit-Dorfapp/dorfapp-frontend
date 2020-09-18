@@ -72,10 +72,11 @@ class _NewsEditState extends State<NewsEdit> {
                   height: 200,
                   child: _image == null
                       ? Center(
-                          child: RaisedButton(
-                            child: Text('Select an Image ',
-                                style: Theme.of(context).textTheme.headline2),
-                            onPressed: () {
+                          child: InkWell(
+                            child: Container(
+                                child: Image.asset('assets/placeholder.png')
+                            ),
+                            onTap: () {
                               _pickImage();
                             },
                           ),

@@ -28,7 +28,7 @@ class _UserSettingsState extends State<UserSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _loggedUser != null ? Scaffold(
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
@@ -51,7 +51,8 @@ class _UserSettingsState extends State<UserSettings> {
                   width: 50,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/australian-shepherd-2208371_1920.jpg'),
+                      image: _loggedUser.imagePath != "" ? NetworkImage(_loggedUser.imagePath)
+                          : AssetImage("assets/avatar.png"),
                       fit: BoxFit.fill,
                     ),
                     color: Colors.black,
@@ -71,14 +72,34 @@ class _UserSettingsState extends State<UserSettings> {
             padding: EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Icon(Icons.accessibility_new, color: Color(0xff6FB3A9)),
-                ),
-                Text(
-                  "Mein Profil",
-                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                ),
+                InkWell(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Icon(Icons.accessibility_new, color: Theme.of(context).buttonColor),
+                        ),
+                        InkWell(
+                          child: Row(
+                            children: <Widget>[
+                              Text("Mein Profil",
+                                style: TextStyle(
+                                    fontFamily: "Raleway",
+                                    fontSize: 16
+                                ),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/profile');
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -116,12 +137,9 @@ class _UserSettingsState extends State<UserSettings> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: ChangeUserAccount()
-          ),
+          Padding(padding: EdgeInsets.only(top: 20), child: ChangeUserAccount()),
         ],
       ),
-    );
+    ) : Center(child: CircularProgressIndicator());
   }
 }

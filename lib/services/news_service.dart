@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 
+import 'comment_service.dart';
+
 class NewsService {
-  CollectionReference _newsCollectionReference =
-      Firestore.instance.collection("Veranstaltung");
+  CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
+  final CommentService _commentService = CommentService();
 
   void insertNews(News news) async {
     await _newsCollectionReference.add({
@@ -31,10 +35,7 @@ class NewsService {
     News newsModel;
 
     try {
-      await _newsCollectionReference
-          .document(newsID)
-          .get()
-          .then((dataSnapshot) {
+      await _newsCollectionReference.document(newsID).get().then((dataSnapshot) {
         newsModel = new News(
             id: newsID,
             title: dataSnapshot.data['title'].toString(),
@@ -45,55 +46,42 @@ class NewsService {
             imagePath: null,
             comments: List(),
             likes: List(),
-            //isNews: dataSnapshot.data['isNews'],
-            isNews: false,
+            isNews: dataSnapshot.data['isNews'],
             createdAt: dataSnapshot.data['createdAt'],
             modifiedAt: dataSnapshot.data['modifiedAt'],
             createdBy: dataSnapshot.data['createdBy']);
       });
 
-      await _newsCollectionReference
-          .document(newsID)
-          .collection("Likes")
-          .getDocuments()
-          .then((dataSnapshot) {
+      await _newsCollectionReference.document(newsID).collection("Likes").getDocuments().then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {
           var userList = List<User>();
           for (var document in dataSnapshot.documents) {
             userList.add(new User(
-                uid: document.documentID,
-                firstName: document.data['firstName'],
-                lastName: document.data['lastName']));
+                uid: document.documentID, firstName: document.data['firstName'], lastName: document.data['lastName']));
           }
           newsModel.likes = userList;
         }
       });
 
-      await _newsCollectionReference
-          .document(newsID)
-          .collection("Kommentare")
-          .getDocuments()
-          .then((dataSnapshot) {
+      await _newsCollectionReference.document(newsID).collection("Kommentare").getDocuments().then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {
-          var commentList = List<Comment>();
+          var commentList = List<TopComment>();
           for (var document in dataSnapshot.documents) {
-            commentList.add(new Comment(
+            commentList.add(new TopComment(
+              new Comment(
                 id: document.documentID,
                 content: document.data["content"],
-                answerTo: document.data["answerTo"],
                 createdAt: document.data["createdAt"],
                 modifiedAt: document.data["modifiedAt"],
                 isDeleted: document.data["isDeleted"],
-                user: new User (
-                  uid: document.data["userID"],
-                  firstName: document.data["firstName"],
-                  lastName: document.data["lastName"]
-                )));
+                user: new User(
+                    uid: document.data["userID"],
+                    firstName: document.data["firstName"],
+                    lastName: document.data["lastName"])), []));
           }
           newsModel.comments = commentList;
         }
       });
-
     } catch (err) {
       print(err.toString());
     }
@@ -110,25 +98,73 @@ class NewsService {
   })),
    */
 
-  Future<List<News>> getAllNews() async {
+  Future<List<News>> getAllNews(String sortMode, String searchTerm) async {
     List<News> news = [];
     try {
-      QuerySnapshot querySnapshot =
-          await _newsCollectionReference.getDocuments();
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
+      QuerySnapshot querySnapshot;
+      switch (sortMode) {
+        case MenuButtons.SORT_ASCENDING:
+          {
+            querySnapshot = await _newsCollectionReference.orderBy("startTime", descending: false).getDocuments();
+          }
+          break;
+        case MenuButtons.SORT_DESCENDING:
+          {
+            querySnapshot = await _newsCollectionReference.orderBy("startTime", descending: true).getDocuments();
+          }
+          break;
+        default:
+          {
+            querySnapshot = await _newsCollectionReference.getDocuments();
+          }
+      }
+
+      for (var document in querySnapshot.documents) {
+        if (searchTerm != null) {
+          var lowerString = document.data['title'].toString().toLowerCase();
+          if (!lowerString.contains(searchTerm)) {
+              continue;
+          }
+        }
         News newsModel = new News(
-            id: querySnapshot.documents[i].documentID,
-            title: querySnapshot.documents[i].data['title'].toString(),
-            description:
-                querySnapshot.documents[i].data['description'].toString(),
-            imagePath: querySnapshot.documents[i].data['imagePath'].toString(),
+            id: document.documentID,
+            title: document.data['title'].toString(),
+            description: document.data['description'].toString(),
+            imagePath: document.data['imagePath'].toString(),
             isNews: false,
-            createdAt: querySnapshot.documents[i].data['createdAt'],
-            createdBy: querySnapshot.documents[i].data['createdBy']);
+            createdAt: document.data['createdAt'],
+            createdBy: document.data['createdBy']);
+
+        ///Problem: Da die Likes in Subcollections gespeichert sind, muss für jeden Eintrag einzeln via await ausgelsen werden, ob er Likes besitzt. --> Langsam!
+        ///Falls wir das beschleunigen wollen, müsste man die Anzahl der Likes im Veranstaltungs-Dokument selbst speichern, aber das darf man dann auch jedesmal mit updaten wenn ein Like gegeben/genommen wird
+        if (sortMode == MenuButtons.SORT_TOP) {
+          await _newsCollectionReference
+              .document(document.documentID)
+              .collection("Likes")
+              .getDocuments()
+              .then((dataSnapshot) {
+            if (dataSnapshot.documents.length > 0) {
+              var userList = List<User>();
+              for (var document in dataSnapshot.documents) {
+                userList.add(new User(
+                    uid: document.documentID,
+                    firstName: document.data['firstName'],
+                    lastName: document.data['lastName']));
+              }
+              newsModel.likes = userList;
+            } else {
+              newsModel.likes = List<User>();
+            }
+          });
+        }
         news.add(newsModel);
       }
     } catch (error) {
       print(error.toString());
+    }
+    if (sortMode == MenuButtons.SORT_TOP && news.length > 0) {
+      ///Ascending: (a,b). Descending: (b,a).
+      news.sort((a, b) => b.likes.length.compareTo(a.likes.length));
     }
     return news;
   }
@@ -143,11 +179,5 @@ class NewsService {
           district: ds.data['address']['district'].toString());
     }
     return address;
-  }
-
-  List<User> convertLikeListToUserList(DocumentSnapshot ds) {
-    List<User> userList = new List<User>();
-
-    if (ds.data['likes'] != null) {}
   }
 }

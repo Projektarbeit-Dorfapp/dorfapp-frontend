@@ -44,7 +44,7 @@ class User extends ChangeNotifier {
     admin = snapshot["admin"] ?? false;
     verificationState = snapshot["verificationState"] ?? false;
     userName = snapshot["userName"] ?? "";
-    age = snapshot[age] ?? 0;
+    age = snapshot["age"] ?? 0;
     userAvatarReference = snapshot["userAvatarReference"] ?? "";
     municipalReference = snapshot["municipalReference"] ?? "";
     sex = snapshot["sex"] ?? "";

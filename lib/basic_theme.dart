@@ -19,5 +19,6 @@ final ThemeData basicTheme = new ThemeData(
     headline2: TextStyle(fontFamily: 'Raleway', fontSize: 30),
     bodyText1: TextStyle(fontFamily: 'Raleway', fontSize: 20, fontStyle: FontStyle.italic),
     bodyText2: TextStyle(fontFamily: 'Raleway', fontSize: 10),
+    button: TextStyle(fontFamily: 'Raleway', fontSize: 14)
   ),
 );
