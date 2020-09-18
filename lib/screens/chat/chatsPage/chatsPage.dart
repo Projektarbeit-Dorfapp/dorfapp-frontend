@@ -51,7 +51,9 @@ class Chats extends StatelessWidget {
             );
           }
           else if (municipalUsers.connectionState == ConnectionState.waiting){
-            return Container();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           } else {
             return Center(
               child: CircularProgressIndicator(),

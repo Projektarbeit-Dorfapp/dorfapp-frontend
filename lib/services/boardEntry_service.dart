@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/models/user_model.dart';
 
 
 ///Matthias Maxelon
@@ -27,9 +26,10 @@ class BoardEntryService{
     _boardRef.document(documentID).updateData({"lastActivity" : Timestamp.now()});
   }
 
-  incrementWatchCount(BoardEntry entry) async{
-
-    _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
+  incrementWatchCount(BoardEntry entry){
+    Future.delayed(Duration(milliseconds: 300)).then((_){
+      _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
+    });
   }
 
   closeBoardEntry(BoardEntry entry){

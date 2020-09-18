@@ -32,20 +32,12 @@ class _MessageStreamState extends State<MessageStream> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<ChatMessage>>(
-            stream: _getMessages(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                /*
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-
-           */
-                return Expanded(
-                  child: ListView.builder(
+    return Expanded(
+      child: StreamBuilder<List<ChatMessage>>(
+              stream: _getMessages(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
                     controller: _scrollController,
                     reverse: true,
                     itemCount: snapshot.data.length,
@@ -58,18 +50,18 @@ class _MessageStreamState extends State<MessageStream> {
                         ),
                       );
                     },
-                  ),
-                );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-            },
-          );
+                  );
+                } else if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+              },
+            ),
+    );
   }
 
   Stream<List<ChatMessage>> _getMessages() {

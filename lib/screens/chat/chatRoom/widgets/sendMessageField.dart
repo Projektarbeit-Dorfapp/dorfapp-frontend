@@ -48,7 +48,7 @@ class _ChatMessageTextFieldState extends State<ChatMessageTextField> {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.87,
-              child: Consumer<ChatMessageHandler>(
+              child: Consumer<ChatRoomHandler>(
                 builder: (context, messageHandler,_){
                   _controller.text = messageHandler.currentMessage;
                   return TextFormField(
@@ -90,7 +90,7 @@ class SendButton extends StatelessWidget {
     );
   }
   _submitMessage(BuildContext context, User selectedUser) async{
-    final messageHandler = Provider.of<ChatMessageHandler>(context, listen: false);
+    final messageHandler = Provider.of<ChatRoomHandler>(context, listen: false);
     messageHandler.sendMessage(context, selectedUser);
     messageHandler.clear();
   }

@@ -145,4 +145,31 @@ class ChatService {
   Stream<DocumentSnapshot> chatDocumentStream(String chatID){
     return Firestore.instance.collection(CollectionNames.CHAT).document(chatID).snapshots();
   }
+
+  ///returns "partner" or "creator" which are the defined roles that two [User]s can potentially have when they chat with each other. An empty String means there is no partner defined which happens when
+  ///there is no existing [ChatRoom] for the combination or [User]s. This function is returning the role of the [selectedUser] and not the role from the current client. Note: If [selectedUser] is "partner",
+  ///then the current client will always be "creator"
+  Future<String> findRoleOfSelectedUser(User selectedUser, String chatID) async{
+
+    ///The ChatRoom might be opened without a chatID (Not existing at that time) which means there is no defined partner role
+    if(chatID == null)
+      return "";
+
+    try{
+      QuerySnapshot snapshot = await Firestore.instance.collection(CollectionNames.USER)
+          .document(selectedUser.documentID)
+          .collection(CollectionNames.CHATS)
+          .where("chatID", isEqualTo: chatID)
+          .getDocuments();
+
+      if(snapshot.documents[0] != null){
+        return snapshot.documents[0].data["role"];
+      } else{
+        return "";
+      }
+    }catch(e){
+      print(e);
+      return "";
+    }
+  }
 }

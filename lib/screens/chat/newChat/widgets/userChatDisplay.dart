@@ -35,7 +35,7 @@ class NewUserChatDisplay extends StatelessWidget {
 
   _navigateChatRoom(BuildContext context) async{
 
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => ChatRoom(selectedUser: user, chatID: getChatID(context),)));
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => ChatRoom(selectedUser: user, chatID: getChatID(context), role: null,)));
   }
   String getChatID(BuildContext context){
     final collectionState = Provider.of<OpenConnectionState>(context, listen: false);

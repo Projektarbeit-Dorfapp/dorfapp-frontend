@@ -20,11 +20,52 @@ class UserDisplay extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: [
-              UserAvatarDisplay(50, 50),
+              Container(
+                height: 50,
+                width: 75,
+                child: Stack(
+                  children: [
+                    UserAvatarDisplay(
+                        50, 50),
+                    Positioned(
+                      left: 38,
+
+                      child: openChat.unreadMessages > 0 ? Padding(
+                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).buttonColor,
+                            borderRadius: BorderRadius.circular(50),
+
+                          ),
+                          child: Center(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                openChat.unreadMessages.toString(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17
+                                ),
+                              ),
+                            ),
+
+                          ),
+                        ),
+                      ) : Container(),
+                    )
+                  ],
+                ),
+              ),
               SizedBox(width: 20,),
               Text(openChat.user.firstName + " " + openChat.user.lastName, style: TextStyle(
                   fontSize: 20
-              ),)
+              ),),
+              Spacer(),
+
+
             ],
           ),
         ),
@@ -32,3 +73,12 @@ class UserDisplay extends StatelessWidget {
     );
   }
 }
+class SimpleQuantityDisplay extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+
+    );
+  }
+}
+
