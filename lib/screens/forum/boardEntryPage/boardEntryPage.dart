@@ -6,6 +6,7 @@ import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class BoardEntryPage extends StatefulWidget {
   @override
   _BoardEntryPageState createState() => _BoardEntryPageState();
@@ -50,48 +51,42 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
               stream: _boardEntryService.getBoardEntriesAsStream(categoryWithColor.category, _listSizeLimit),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.builder(
-                    controller: _scrollController,
-                    itemCount: snapshot.data.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
+                  return Stack(
+                    children: [
+                      ListView.builder(
+                        controller: _scrollController,
+                        itemCount: snapshot.data.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
 
-                      if(index == snapshot.data.length){
-                        return Container(
-                          height: MediaQuery.of(context).size.height * 0.05,
-                        );
-                      }
-                      _animationController.forward();
-                      return FadeScaleTransition(
-                        animation: _animationController,
-                        child: BoardEntryDisplay(
-                          //categoryColor: categoryWithColor.categoryColor,
-                          entry: snapshot.data[index],
-                        ),
-                      );
-                    },
+                          if(index == snapshot.data.length){
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                            );
+                          }
+                          _animationController.forward();
+                          return FadeScaleTransition(
+                            animation: _animationController,
+                            child: BoardEntryDisplay(
+                              categoryColor: categoryWithColor.categoryColor,
+                              entry: snapshot.data[index],
+                            ),
+                          );
+                        },
+                      ),
+                      AddEntryNavigationButton(category: categoryWithColor.category, categoryColor: categoryWithColor.categoryColor,boardEntryScrollController: _scrollController,)
+                    ],
                   );
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 } else { ///ERROR
                   return Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text("Etwas ist schief gelaufen :("),
-                        RaisedButton(
-                          onPressed: () {
-                            setState(() {});
-                          },
-                          child: Text("Wiederholen"),
-                        ),
-                      ],
-                    ),
+                    child: CircularProgressIndicator(),
                   );
                 }
               },
             ),
-            AddEntryNavigationButton(category: categoryWithColor.category, categoryColor: categoryWithColor.categoryColor,)
+
           ],
         ),
       ),

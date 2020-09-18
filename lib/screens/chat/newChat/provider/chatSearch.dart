@@ -1,6 +1,7 @@
 import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
+///Matthias Maxelon
 class ChatSearch extends ChangeNotifier{
   List<User> _municipal;
   List<User> _searchedMunicipal;

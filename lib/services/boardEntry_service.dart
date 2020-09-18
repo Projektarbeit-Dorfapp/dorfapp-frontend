@@ -26,9 +26,9 @@ class BoardEntryService{
     _boardRef.document(documentID).updateData({"lastActivity" : Timestamp.now()});
   }
 
-  incrementWatchCount(BoardEntry entry){
+  incrementWatchCount(String entryReference){
     Future.delayed(Duration(milliseconds: 300)).then((_){
-      _boardRef.document(entry.documentID).updateData({"watchCount" : FieldValue.increment(1)});
+      _boardRef.document(entryReference).updateData({"watchCount" : FieldValue.increment(1)});
     });
   }
 

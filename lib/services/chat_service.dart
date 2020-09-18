@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/services/user_service.dart';
 
 ///Kilian Berthold & Matthias Maxelon
 class ChatService {

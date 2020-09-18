@@ -2,6 +2,7 @@ import 'package:dorf_app/screens/chat/newChat/provider/chatSearch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class SearchField extends StatelessWidget {
 
   @override

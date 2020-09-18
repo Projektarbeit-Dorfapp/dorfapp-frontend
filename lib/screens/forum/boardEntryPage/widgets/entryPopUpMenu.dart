@@ -7,6 +7,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class EntryPopUpMenu extends StatefulWidget {
   final BoardEntry entry;
   EntryPopUpMenu(this.entry);

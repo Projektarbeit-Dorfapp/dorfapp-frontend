@@ -3,6 +3,7 @@ import 'package:dorf_app/screens/chat/chatRoom/provider/chatMessageHandler.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class ChatMessageTextField extends StatefulWidget {
   final String chatRoomID;
   final User selectedUser;

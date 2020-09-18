@@ -7,9 +7,11 @@ import 'package:dorf_app/widgets/showUserProfileText.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class BoardEntryDisplay extends StatelessWidget {
   final BoardEntry entry;
-  BoardEntryDisplay({@required this.entry});
+  final Color categoryColor;
+  BoardEntryDisplay({@required this.entry, this.categoryColor});
 
   @override
   Widget build(BuildContext context) {
@@ -138,9 +140,9 @@ class BoardEntryDisplay extends StatelessWidget {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BoardMessagePage(entryDocumentID: entry.documentID),
+          builder: (context) => BoardMessagePage(entryDocumentID: entry.documentID, boardCategoryColor: entry.categoryColor, boardCategoryHeadline: entry.boardCategoryTitle,),
         ));
-    BoardEntryService().incrementWatchCount(entry);
+    BoardEntryService().incrementWatchCount(entry.documentID);
   }
 }
 

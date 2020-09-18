@@ -1,12 +1,11 @@
-
 import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/chat_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class MessageStream extends StatefulWidget {
   final User loggedUser;
   final String chatID;

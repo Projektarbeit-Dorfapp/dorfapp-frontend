@@ -6,11 +6,13 @@ import 'package:dorf_app/screens/forum/addEntryPage/widgets/addEntryDescriptionF
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class AddEntryPage extends StatelessWidget {
   final BoardCategory category;
   final Color categoryColor;
   final GlobalKey<FormState> formKey;
-  AddEntryPage({this.category, this.categoryColor, this.formKey});
+  final ScrollController boardEntryScrollController;
+  AddEntryPage({this.category, this.categoryColor, this.formKey, this.boardEntryScrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class AddEntryPage extends StatelessWidget {
           height: 80,
           child: Padding(
             padding: EdgeInsets.only(bottom: 10, right: 10),
-            child: AddEntryButton(category, categoryColor, formKey),
+            child: AddEntryButton(category, categoryColor, formKey, boardEntryScrollController),
           ),
         ),
         body: Container(

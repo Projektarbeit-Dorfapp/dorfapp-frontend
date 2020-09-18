@@ -1,6 +1,6 @@
 import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:flutter/cupertino.dart';
-
+///Matthias Maxelon
 class OpenConnectionState extends ChangeNotifier{
 
   List<OpenChat> _openConnections;

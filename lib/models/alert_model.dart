@@ -7,14 +7,18 @@ class Alert{
   Timestamp creationDate;
   String additionalMessage;
   String headline; ///The name of the content, if news -> maybe save news headline here or if boardEntry -> save headline of entry
+  String secondHeadline;
   bool isRead; /// is true if user has read the alert
   String fromUserName;
   String fromFirstName;
   String fromLastName;
   String documentReference;
+  int alertColor;
 
   AlertType alertType;
   Alert({
+    this.secondHeadline,
+    this.alertColor,
     this.headline,
     this.documentReference,
     this.creationDate,
@@ -26,6 +30,8 @@ class Alert{
 
   Alert.fromJson(Map snapshot, String documentID){
     this.documentID = documentID;
+    secondHeadline = snapshot["secondHeadline"] ?? "";
+    alertColor = snapshot["alertColor"] ?? 0;
     isRead = snapshot["isRead"] ?? false;
     headline = snapshot["headline"] ?? "";
     documentReference = snapshot["documentReference"] ?? "";
@@ -39,6 +45,8 @@ class Alert{
   }
   Map<String, dynamic> toJson(){
     return {
+      "secondHeadline" : secondHeadline,
+      "alertColor" : alertColor,
       "headline" : headline,
       "documentReference" : documentReference,
       "additionalMessage" : additionalMessage,

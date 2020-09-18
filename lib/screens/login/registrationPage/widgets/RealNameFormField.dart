@@ -2,6 +2,8 @@ import 'package:dorf_app/screens/login/loginDecoration/loginInputDecoration.dart
 import 'package:dorf_app/screens/login/registrationPage/provider/registrationValidator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+///Matthias Maxelon
 enum RealNameType{firstName, lastName}
 class RealNameFormField extends StatelessWidget {
   final FocusNode focusNext;

@@ -9,7 +9,7 @@ import 'package:dorf_app/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
+///Matthias Maxelon
 class ChatRoom extends StatefulWidget {
   final User selectedUser;
   final String chatID; /// can be null

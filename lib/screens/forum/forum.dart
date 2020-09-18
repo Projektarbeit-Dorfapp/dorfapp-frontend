@@ -1,9 +1,9 @@
 import 'package:dorf_app/screens/forum/boardCategoryPage/boardCategoryPage.dart';
-import 'package:dorf_app/screens/forum/municipalPage/municipalPage.dart';
 import 'package:dorf_app/screens/forum/pinsPage/pinsPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+///Matthias Maxelon
 class Forum extends StatefulWidget {
   @override
   _ForumState createState() => _ForumState();

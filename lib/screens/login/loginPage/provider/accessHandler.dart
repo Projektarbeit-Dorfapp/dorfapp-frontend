@@ -4,6 +4,7 @@ import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/models/user_model.dart';
 
+///Matthias Maxelon & Kilian Berthold
 class AccessHandler extends ChangeNotifier {
   final _userService = UserService();
 

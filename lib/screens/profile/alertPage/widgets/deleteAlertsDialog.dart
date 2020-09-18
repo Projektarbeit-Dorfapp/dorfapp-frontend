@@ -3,6 +3,7 @@ import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class DeleteAlertsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -10,13 +11,13 @@ class DeleteAlertsDialog extends StatelessWidget {
       title: Text("Alle Benachrichtigungen löschen?"),
       actions: <Widget>[
         FlatButton(
-          child: Text("Ja", style: TextStyle(color: Theme.of(context).buttonColor),),
+          child: Text("Ja", style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 17),),
           onPressed: (){
             _cancelAlertsEvent(context);
           },
         ),
         FlatButton(
-          child: Text("Nein", style: TextStyle(color: Theme.of(context).buttonColor),),
+          child: Text("Nein", style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 17),),
           onPressed: (){
             _dismiss(context);
           },

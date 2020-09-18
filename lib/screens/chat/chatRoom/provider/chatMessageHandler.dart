@@ -7,6 +7,7 @@ import 'package:dorf_app/services/chat_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class ChatRoomHandler extends ChangeNotifier with WidgetsBindingObserver{
 
   String _currentMessage;

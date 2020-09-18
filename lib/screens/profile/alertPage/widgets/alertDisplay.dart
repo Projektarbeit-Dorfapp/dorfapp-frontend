@@ -1,6 +1,7 @@
 import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
 import 'package:dorf_app/services/alert_service.dart';
+import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +28,10 @@ class AlertDisplay extends StatelessWidget {
   ///depending on AlertType -> Navigate to a specific page
   _navigate(BuildContext context) async{
     if(alertService.getAlerts()[builderIndex].alertType == AlertType.boardMessage || alertService.getAlerts()[builderIndex].alertType == AlertType.entry){
+      Alert alert = alertService.getAlerts()[builderIndex];
       Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMessagePage(
-        entryDocumentID: alertService.getAlerts()[builderIndex].documentReference,)));
+        entryDocumentID: alert.documentReference, boardCategoryColor: alert.alertColor, boardCategoryHeadline: alert.secondHeadline,)));
+      BoardEntryService().incrementWatchCount(alert.documentReference);
     }
   }
   

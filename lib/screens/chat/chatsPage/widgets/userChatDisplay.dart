@@ -3,8 +3,8 @@ import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/chat/chatRoom/widgets/chatRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
+///Matthias Maxelon
 class UserDisplay extends StatelessWidget {
   final OpenChat openChat;
   UserDisplay({@required this.openChat});
@@ -81,4 +81,5 @@ class SimpleQuantityDisplay extends StatelessWidget {
     );
   }
 }
+
 

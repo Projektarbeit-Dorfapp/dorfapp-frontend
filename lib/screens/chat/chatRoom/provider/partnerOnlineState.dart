@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/services/chat_service.dart';
 import 'package:flutter/cupertino.dart';
 
+///Matthias Maxelon
 class PartnerOnlineState extends ChangeNotifier {
   final String _offlineState = "Offline";
   final String _onlineState = "Online";

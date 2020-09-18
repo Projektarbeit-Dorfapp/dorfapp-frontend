@@ -1,9 +1,10 @@
-import 'package:dorf_app/screens/forum/boardMessagePage/provider/boardMessageHandler.dart';
+
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class SendBoardMessageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -8,6 +8,7 @@ import 'package:dorf_app/services/boardMessage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class NotUsed extends StatefulWidget {
   final BoardCategory category;
   final BoardEntry entry;

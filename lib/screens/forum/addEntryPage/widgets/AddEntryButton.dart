@@ -12,11 +12,13 @@ import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Matthias Maxelon
 class AddEntryButton extends StatelessWidget {
   final BoardCategory category;
   final Color categoryColor;
   final GlobalKey<FormState> formKey;
-  AddEntryButton(this.category, this.categoryColor, this.formKey);
+  final ScrollController boardEntryScrollController;
+  AddEntryButton(this.category, this.categoryColor, this.formKey, this.boardEntryScrollController);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class AddEntryButton extends StatelessWidget {
     DocumentReference docRef = await _entryService.insertEntry(createdEntry);
     _subscribe(docRef, context, createdEntry);
     _notifyMunicipal(context, docRef, createdEntry);
+    boardEntryScrollController.animateTo(0.0, duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
   }
 
   ///Subscribe to own content on insertion
@@ -86,6 +89,8 @@ class AddEntryButton extends StatelessWidget {
 
   Alert _createAlert(DocumentReference documentReference, BoardEntry createdEntry){
     return Alert(
+      secondHeadline: createdEntry.boardCategoryTitle,
+      alertColor: createdEntry.categoryColor,
       alertType: AlertType.entry,
       creationDate: Timestamp.now(),
       documentReference: documentReference.documentID,

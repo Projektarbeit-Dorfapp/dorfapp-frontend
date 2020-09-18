@@ -36,7 +36,6 @@ class UserAvatar extends StatelessWidget {
         builder: (context){
           return Container(
             height: MediaQuery.of(context).size.height - _safeAreaHeight,
-            //TODO: MediaQuery.of(context).padding.top isn't working... something is off with the context dont know why even the _safeAreaHeight doesnt work.
             child: UserSettings(
 
             ),
