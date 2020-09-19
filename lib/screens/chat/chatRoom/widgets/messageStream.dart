@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/chat_service.dart';
@@ -19,7 +21,7 @@ class _MessageStreamState extends State<MessageStream> {
 
   @override
   void initState() {
-    _scrollController = ScrollController();
+    _scrollController = ScrollController(initialScrollOffset: 1);
     super.initState();
   }
 

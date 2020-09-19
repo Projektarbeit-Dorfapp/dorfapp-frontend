@@ -83,7 +83,7 @@ class _WeatherDisplayState extends State<WeatherDisplay> {
         else if(snapshot.hasError){
           return Container();
         } else {
-          return CircularProgressIndicator();
+          return Container();
         }
       },
     );
