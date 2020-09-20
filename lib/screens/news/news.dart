@@ -3,10 +3,10 @@ import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
-import 'file:///C:/Projekte/dorfapp-frontend/lib/screens/news/news_edit.dart';
+import 'package:dorf_app/screens/news/news_edit.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/material.dart';
-import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:provider/provider.dart';
 

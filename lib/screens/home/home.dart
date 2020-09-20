@@ -8,7 +8,7 @@ import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
 import 'package:dorf_app/screens/news/news.dart';
 import 'package:dorf_app/screens/profile/alertPage/alertPage.dart';
 import 'package:dorf_app/services/alert_service.dart';
-import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

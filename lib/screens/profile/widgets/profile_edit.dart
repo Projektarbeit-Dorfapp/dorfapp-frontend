@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/profile/profile.dart';
-import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';

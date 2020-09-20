@@ -4,7 +4,7 @@ import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/authentication_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';

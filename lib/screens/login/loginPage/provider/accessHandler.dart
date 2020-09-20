@@ -1,5 +1,5 @@
 import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
-import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/models/user_model.dart';

@@ -244,21 +244,18 @@ class _NewsEditState extends State<NewsEdit> {
     uploadFile();
   }
 
-
   Future uploadFile() async {
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
         .child(new DateTime.now().millisecondsSinceEpoch.toString() + _image.path.split("/")?.last);
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
-    print('File Uploaded');
     storageReference.getDownloadURL().then((fileURL) {
       setState(() {
         _uploadedFileURL = fileURL;
       });
     });
   }
-
 
   RaisedButton _addNewsButton(String newsID) {
     AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);

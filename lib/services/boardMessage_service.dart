@@ -4,7 +4,7 @@ import 'package:dorf_app/models/boardCategory_model.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/boardMessage_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
-import 'package:dorf_app/services/auth/authentication_service.dart';
+import 'package:dorf_app/services/authentication_service.dart';
 ///Matthias Maxelon
 enum OrderType {latest, oldest, mostLikes,}
 
