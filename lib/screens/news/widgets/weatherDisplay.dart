@@ -13,7 +13,9 @@ class WeatherDisplay extends StatefulWidget {
   _WeatherDisplayState createState() => _WeatherDisplayState();
 }
 
-class _WeatherDisplayState extends State<WeatherDisplay> {
+class _WeatherDisplayState extends State<WeatherDisplay> with SingleTickerProviderStateMixin{
+  AnimationController _controller;
+  Animation _animation;
   WeatherFactory weatherFactory;
   final mainColor = Colors.black;
   final temperatureColor = Color(0xffdb5656);
@@ -25,6 +27,8 @@ class _WeatherDisplayState extends State<WeatherDisplay> {
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
+    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     weatherFactory = WeatherFactory("c2c10f74ba4dcdbdcf10250640a08187");
     updateState();
   }
@@ -54,36 +58,40 @@ class _WeatherDisplayState extends State<WeatherDisplay> {
       future: initializeWeatherData(),
       builder: (BuildContext context, AsyncSnapshot<Weather> snapshot){
         if(snapshot.hasData){
+          _controller.forward();
           temperature = snapshot.data.temperature.celsius.round();
           areaName = snapshot.data.areaName;
-          return Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(areaName,
-                    style: TextStyle(color: mainColor, fontSize: widget.textSize != null ? widget.textSize : 16, fontFamily: "Raleway")),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  temperature.toString() + "°C",
-                  style: TextStyle(
-                    fontSize: widget.textSize != null ? widget.textSize : 16,
-                    color: _getTemperatureColor(),
-                    fontFamily: "Raleway"
+          return FadeTransition(
+            opacity: _animation,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(areaName,
+                      style: TextStyle(color: mainColor, fontSize: widget.textSize != null ? widget.textSize : 16, fontFamily: "Raleway")),
+                  SizedBox(
+                    width: 10,
                   ),
+                  Text(
+                    temperature.toString() + "°C",
+                    style: TextStyle(
+                      fontSize: widget.textSize != null ? widget.textSize : 16,
+                      color: _getTemperatureColor(),
+                      fontFamily: "Raleway"
+                    ),
 
-                ),
-                //weatherIcons(),
-              ],
+                  ),
+                  //weatherIcons(),
+                ],
+              ),
             ),
           );
         }
         else if(snapshot.hasError){
           return Container();
         } else {
-          return CircularProgressIndicator();
+          return Container();
         }
       },
     );

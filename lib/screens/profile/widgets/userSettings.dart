@@ -103,41 +103,14 @@ class _UserSettingsState extends State<UserSettings> {
               ],
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 20), child: MyAlerts()),
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Icon(Icons.favorite, color: Color(0xff6FB3A9)),
-                ),
-                Text(
-                  "Meine Favoriten",
-                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                ),
-              ],
-            ),
-          ),
+          Padding(padding: EdgeInsets.only(top: 20, bottom: 10), child: MyAlerts()),
+
           Divider(
             thickness: 2,
+            indent: MediaQuery.of(context).size.width * 0.06,
+            endIndent: MediaQuery.of(context).size.width * 0.06,
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Icon(Icons.settings, color: Color(0xff6FB3A9)),
-                ),
-                Text(
-                  "Einstellungen",
-                  style: TextStyle(fontFamily: "Raleway", fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(top: 20), child: ChangeUserAccount()),
+          Padding(padding: EdgeInsets.only(top: 10), child: ChangeUserAccount()),
         ],
       ),
     ) : Center(child: CircularProgressIndicator());
