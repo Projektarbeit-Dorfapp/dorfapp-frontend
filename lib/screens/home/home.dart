@@ -1,4 +1,5 @@
 import 'package:dorf_app/constants/menu_buttons.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
@@ -17,6 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
   int _currentIndex = 1;
   final List<Widget> _children = [
     Calendar(),
@@ -25,7 +27,6 @@ class _HomeState extends State<Home> {
   ];
   @override
   void initState() {
-
     super.initState();
   }
   @override

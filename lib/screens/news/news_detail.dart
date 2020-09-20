@@ -6,10 +6,12 @@ import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
+import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/widgets/comment_section.dart';
 import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
 import 'package:dorf_app/widgets/like_section.dart';
 import 'package:dorf_app/screens/news/widgets/time_detailview.dart';
+import 'package:dorf_app/widgets/subscription_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -84,7 +86,13 @@ class _NewsDetailState extends State<NewsDetail> {
                                 fontSize: 16,
                                 color: Colors.black),
                           )),
-                      LikeSection(newsModel.likes, widget.newsID, "Veranstaltung", _userID),
+                      Row(
+                        children: <Widget>[
+                          LikeSection(newsModel.likes, widget.newsID, "Veranstaltung", _userID),
+                          Spacer(),
+                          SubscriptionSection(widget.newsID, newsModel.bookmarks, _userID)
+                        ],
+                      ),
                       CommentSection(newsModel.comments, widget.newsID, "Veranstaltung"),
                     ],
                   )));

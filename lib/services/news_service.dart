@@ -3,6 +3,7 @@ import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:flutter/material.dart';
 
 class NewsService {
   CollectionReference _newsCollectionReference =
@@ -71,6 +72,20 @@ class NewsService {
 
       await _newsCollectionReference
           .document(newsID)
+          .collection("Gepinnt")
+          .getDocuments()
+          .then((dataSnapshot) {
+            if (dataSnapshot.documents.length > 0) {
+              var pinnedList = List<User>();
+              for (var document in dataSnapshot.documents) {
+                pinnedList.add(new User(uid: document.documentID));
+              }
+              newsModel.bookmarks = pinnedList;
+            }
+          });
+
+      await _newsCollectionReference
+          .document(newsID)
           .collection("Kommentare")
           .getDocuments()
           .then((dataSnapshot) {
@@ -131,6 +146,18 @@ class NewsService {
       print(error.toString());
     }
     return news;
+  }
+
+  Future<List<News>>getPinnedNews(AsyncSnapshot<List<DocumentSnapshot>> snapshot) async {
+    List<News> pinnedNews = [];
+    try {
+      for(DocumentSnapshot doc in snapshot.data){
+        pinnedNews.add(await getNews(doc.data["DocumentReference"]));
+      }
+    } catch (error) {
+      print(error.toString());
+    }
+    return pinnedNews;
   }
 
   Address convertSnapshotToAddress(DocumentSnapshot ds) {

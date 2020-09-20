@@ -1,4 +1,5 @@
 import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
+import 'package:dorf_app/screens/news/widgets/pinnedNews.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
 import 'package:dorf_app/screens/news_edit/news_edit.dart';
@@ -10,8 +11,9 @@ import '../../models/news_model.dart';
 import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
-class NewsOverview extends StatelessWidget {
+// Philipp Hellwich
 
+class NewsOverview extends StatelessWidget {
   final _newsService = new NewsService();
 
   @override
@@ -34,7 +36,9 @@ class NewsOverview extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          WeatherDisplay(textSize: 24,),
+                          WeatherDisplay(
+                            textSize: 24,
+                          ),
                           Spacer(),
                           Container(
                             height: 70,
@@ -43,7 +47,7 @@ class NewsOverview extends StatelessWidget {
                               children: <Widget>[
                                 UserAvatar(safeAreaHeight, 50, 50),
                                 Consumer<AlertService>(
-                                  builder: (context, alertService, _){
+                                  builder: (context, alertService, _) {
                                     return Positioned(
                                       right: 8,
                                       top: 8,
@@ -59,7 +63,6 @@ class NewsOverview extends StatelessWidget {
                                       ),
                                     );
                                   },
-
                                 ),
                               ],
                             ),
@@ -80,7 +83,7 @@ class NewsOverview extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        "Deine ",
+                        "Deine gepinnten News ",
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.blueGrey,
@@ -96,44 +99,13 @@ class NewsOverview extends StatelessWidget {
                 ),
               ),
             ),
-
+            
             ///Gepinnte Karte
             SliverToBoxAdapter(
               child: Container(
                 color: Colors.white,
-                height: 150,
-                child: PageView.builder(
-                  scrollDirection: Axis.horizontal,
-                  controller: PageController(
-                    viewportFraction: 0.7,
-                    initialPage: 0,
-                  ),
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 50,
-                      child: Card(
-                        child: Center(
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Center(
-                                child: Text(
-                                  "Philcard",
-                                  style: TextStyle(
-                                      fontSize: 30, color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        color: Color(0xff6FB3A9),
-                        elevation: 2,
-                      ),
-                    );
-                  },
-                ),
+                height: 100,
+                child: PinnedNews()
               ),
             ),
             SliverToBoxAdapter(
@@ -142,7 +114,7 @@ class NewsOverview extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "Neuigkeiten auf einem Blick",
+                    "Alle Neuigkeiten auf einem Blick",
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.blueGrey,
@@ -202,13 +174,10 @@ class NewsOverview extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NewsEdit()));
+                  context, MaterialPageRoute(builder: (context) => NewsEdit()));
             },
             child: Icon(Icons.add),
-            backgroundColor: Color(0xFF548c58)
-        ),
+            backgroundColor: Color(0xFF548c58)),
       ),
     );
   }

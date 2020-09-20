@@ -43,7 +43,7 @@ class _PinsPageState extends State<PinsPage> {
   Widget build(BuildContext context) {
     return _loggedUser != null
         ? StreamBuilder(
-            stream: _subscriptionService.getPins(_loggedUser, _itemLimit, SubscriptionType.entry),
+            stream: _subscriptionService.getPinnedDocumentsAsStream(_loggedUser, _itemLimit, SubscriptionType.entry),
             builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
 
               if (snapshot.hasData) {

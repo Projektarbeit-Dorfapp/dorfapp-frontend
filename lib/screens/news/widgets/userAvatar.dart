@@ -1,4 +1,4 @@
-import 'file:///C:/Users/R4pture/AndroidStudioProjects/dorfapp-frontend/lib/screens/profile/widgets/userSettings.dart';
+import 'package:dorf_app/screens/profile/widgets/userSettings.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
