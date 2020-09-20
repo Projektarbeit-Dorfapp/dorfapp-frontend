@@ -7,7 +7,7 @@ import 'package:dorf_app/screens/general/custom_border.dart';
 import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
-import 'package:dorf_app/screens/news_edit/news_edit.dart';
+import 'file:///C:/Projekte/dorfapp-frontend/lib/screens/news/news_edit.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/widgets/comment_section.dart';
 import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
