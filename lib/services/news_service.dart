@@ -5,6 +5,7 @@ import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:flutter/material.dart';
 
 import 'comment_service.dart';
 
@@ -60,6 +61,20 @@ class NewsService {
                 uid: document.documentID, firstName: document.data['firstName'], lastName: document.data['lastName']));
           }
           newsModel.likes = userList;
+        }
+      });
+
+      await _newsCollectionReference
+          .document(newsID)
+          .collection("Gepinnt")
+          .getDocuments()
+          .then((dataSnapshot) {
+        if (dataSnapshot.documents.length > 0) {
+          var pinnedList = List<User>();
+          for (var document in dataSnapshot.documents) {
+            pinnedList.add(new User(uid: document.documentID));
+          }
+          newsModel.bookmarks = pinnedList;
         }
       });
 
@@ -167,6 +182,18 @@ class NewsService {
       news.sort((a, b) => b.likes.length.compareTo(a.likes.length));
     }
     return news;
+  }
+
+  Future<List<News>>getPinnedNews(AsyncSnapshot<List<DocumentSnapshot>> snapshot) async {
+    List<News> pinnedNews = [];
+    try {
+      for(DocumentSnapshot doc in snapshot.data){
+        pinnedNews.add(await getNews(doc.data["DocumentReference"]));
+      }
+    } catch (error) {
+      print(error.toString());
+    }
+    return pinnedNews;
   }
 
   Address convertSnapshotToAddress(DocumentSnapshot ds) {

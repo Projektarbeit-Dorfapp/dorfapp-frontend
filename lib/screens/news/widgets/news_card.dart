@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import '../news_detail.dart';
 
+// Philipp Hellwich
+
 class NewsCard extends StatelessWidget {
   News newsCard = new News();
 
@@ -56,19 +58,6 @@ class NewsCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0.0),
-                        child: Text(
-                          newsCard.description,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontSize: 14,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -78,26 +67,6 @@ class NewsCard extends StatelessWidget {
                               this.newsCard.convertTimestamp(this.newsCard.createdAt),
                               Colors.white,
                               12.0),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(right: 15.0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 20,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.more_vert,
-                                    color: Colors.white,
-                                    size: 16,
-                                  ),
-                                  onPressed: () {
-                                    print("Comment");
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ],
                     )

@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
-import 'package:dorf_app/models/alert_model.dart';
+import 'package:dorf_app/models/boardEntry_Model.dart';
+import 'package:dorf_app/models/news_model.dart';
 import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
-import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
 ///Matthias Maxelon
 enum SubscriptionType { news, entry }
@@ -98,7 +96,8 @@ class SubscriptionService {
   ///
   /// Duplicate data is saved in [CollectionNames.USER] -> user document -> [CollectionNames.PIN] -> duplicate document
   ///
-  _insertDuplicate(User loggedUser, String topLevelDocumentID, SubscriptionType subscriptionType) async{
+  //This should allow us to have much fast queries if trying to display all pinned content from a specific user.
+  _insertDuplicate(User loggedUser, String topLevelDocumentID, SubscriptionType subscriptionType) async {
     final ref = _getRef(loggedUser.documentID, CollectionNames.USER);
     ref.add({
       "SubscriptionType" : subscriptionType.toString().split('.').last,
@@ -118,8 +117,8 @@ class SubscriptionService {
   Future<bool> isUserSubscribed({@required User loggedUser, @required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
     var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
     bool isSubscribed;
-    var subscriptionDoc = await ref.document(loggedUser.uid).get();
-    if (subscriptionDoc.data == null) {
+    var subscriptionDoc = await ref.where("uid", isEqualTo: loggedUser.uid).getDocuments();
+    if (subscriptionDoc.documents.length == 0) {
       isSubscribed = false;
     } else {
       isSubscribed = true;
@@ -167,6 +166,10 @@ class SubscriptionService {
     });
   }
 
+  CollectionReference _getRef(documentID, collection) {
+    return Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.PIN);
+  }
+
   Future<List<DocumentSnapshot>> _getReferencedDocuments(SubscriptionType subscriptionType, List<DocumentSnapshot> documentSnapshot) async{
     List<DocumentSnapshot> list = [];
     for(var doc in documentSnapshot){
@@ -187,7 +190,4 @@ class SubscriptionService {
     return await _getReferencedDocuments(subscriptionType, snapshot.documents);
   }
 
-  CollectionReference _getRef(documentID, collection) {
-    return Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.PIN);
-  }
 }

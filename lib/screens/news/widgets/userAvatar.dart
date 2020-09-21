@@ -1,6 +1,5 @@
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/profile/widgets/userSettings.dart';
-//import 'package:dorf_app/screens/news/widgets/userSettings.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {

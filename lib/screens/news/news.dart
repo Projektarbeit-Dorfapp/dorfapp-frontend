@@ -1,5 +1,6 @@
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
+import 'package:dorf_app/screens/news/widgets/pinnedNews.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/news/widgets/weatherDisplay.dart';
@@ -14,6 +15,7 @@ import '../../models/news_model.dart';
 import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
+// Philipp Hellwich
 class NewsOverview extends StatefulWidget {
   final double safeAreaHeight;
   NewsOverview({@required this.safeAreaHeight});
@@ -111,8 +113,11 @@ class _NewsOverviewState extends State<NewsOverview> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        "Deine ",
-                        style: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Raleway'),
+                        "Deine gepinnten News ",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blueGrey,
+                            fontFamily: 'Raleway'),
                       ),
                       Icon(
                         Icons.pin_drop,
@@ -129,38 +134,8 @@ class _NewsOverviewState extends State<NewsOverview> {
             SliverToBoxAdapter(
               child: Container(
                 color: Colors.white,
-                height: 150,
-                child: PageView.builder(
-                  scrollDirection: Axis.horizontal,
-                  controller: PageController(
-                    viewportFraction: 0.7,
-                    initialPage: 0,
-                  ),
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 50,
-                      child: Card(
-                        child: Center(
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Center(
-                                child: Text(
-                                  "Philcard",
-                                  style: TextStyle(fontSize: 30, color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        color: Color(0xff6FB3A9),
-                        elevation: 2,
-                      ),
-                    );
-                  },
-                ),
+                height: 100,
+                child: PinnedNews()
               ),
             ),
             SliverToBoxAdapter(
@@ -212,8 +187,11 @@ class _NewsOverviewState extends State<NewsOverview> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "Neuigkeiten auf einen Blick",
-                    style: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: "Raleway"),
+                    "Alle Neuigkeiten auf einem Blick",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blueGrey,
+                        fontFamily: "Raleway"),
                   ),
                 ),
               ),

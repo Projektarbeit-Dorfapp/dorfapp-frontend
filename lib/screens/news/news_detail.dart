@@ -13,6 +13,7 @@ import 'package:dorf_app/widgets/comment_section.dart';
 import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
 import 'package:dorf_app/widgets/like_section.dart';
 import 'package:dorf_app/screens/news/widgets/time_detailview.dart';
+import 'package:dorf_app/widgets/subscription_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -80,6 +81,8 @@ class _NewsDetailState extends State<NewsDetail> {
                       _getEventInfo(),
                       DescriptionDisplay(description: newsModel.description,), //umgeschrieben in eigenes Widget, siehe unten - Matthias
                       LikeSection(newsModel.likes, widget.newsID, CollectionNames.EVENT, _userID),
+                      Spacer(),
+                      SubscriptionSection(widget.newsID, newsModel.bookmarks, _userID)
                       CustomBorder(),
                       CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news, disableAddingComment: false),
                     ],
