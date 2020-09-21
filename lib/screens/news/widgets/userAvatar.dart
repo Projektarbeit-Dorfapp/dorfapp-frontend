@@ -3,11 +3,10 @@ import 'package:dorf_app/screens/profile/widgets/userSettings.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
-  final double _safeAreaHeight;
-  final User _currentUser;
+  final String imagePath;
   final double height;
   final double width;
-  UserAvatar(this._safeAreaHeight, this._currentUser, this.height, this.width);
+  UserAvatar(this.imagePath, this.height, this.width);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,7 +20,7 @@ class UserAvatar extends StatelessWidget {
           width: width,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: _currentUser.imagePath != "" ? NetworkImage(_currentUser.imagePath)
+              image: imagePath != "" ? NetworkImage(imagePath)
                   : AssetImage("assets/avatar.png"),
               fit: BoxFit.fill,
             ),
@@ -32,15 +31,16 @@ class UserAvatar extends StatelessWidget {
       ),
     );
   }
+
   _showDrawer(BuildContext context){
     showModalBottomSheet(
       isScrollControlled: true,
         context: context,
         builder: (context){
-          return Container(
-            height: MediaQuery.of(context).size.height - _safeAreaHeight,
-            child: UserSettings(
-
+          return SafeArea(
+            child: Container(
+              height: MediaQuery.of(context).size.height - _safeAreaHeight,
+             child: UserSettings(),
             ),
           );
         }
