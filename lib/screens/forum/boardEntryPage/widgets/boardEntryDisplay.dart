@@ -1,6 +1,7 @@
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
+import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:dorf_app/widgets/showUserProfileText.dart';
@@ -36,7 +37,7 @@ class BoardEntryDisplay extends StatelessWidget {
                 Positioned(
                   left: _leftPosDistance,
                   top: 13,
-                  child: UserAvatarDisplay(30, 30), //TODO: Fetch from storage
+                  child: UserAvatar(height: 30, width: 30, userID: entry.createdBy,), //TODO: Fetch from storage
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

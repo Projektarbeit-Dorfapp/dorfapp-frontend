@@ -1,4 +1,5 @@
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,18 +32,9 @@ class LikeDetail extends StatelessWidget{
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.only(right: 10.0, bottom: 15.0, top: 15.0),
-                            width: 50.0,
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(user.imagePath != null && user.imagePath != "" ? user.imagePath : "assets/avatar.png")
-                                )
-                            )
-                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10, bottom: 10, right: 10),
+                            child: UserAvatar(userID: user.uid, height: 50, width: 50,)),
                         Text(
                             user.firstName + " " + user.lastName,
                             style: TextStyle(

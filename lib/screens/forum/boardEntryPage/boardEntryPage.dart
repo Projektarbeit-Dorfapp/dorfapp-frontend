@@ -3,6 +3,7 @@ import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/screens/forum/boardCategoryPage/widgets/boardCategoryDisplay.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/addEntryNavigationButton.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.dart';
+import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:flutter/material.dart';
 
@@ -51,9 +52,10 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
               stream: _boardEntryService.getBoardEntriesAsStream(categoryWithColor.category, _listSizeLimit),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  int snapshotLength = snapshot.data.length;
                   return Stack(
                     children: [
-                      ListView.builder(
+                      snapshotLength > 0 ? ListView.builder(
                         controller: _scrollController,
                         itemCount: snapshot.data.length + 1,
                         itemBuilder: (BuildContext context, int index) {
@@ -72,6 +74,11 @@ class _BoardEntryPageState extends State<BoardEntryPage> with SingleTickerProvid
                             ),
                           );
                         },
+                      ) : Center(
+                        child: ShowTextIfListEmpty(
+                          iconData: Icons.forum,
+                          text: "Noch keine Themen",
+                        ),
                       ),
                       AddEntryNavigationButton(category: categoryWithColor.category, categoryColor: categoryWithColor.categoryColor,boardEntryScrollController: _scrollController,)
                     ],

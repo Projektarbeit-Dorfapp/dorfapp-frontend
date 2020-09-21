@@ -1,6 +1,6 @@
 import 'package:dorf_app/models/chatMessage_model.dart';
-import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/chat/chatRoom/chatRoom.dart';
+import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -25,11 +25,9 @@ class UserDisplay extends StatelessWidget {
                 width: 75,
                 child: Stack(
                   children: [
-                    UserAvatarDisplay(
-                        50, 50),
+                    UserAvatar(width: 50, height: 50, userID: openChat.user.uid,),
                     Positioned(
                       left: 38,
-
                       child: openChat.unreadMessages > 0 ? Padding(
                         padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
                         child: Container(

@@ -146,44 +146,59 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
               ],
             ),
             body: Container(
-              child: ListView(
+              child: Column(
                 children: <Widget>[
-                  ImageTitleDisplay(
-                    title: _entry.title,
-                    imagePath: null,
+                  Container(
+                    child: Material(
+                      elevation: 3,
+                      child: Column(
+                        children: [
+                          ImageTitleDisplay(
+                            title: _entry.title,
+                            imagePath: null,
+                          ),
+                          DescriptionDisplay(
+                            description: _entry.description,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              LikeSection(
+                                _likeList,
+                                _entry.documentID,
+                                CollectionNames.BOARD_ENTRY,
+                                _loggedUser.uid,
+                                likedColor: Color(_categoryColor),
+                                notLikedColor: Colors.grey,
+                                likeDetailAppbarColor: Color(_categoryColor),
+                              ),
+                              Spacer(),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 5, right: MediaQuery.of(context).size.width * 0.05),
+                                child: CommentsDisplayBar(
+                                  barHeight: 50,
+                                  elevation: 4,
+                                  commentQuantity: _entry.commentCount,
+                                  iconColor: Color(_categoryColor),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                    ),
                   ),
-                  DescriptionDisplay(
-                    description: _entry.description,
-                  ),
-                  LikeSection(
-                    _likeList,
-                    _entry.documentID,
-                    CollectionNames.BOARD_ENTRY,
-                    _loggedUser.uid,
-                    likedColor: Color(_categoryColor),
-                    notLikedColor: Colors.grey,
-                    likeDetailAppbarColor: Color(_categoryColor),
-                  ),
-                  CustomBorder(
-                    color: Color(_categoryColor),
-                  ),
-                  SortBar(
-                    barHeight: 50,
-                    elevation: 4,
-                    commentQuantity: _entry.commentCount,
-                    iconColor: Color(_categoryColor),
-                  ),
+
+                  //CustomBorder(
+                    //color: Color(_categoryColor),
+                  //),
+
                   SizedBox(
                     height: 3,
                   ),
-                  _isClosed == true
-                      ? TextNoteBar(
-                          text: "Der Ersteller hat den Kommentarbereich geschlossen. Kommentieren ist nicht möglich",
-                          leftPadding: 20,
-                        )
-                      : Container(),
                   CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry,
-                      disableAddingComment: _isClosed != true ? false : true),
+                      disableAddingComment: _isClosed != true ? false : true, sortMenuColor: Color(widget.boardCategoryColor),),
                 ],
               ),
             ))

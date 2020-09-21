@@ -13,7 +13,7 @@ class ShowUserProfileText extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        _showUserProfile(context);
+        //_showUserProfile(context); Does not work because how the profilePage is built (currently only works with the logged user)
       },
       child: Row(
         children: <Widget>[

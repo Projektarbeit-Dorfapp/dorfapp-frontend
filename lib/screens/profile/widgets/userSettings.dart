@@ -1,5 +1,6 @@
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/screens/profile/widgets/changeUserAccount.dart';
 import 'package:dorf_app/screens/profile/widgets/myAlerts.dart';
 import 'package:flutter/material.dart';
@@ -46,19 +47,7 @@ class _UserSettingsState extends State<UserSettings> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(20),
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: _loggedUser.imagePath != "" ? NetworkImage(_loggedUser.imagePath)
-                          : AssetImage("assets/avatar.png"),
-                      fit: BoxFit.fill,
-                    ),
-                    color: Colors.black,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                child: UserAvatar(userID: _loggedUser.uid, height: 50, width: 50,)
               ),
               _loggedUser != null
                   ? Text(
