@@ -73,7 +73,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                             width: 70,
                             child: Stack(
                               children: <Widget>[
-                                UserAvatar(safeAreaHeight, this._currentUser, 50, 50),
+                                UserAvatar(this._currentUser.imagePath, 200, 200),
                                 Consumer<AlertService>(
                                   builder: (context, alertService, _) {
                                     return Positioned(

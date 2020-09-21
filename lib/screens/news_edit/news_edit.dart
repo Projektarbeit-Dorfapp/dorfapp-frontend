@@ -45,7 +45,6 @@ class _NewsEditState extends State<NewsEdit> {
   final f = new DateFormat('dd.MM.yyyy HH:mm');
   DateTime startDateTime = DateTime.now();
   DateTime endDateTime = DateTime.now();
-  ///Anpassen, sodass der Wert aus dem Dokument übernommen wird
   bool isNews = false;
 
   @override
@@ -306,14 +305,8 @@ class _NewsEditState extends State<NewsEdit> {
             news.endTime = Timestamp.fromDate(endDateTime);
             news.isNews = this.isNews;
             news.createdBy = await _accessHandler.getUID();
-            ///Insert so überarbeiten, dass er die ID der neuen Veranstaltung zurückgibt. Dann zur DetailView dieser ID navigieren
             news.imagePath = _uploadedFileURL;
             _newsService.insertNews(news);
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NewsDetail(newsID)));
-             */
           }
         },
       );

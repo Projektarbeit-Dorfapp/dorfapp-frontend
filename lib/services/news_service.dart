@@ -8,6 +8,8 @@ import 'package:dorf_app/models/user_model.dart';
 
 import 'comment_service.dart';
 
+  //Hannes Hauenstein,
+
 class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
   final CommentService _commentService = CommentService();
@@ -29,6 +31,26 @@ class NewsService {
       'imagePath': news.imagePath,
       'createdBy': news.createdBy
     });
+  }
+
+  Future<void> updateNews(News news) async{
+    await _newsCollectionReference.document(news.id).updateData({
+      'title': news.title,
+      'description': news.description,
+      'startTime': news.startTime,
+      'endTime': news.endTime,
+      'createdAt': DateTime.now(),
+      'address': {
+        'street': news.address.street,
+        'houseNumber': news.address.houseNumber,
+        'district': news.address.district,
+        'zipCode': news.address.zipCode,
+      },
+      'isNews': news.isNews,
+      'imagePath': news.imagePath,
+      'createdBy': news.createdBy
+    }
+    );
   }
 
   Future<News> getNews(String newsID) async {
