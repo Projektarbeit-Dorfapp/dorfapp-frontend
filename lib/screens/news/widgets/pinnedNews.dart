@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../news_detail.dart';
 
 // Philipp Hellwich
@@ -14,12 +17,24 @@ class PinnedNews extends StatefulWidget {
 
 class _PinnedNewsState extends State<PinnedNews> {
   final SubscriptionService _subService = new SubscriptionService();
-
+  User _currentUser;
+  @override
+  void initState() {
+    final accessH = Provider.of<AccessHandler>(context, listen: false);
+    accessH.getUser().then((value){
+      if(mounted)
+        setState(() {
+          _currentUser = value;
+        });
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DocumentSnapshot>>(
-        future:
-            _subService.getPinnedDocuments(context, SubscriptionType.news, 10),
+
+    return _currentUser != null ? StreamBuilder<List<DocumentSnapshot>>(
+        stream:
+            _subService.getPinnedDocumentsAsStream(_currentUser, 10, SubscriptionType.news),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return PageView.builder(
@@ -73,6 +88,8 @@ class _PinnedNewsState extends State<PinnedNews> {
                 color: Colors.white,
                 child: Center(child: CircularProgressIndicator()));
           }
-        });
+        }) : Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }

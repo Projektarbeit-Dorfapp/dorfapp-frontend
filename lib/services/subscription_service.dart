@@ -120,8 +120,8 @@ class SubscriptionService {
   Future<bool> isUserSubscribed({@required User loggedUser, @required String topLevelDocumentID, @required SubscriptionType subscriptionType}) async {
     var ref = _getRef(topLevelDocumentID, _getCollectionName(subscriptionType));
     bool isSubscribed;
-    var subscriptionDoc = await ref.where("uid", isEqualTo: loggedUser.uid).getDocuments();
-    if (subscriptionDoc.documents.length == 0) {
+    var subscriptionDoc = await ref.document(loggedUser.uid).get();
+    if (subscriptionDoc.data == null) {
       isSubscribed = false;
     } else {
       isSubscribed = true;
