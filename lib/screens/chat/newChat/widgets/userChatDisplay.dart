@@ -1,6 +1,6 @@
 import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/screens/chat/chatRoom/widgets/chatRoom.dart';
+import 'package:dorf_app/screens/chat/chatRoom/chatRoom.dart';
 import 'package:dorf_app/screens/chat/chatsPage/provider/openConnectionState.dart';
 import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,10 +1,8 @@
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/screens/general/custom_border.dart';
 import 'package:dorf_app/screens/general/textNoteBar.dart';
 import 'package:dorf_app/screens/general/sortBar.dart';

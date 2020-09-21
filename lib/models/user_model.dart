@@ -21,7 +21,7 @@ class User extends ChangeNotifier {
   String imagePath;
 
   User(
-      {@required this.uid,
+      {this.uid,
       this.userName,
       this.admin,
       this.verificationState,

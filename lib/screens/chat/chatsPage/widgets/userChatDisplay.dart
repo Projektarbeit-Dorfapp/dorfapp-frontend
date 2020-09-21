@@ -1,13 +1,13 @@
 import 'package:dorf_app/models/chatMessage_model.dart';
 import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
-import 'package:dorf_app/screens/chat/chatRoom/widgets/chatRoom.dart';
+import 'package:dorf_app/screens/chat/chatRoom/chatRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 ///Matthias Maxelon
 class UserDisplay extends StatelessWidget {
   final OpenChat openChat;
-  UserDisplay({@required this.openChat});
+  UserDisplay({this.openChat});
   @override
   Widget build(BuildContext context) {
     return InkWell(

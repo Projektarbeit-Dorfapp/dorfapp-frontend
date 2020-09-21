@@ -145,6 +145,8 @@ class NewsService {
             id: document.documentID,
             title: document.data['title'].toString(),
             description: document.data['description'].toString(),
+            startTime: document.data['startTime'],
+            endTime: document.data['endTime'],
             imagePath: document.data['imagePath'].toString(),
             isNews: false,
             createdAt: document.data['createdAt'],
@@ -152,7 +154,7 @@ class NewsService {
 
         ///Problem: Da die Likes in Subcollections gespeichert sind, muss für jeden Eintrag einzeln via await ausgelsen werden, ob er Likes besitzt. --> Langsam!
         ///Falls wir das beschleunigen wollen, müsste man die Anzahl der Likes im Veranstaltungs-Dokument selbst speichern, aber das darf man dann auch jedesmal mit updaten wenn ein Like gegeben/genommen wird
-        if (sortMode == MenuButtons.SORT_TOP) {
+        /*if (sortMode == MenuButtons.SORT_TOP) {
           await _newsCollectionReference
               .document(document.documentID)
               .collection("Likes")
@@ -171,7 +173,7 @@ class NewsService {
               newsModel.likes = List<User>();
             }
           });
-        }
+        }*/
         news.add(newsModel);
       }
     } catch (error) {

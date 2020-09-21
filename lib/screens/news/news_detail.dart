@@ -80,9 +80,13 @@ class _NewsDetailState extends State<NewsDetail> {
                       ImageTitleDisplay(title: newsModel.title, imagePath: newsModel.imagePath,),
                       _getEventInfo(),
                       DescriptionDisplay(description: newsModel.description,), //umgeschrieben in eigenes Widget, siehe unten - Matthias
-                      LikeSection(newsModel.likes, widget.newsID, CollectionNames.EVENT, _userID),
-                      Spacer(),
-                      SubscriptionSection(widget.newsID, newsModel.bookmarks, _userID)
+                      Row(
+                        children: <Widget>[
+                          LikeSection(newsModel.likes, widget.newsID, CollectionNames.EVENT, _userID),
+                          Spacer(),
+                          SubscriptionSection(widget.newsID, newsModel.bookmarks, _userID),
+                        ],
+                      ),
                       CustomBorder(),
                       CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news, disableAddingComment: false),
                     ],

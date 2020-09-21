@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
-import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import 'alert_service.dart';
 
 ///Matthias Maxelon
 enum SubscriptionType { news, entry }

@@ -8,7 +8,6 @@ class BoardCategoryPage extends StatelessWidget {
   final _boardCategoryService = BoardCategoryService();
   @override
   Widget build(BuildContext context) {
-    final separatorIndent = MediaQuery.of(context).size.width * 0.05;
 
     return Scaffold(
       backgroundColor: Color(0xfff0f0f0),

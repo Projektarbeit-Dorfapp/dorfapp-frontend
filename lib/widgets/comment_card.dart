@@ -1,12 +1,8 @@
-import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
-import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/widgets/comment_answer.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:dorf_app/widgets/comment_section.dart';
 
 //Meike Nedwidek
 class CommentCard extends StatefulWidget {

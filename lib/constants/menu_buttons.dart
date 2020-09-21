@@ -27,7 +27,8 @@ class MenuButtons {
   static const List<String> NewsSorting = <String>[
     SORT_DESCENDING,
     SORT_ASCENDING,
-    SORT_TOP
+    //Einkommentieren, wenn die Likes auf der Top-Ebene der News implementiert werden
+    //SORT_TOP
   ];
 
   static const List<String> EditDelete = <String>[

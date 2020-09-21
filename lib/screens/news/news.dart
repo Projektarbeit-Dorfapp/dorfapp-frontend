@@ -18,7 +18,7 @@ import 'widgets/news_card.dart';
 // Philipp Hellwich
 class NewsOverview extends StatefulWidget {
   final double safeAreaHeight;
-  NewsOverview({@required this.safeAreaHeight});
+  NewsOverview({this.safeAreaHeight});
   @override
   _NewsOverviewState createState() => _NewsOverviewState();
 }

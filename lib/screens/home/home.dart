@@ -1,24 +1,18 @@
 import 'package:animations/animations.dart';
 import 'package:dorf_app/screens/chat/chatsPage/chatsPage.dart';
-import 'package:dorf_app/constants/menu_buttons.dart';
-import 'package:dorf_app/models/user_model.dart';
-import 'package:dorf_app/screens/calendar/calendar.dart';
 import 'package:dorf_app/screens/forum/forum.dart';
-import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/general/alertQuantityDisplay.dart';
 import 'package:dorf_app/screens/news/news.dart';
 import 'package:dorf_app/screens/profile/alertPage/alertPage.dart';
 import 'package:dorf_app/services/alert_service.dart';
-import 'package:dorf_app/services/authentication_service.dart';
-import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   final int _pageIndex;
-  final double safeAreaHight;
-  Home(this._pageIndex, {this.safeAreaHight});
+  final double safeAreaHeight;
+  Home(this._pageIndex, {this.safeAreaHeight});
 
   State<StatefulWidget> createState() {
     return _HomeState();
@@ -35,7 +29,7 @@ class _HomeState extends State<Home> {
   ];
   @override
   void initState() {
-    _children[0] = NewsOverview(safeAreaHeight: widget.safeAreaHight,);
+    _children[0] = NewsOverview(safeAreaHeight: widget.safeAreaHeight,);
     super.initState();
   }
   @override

@@ -23,7 +23,7 @@ import 'package:flare_splash_screen/flare_splash_screen.dart';
 
 class Application {
 
-  final String SPLASH_SCREEN_PATH = 'assets/dorf_intro.flr';
+  static const String SPLASH_SCREEN_PATH = 'assets/dorf_intro.flr';
 
   final routes = <String, WidgetBuilder>{
 //    '/': (BuildContext context) => RootPage(),
