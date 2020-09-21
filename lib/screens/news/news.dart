@@ -80,7 +80,11 @@ class _NewsOverviewState extends State<NewsOverview> {
                                   child: Stack(
                                     children: <Widget>[
                                       GestureDetector(
-                                        child: UserAvatar(this._currentUser.imagePath, 200, 200),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(right: 10, top: 10),
+                                          child: UserAvatar(
+                                            width: 70, height: 70, userID: _currentUser.uid,),
+                                        ),
                                         onTap: () {
                                           _showDrawer(context);
                                         },

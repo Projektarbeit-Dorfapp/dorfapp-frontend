@@ -22,10 +22,11 @@ class CommentSection extends StatefulWidget {
   final String collection;
   final bool disableAddingComment;
   final SubscriptionType subscriptionType;
+  final Color sortMenuColor;
 
   ///where is the commentsection implemented? [SubscriptionType.news] when in news or [SubscriptionType.entry] when in Forum
 
-  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment});
+  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment, this.sortMenuColor});
 
   @override
   _CommentSectionState createState() => _CommentSectionState();
@@ -125,7 +126,7 @@ class _CommentSectionState extends State<CommentSection> {
                       ),
               ),
               PopupMenuButton(
-                icon: Icon(Icons.tune, color: Theme.of(context).primaryColor),
+                icon: Icon(Icons.tune, color: widget.sortMenuColor == null ? Theme.of(context).primaryColor : widget.sortMenuColor),
                 onSelected: (value) {
                   FocusManager.instance.primaryFocus.unfocus();
                   var tempCommentList = curCommentList;

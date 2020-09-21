@@ -5,6 +5,7 @@ import 'package:dorf_app/screens/chat/chatRoom/widgets/messageStream.dart';
 import 'package:dorf_app/screens/chat/chatRoom/widgets/sendMessageField.dart';
 import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
+import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +87,7 @@ class _ChatRoomState extends State<ChatRoom> with WidgetsBindingObserver{
           appBar: AppBar(
             title: Row(
               children: [
-                UserAvatarDisplay(40, 40),
+                UserAvatar(height: 40, width: 40, userID: widget.selectedUser.uid,),
                 ChangeNotifierProvider(
                   create: (context) => PartnerOnlineState(widget.chatID),
                   child: Padding(

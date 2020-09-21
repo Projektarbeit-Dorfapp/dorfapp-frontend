@@ -19,6 +19,7 @@ class ChatService {
             role: doc.data["role"],
             unreadMessages: doc.data["unreadMessages"],
             user: User(
+              uid: doc.data["uid"],
               documentID: doc.documentID,
               userName: doc.data["userName"],
               firstName: doc.data["firstName"],
@@ -81,7 +82,8 @@ class ChatService {
       "lastName": toUser.lastName,
       "userName": toUser.userName,
       "role": role,
-      "unreadMessages": 0
+      "unreadMessages": 0,
+      "uid": toUser.uid,
     });
   }
 

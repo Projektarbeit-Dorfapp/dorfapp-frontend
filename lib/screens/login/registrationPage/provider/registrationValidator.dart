@@ -47,11 +47,21 @@ class RegistrationValidator extends ChangeNotifier{
     }
   }
   setLastName(String lastName){
-    _currentLastName = lastName.trim();
+    _currentLastName = _adjustUpperCaseAndLowerCaseName(lastName).replaceAll(" ", "").trim();
   }
+  String _adjustUpperCaseAndLowerCaseName(String inputName){
+    List<String> characterArray = inputName.split("");
+    for(int i = 0; i<characterArray.length; i++){
+      if(i==0)
+        characterArray[i] = characterArray[i].toUpperCase();
+      else
+        characterArray[i] = characterArray[i].toLowerCase();
+    }
 
+    return characterArray.join();
+  }
   setFirstName(String firstName){
-    _currentFirstName = firstName.trim();
+    _currentFirstName = _adjustUpperCaseAndLowerCaseName(firstName).replaceAll(" ", "").trim();
   }
   setUserName(String userName){
     _currentUserName = userName.trim();

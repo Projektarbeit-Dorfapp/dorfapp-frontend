@@ -46,13 +46,15 @@ class BoardCategoryPage extends StatelessWidget {
   //idk
   Color _getColor(int index, BuildContext context){
     if(index == 1)
-      return Color(0xff6178A3);
+      return Color(0xffc75454);
     else if (index == 0)
-      return Color(0xff70a1a0);
+      return Theme.of(context).primaryColor;
     else if (index == 2)
-      return Theme.of(context).buttonColor;
+      return Color(0xff828181);
     else if(index == 3)
-      return Color(0xff916740);
-    else return Colors.deepPurple;
+      return Theme.of(context).buttonColor;
+    else if(index == 4)
+      return Color(0xff70a1a0);
+    else return Color(0xffbd8d57);
   }
 }

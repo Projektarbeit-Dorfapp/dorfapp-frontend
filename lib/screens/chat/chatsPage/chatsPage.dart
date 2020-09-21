@@ -120,7 +120,7 @@ class NewChatNavigation extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(50))
             ),
             transitionType: ContainerTransitionType.fade,
-            transitionDuration: const Duration(milliseconds: 450),
+            transitionDuration: const Duration(milliseconds: 300),
             openBuilder: (context, action){
               return NewChatPage(municipalUsers: municipal);
             },

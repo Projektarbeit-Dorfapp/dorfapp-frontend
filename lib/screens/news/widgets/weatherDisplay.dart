@@ -34,6 +34,7 @@ class _WeatherDisplayState extends State<WeatherDisplay> with SingleTickerProvid
   }
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
     updateCycle.cancel();
   }
