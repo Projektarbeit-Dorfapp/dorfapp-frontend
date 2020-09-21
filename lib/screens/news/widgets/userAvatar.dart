@@ -11,39 +11,20 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only( right: 5, top: 10),
-      child: GestureDetector(
-        onTap: (){
-          _showDrawer(context);
-        },
-        child: Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: imagePath != "" ? NetworkImage(imagePath)
-                  : AssetImage("assets/avatar.png"),
-              fit: BoxFit.fill,
-            ),
-            color: Colors.black,
-            shape: BoxShape.circle,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imagePath != "" ? NetworkImage(imagePath)
+                : AssetImage("assets/avatar.png"),
+            fit: BoxFit.fill,
           ),
+          color: Colors.black,
+          shape: BoxShape.circle,
         ),
       ),
     );
   }
 
-  _showDrawer(BuildContext context){
-    showModalBottomSheet(
-      isScrollControlled: true,
-        context: context,
-        builder: (context){
-          return SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height - _safeAreaHeight,
-             child: UserSettings(),
-            ),
-          );
-        }
-    );
-  }
 }

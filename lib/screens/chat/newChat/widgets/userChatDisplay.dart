@@ -41,7 +41,7 @@ class NewUserChatDisplay extends StatelessWidget {
   String getChatID(BuildContext context){
     final collectionState = Provider.of<OpenConnectionState>(context, listen: false);
     for(OpenChat openChat in collectionState.getOpenConnections()){
-      if(openChat.user.userName == user.userName)
+      if(openChat.user.documentID == user.documentID)
         return openChat.chatID;
     }
     return null;
