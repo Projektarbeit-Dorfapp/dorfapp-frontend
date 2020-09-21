@@ -130,7 +130,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                               style: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Raleway'),
                             ),
                             Icon(
-                              Icons.pin_drop,
+                              Icons.bookmark_border,
                               color: Colors.blueGrey,
                               size: 16,
                             ),
