@@ -66,7 +66,7 @@ class NewsService {
             startTime: dataSnapshot.data['startTime'],
             endTime: dataSnapshot.data['endTime'],
             address: convertSnapshotToAddress(dataSnapshot),
-            imagePath: null,
+            imagePath: dataSnapshot.data['imagePath'],
             comments: List(),
             likes: List(),
             isNews: dataSnapshot.data['isNews'],

@@ -1,4 +1,5 @@
 import 'package:dorf_app/models/topComment_model.dart';
+import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/widgets/comment_answer.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,16 +34,9 @@ class CommentCardState extends State<CommentCard> {
             Row(
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(right: 10.0),
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage(widget.topComment.comment.user.imagePath != null
-                                ? widget.topComment.comment.user.imagePath
-                                : "assets/avatar.png")))),
+                  margin: EdgeInsets.only(right: 10.0),
+                  child: UserAvatar(userID: widget.topComment.comment.userID, width: 50.0, height: 50.0),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 10.0),
                   padding: EdgeInsets.all(15.0),
@@ -61,6 +55,7 @@ class CommentCardState extends State<CommentCard> {
                           ),
                           Expanded(
                             child: Container(
+                              margin: EdgeInsets.only(left: 10.0),
                               alignment: Alignment.topRight,
                               child: RelativeDate(
                                   widget.topComment.comment.convertTimestamp(widget.topComment.comment.createdAt),

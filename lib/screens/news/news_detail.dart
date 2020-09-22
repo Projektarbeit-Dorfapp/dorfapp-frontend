@@ -209,23 +209,16 @@ class ImageTitleDisplay extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-            child: Image.asset(imagePath, fit: BoxFit.cover),
-            constraints: BoxConstraints.expand(height: 300.0)),
+            child: FadeInImage.assetNetwork(placeholder: "assets/placeholder.png", image: imagePath, fit: BoxFit.cover),
+            constraints: BoxConstraints.expand(height: 250.0)),
         Container(
-          margin: EdgeInsets.only(top: 200.0),
-          height: 100.0,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.white]),
-          ),
-          child: Container(
-              margin: EdgeInsets.only(top: 70.0),
-              child: Center(
-                  child: Text(title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Raleway', fontWeight: FontWeight.w600, fontSize: 22, color: Colors.black54)))),
-        )
+          margin: EdgeInsets.only(top: 265.0),
+          child: Center(
+              child: Text(title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Raleway', fontWeight: FontWeight.w600, fontSize: 22, color: Colors.black54)))),
+
       ],
     );
   }
