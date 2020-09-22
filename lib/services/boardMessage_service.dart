@@ -37,7 +37,6 @@ class BoardMessageService{
         var message = BoardMessage.fromJson(document.data, document.documentID);
         list.add(message);
       }
-      messageQuantity.setQuantity(list.length);
       return list;
     });
   }

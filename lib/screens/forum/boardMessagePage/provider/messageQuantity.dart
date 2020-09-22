@@ -1,22 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 ///Matthias Maxelon
 class MessageQuantity extends ChangeNotifier{
   MessageQuantity(this._quantity);
   int _quantity;
-  String _sortMode;
+
   get quantity => _quantity;
-  get sortMode => _sortMode;
 
-  setQuantity(int quantity){
-    _quantity = quantity;
+  increment(){
+    _quantity++;
     notifyListeners();
   }
-
-  setSortMode(String sortMode) {
-    _sortMode = sortMode;
-    notifyListeners();
-  }
-
-
 }

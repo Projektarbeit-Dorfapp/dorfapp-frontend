@@ -3,6 +3,7 @@ import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/models/user_model.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/screens/general/custom_border.dart';
 import 'package:dorf_app/screens/general/textNoteBar.dart';
 import 'package:dorf_app/screens/general/sortBar.dart';
@@ -121,87 +122,96 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
   @override
   Widget build(BuildContext context) {
     return _isSubscribed != null && _entry != null && _likeList != null && _commentList != null
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text(_entry.boardCategoryTitle),
-              centerTitle: true,
-              backgroundColor: widget.boardCategoryColor != null ? Color(widget.boardCategoryColor) : Color(_categoryColor),
-              actions: <Widget>[
-                _isClosed != true && _isCreator()
-                    ? IconButton(
-                        icon: Icon(Icons.lock),
-                        onPressed: () {
-                          _showCloseThreadDialog();
-                        },
-                      )
-                    : Container(),
-                PopupMenuButton<String>(
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  onSelected: (value) => _choiceAction(value, context),
-                  color: Colors.white,
-                  itemBuilder: (BuildContext context) {
-                    return _createPopupMenuItems();
-                  },
-                )
-              ],
-            ),
-            body: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: Material(
-                      elevation: 3,
-                      child: Column(
-                        children: [
-                          ImageTitleDisplay(
-                            title: _entry.title,
-                            imagePath: null,
-                          ),
-                          DescriptionDisplay(
-                            description: _entry.description,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              LikeSection(
-                                _likeList,
-                                _entry.documentID,
-                                CollectionNames.BOARD_ENTRY,
-                                _loggedUser.uid,
-                                likedColor: Color(_categoryColor),
-                                notLikedColor: Colors.grey,
-                                likeDetailAppbarColor: Color(_categoryColor),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 5, right: MediaQuery.of(context).size.width * 0.05),
-                                child: CommentsDisplayBar(
-                                  barHeight: 50,
-                                  elevation: 4,
-                                  commentQuantity: _entry.commentCount,
-                                  iconColor: Color(_categoryColor),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  //CustomBorder(
-                    //color: Color(_categoryColor),
-                  //),
-
-                  SizedBox(
-                    height: 3,
-                  ),
-                  CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry,
-                      disableAddingComment: _isClosed != true ? false : true, sortMenuColor: Color(widget.boardCategoryColor),),
+        ? ChangeNotifierProvider(
+      create: (context) => MessageQuantity(_entry.commentCount),
+          child: Scaffold(
+              appBar: AppBar(
+                title: Text(_entry.boardCategoryTitle),
+                centerTitle: true,
+                backgroundColor: widget.boardCategoryColor != null ? Color(widget.boardCategoryColor) : Color(_categoryColor),
+                actions: <Widget>[
+                  _isClosed != true && _isCreator()
+                      ? IconButton(
+                          icon: Icon(Icons.lock),
+                          onPressed: () {
+                            _showCloseThreadDialog();
+                          },
+                        )
+                      : Container(),
+                  PopupMenuButton<String>(
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    onSelected: (value) => _choiceAction(value, context),
+                    color: Colors.white,
+                    itemBuilder: (BuildContext context) {
+                      return _createPopupMenuItems();
+                    },
+                  )
                 ],
               ),
-            ))
+              body: Container(
+                child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: Material(
+                        elevation: 3,
+                        child: Column(
+                          children: [
+                            ImageTitleDisplay(
+                              title: _entry.title,
+                              imagePath: null,
+                            ),
+                            DescriptionDisplay(
+                              description: _entry.description,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                LikeSection(
+                                  _likeList,
+                                  _entry.documentID,
+                                  CollectionNames.BOARD_ENTRY,
+                                  _loggedUser.uid,
+                                  likedColor: Color(_categoryColor),
+                                  notLikedColor: Colors.grey,
+                                  likeDetailAppbarColor: Color(_categoryColor),
+                                ),
+                                Spacer(),
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 5, right: MediaQuery.of(context).size.width * 0.05),
+                                  child: Consumer<MessageQuantity>(
+                                    builder: (context, messageQuantity, _){
+                                      return CommentsDisplayBar(
+                                      barHeight: 50,
+                                      elevation: 4,
+                                      commentQuantity: messageQuantity.quantity,
+                                      iconColor: Color(_categoryColor),
+                                      );
+                                    },
+
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    //CustomBorder(
+                      //color: Color(_categoryColor),
+                    //),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    CommentSection(_commentList, _entry.documentID, CollectionNames.BOARD_ENTRY, SubscriptionType.entry,
+                        disableAddingComment: _isClosed != true ? false : true, sortMenuColor: Color(widget.boardCategoryColor),),
+                  ],
+                ),
+                ),
+              )),
+        )
         : Center(
             child: Scaffold(
               appBar: AppBar(

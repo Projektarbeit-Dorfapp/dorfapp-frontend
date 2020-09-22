@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
+import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
 import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/general/textNoteBar.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
@@ -72,14 +73,15 @@ class _CommentSectionState extends State<CommentSection> {
         modifiedAt: date);
 
     if (answerTo != null) {
-      commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo);
+      commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo, widget.subscriptionType);
+      _localCommentCountIncrement();
       setState(() {
         curCommentList.firstWhere((element) => element.comment.id == answerTo).answerList.add(newComment);
       });
     } else {
       commentService.insertNewComment(widget.document, widget.collection, newComment,
           Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
-
+      _localCommentCountIncrement();
       setState(() {
         TopComment newTopComment = TopComment(newComment, []);
         if (sortMode == MenuButtons.SORT_DESCENDING) {
@@ -89,6 +91,11 @@ class _CommentSectionState extends State<CommentSection> {
         }
       });
     }
+  }
+
+  _localCommentCountIncrement(){
+    if(widget.subscriptionType == SubscriptionType.entry)
+      Provider.of<MessageQuantity>(context, listen: false).increment();
   }
 
   @override
