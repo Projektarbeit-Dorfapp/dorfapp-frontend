@@ -3,7 +3,6 @@ import 'package:dorf_app/screens/chat/chatRoom/provider/chatMessageHandler.dart'
 import 'package:dorf_app/screens/chat/chatRoom/provider/partnerOnlineState.dart';
 import 'package:dorf_app/screens/chat/chatRoom/widgets/messageStream.dart';
 import 'package:dorf_app/screens/chat/chatRoom/widgets/sendMessageField.dart';
-import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/services/chat_service.dart';
@@ -57,6 +56,8 @@ class _ChatRoomState extends State<ChatRoom> with WidgetsBindingObserver{
           _goOnline();
         });
       }
+    }).catchError((error){
+      debugPrint(error.toString());
     });
   }
   _goOnline(){
@@ -88,24 +89,28 @@ class _ChatRoomState extends State<ChatRoom> with WidgetsBindingObserver{
             title: Row(
               children: [
                 UserAvatar(height: 40, width: 40, userID: widget.selectedUser.uid,),
-                ChangeNotifierProvider(
-                  create: (context) => PartnerOnlineState(widget.chatID),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            widget.selectedUser.firstName + " " + widget.selectedUser.lastName),
-                        Consumer<PartnerOnlineState>(
-                          builder: (context, partnerOnlineState, _){
-                            return Text(partnerOnlineState.getPartnerOnlineState(_currentRole),
-                            style: TextStyle(
-                              fontSize: 11
-                            ),);
-                          },
-                        ),
-                      ],
+                Flexible(
+                  child: ChangeNotifierProvider(
+                    create: (context) => PartnerOnlineState(widget.chatID),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text( "${widget.selectedUser.firstName} ${widget.selectedUser.lastName}",
+                              overflow: TextOverflow.ellipsis,),
+                          ),
+                          Consumer<PartnerOnlineState>(
+                            builder: (context, partnerOnlineState, _){
+                              return Text(partnerOnlineState.getPartnerOnlineState(_currentRole),
+                              style: TextStyle(
+                                fontSize: 11
+                              ),);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

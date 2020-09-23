@@ -2,6 +2,8 @@ import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+///Hannes Hauenstein
 class UserAvatar extends StatelessWidget {
   //final String imagePath;
   final String userID;
@@ -21,6 +23,8 @@ class UserAvatar extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/avatar.png",
+                placeholderCacheHeight: height.round(),
+                placeholderCacheWidth: width.round(),
                 imageCacheHeight: height.round(),
                 imageCacheWidth: width.round(),
                 image: snapshot.data.imagePath,
@@ -61,3 +65,4 @@ class UserAvatar extends StatelessWidget {
     return u;
   }
 }
+

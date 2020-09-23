@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 ///Matthias Maxelon
 class ShowUserProfileText extends StatelessWidget {
   final Color color;
@@ -8,38 +9,32 @@ class ShowUserProfileText extends StatelessWidget {
   final String lastName;
   final String userName;
   final String userReference;
-  ShowUserProfileText({this.color, this.fontSize, this.fontWeight, @required this.userName, @required this.userReference, @required this.firstName, @required this.lastName});
+  ShowUserProfileText(
+      {this.color,
+      this.fontSize,
+      this.fontWeight,
+      @required this.userName,
+      @required this.userReference,
+      @required this.firstName,
+      @required this.lastName});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        //_showUserProfile(context); Does not work because how the profilePage is built (currently only works with the logged user)
+      onTap: () {
+        //_showUserProfile(context); Does not work because how the profilePage is built (currently only works with the logged user, tell hannes to change)
       },
-      child: Row(
-        children: <Widget>[
-          Text(
-            firstName + " ",
-            style: TextStyle(
-              color: color != null ? color : Colors.black,
-              fontSize: fontSize != null ? fontSize : 16,
-              fontWeight: fontWeight != null ? fontWeight : FontWeight.normal,
-            ),
-
-          ),
-          Text(
-            lastName,
-            style: TextStyle(
-              color: color != null ? color : Colors.black,
-              fontSize: fontSize != null ? fontSize : 16,
-              fontWeight: fontWeight != null ? fontWeight : FontWeight.normal,
-            ),
-
-          ),
-        ],
+      child: Text(
+        "$firstName $lastName",
+        style: TextStyle(
+          color: color != null ? color : Colors.black,
+          fontSize: fontSize != null ? fontSize : 16,
+          fontWeight: fontWeight != null ? fontWeight : FontWeight.normal,
+        ),
       ),
     );
   }
-  _showUserProfile(BuildContext context){
+
+  _showUserProfile(BuildContext context) {
     Navigator.pushNamed(context, "/profilePage", arguments: userReference);
   }
 }

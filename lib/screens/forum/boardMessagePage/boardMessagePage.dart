@@ -70,6 +70,8 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
             _isSubscribed = isSubscribed;
           });
         }
+      }).catchError((onError){
+        debugPrint(onError.toString());
       });
       _entryService.getEntry(widget.entryDocumentID).then((entry) {
         if (mounted) {
@@ -79,6 +81,8 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
             if (entry != null) _isClosed = _entry.isClosed;
           });
         }
+      }).catchError((onError){
+        debugPrint(onError.toString());
       });
       _likeService.getUsersThatLiked(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((likes) {
         if (mounted) {
@@ -86,6 +90,8 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
             _likeList = likes;
           });
         }
+      }).catchError((onError){
+        debugPrint(onError.toString());
       });
       _commentService.getComments(widget.entryDocumentID, CollectionNames.BOARD_ENTRY).then((comments) {
         if (mounted) {
@@ -93,7 +99,11 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
             _commentList = comments;
           });
         }
+      }).catchError((onError){
+        debugPrint(onError.toString());
       });
+    }).catchError((getUserError){
+      debugPrint(getUserError.toString());
     });
   }
 
@@ -157,9 +167,12 @@ class _BoardMessagePageState extends State<BoardMessagePage> {
                         elevation: 3,
                         child: Column(
                           children: [
-                            ImageTitleDisplay(
-                              title: _entry.title,
-                              imagePath: null,
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: ImageTitleDisplay(
+                                title: _entry.title,
+                                imagePath: null,
+                              ),
                             ),
                             DescriptionDisplay(
                               description: _entry.description,
