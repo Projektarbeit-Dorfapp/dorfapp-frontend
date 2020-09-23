@@ -44,16 +44,22 @@ class _UserSettingsState extends State<UserSettings> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(20),
                 child: UserAvatar(userID: _loggedUser.uid, height: 50, width: 50,)
               ),
               _loggedUser != null
-                  ? Text(
-                      _loggedUser.userName,
-                      style: TextStyle(fontFamily: "Raleway", fontSize: 16, fontWeight: FontWeight.bold),
-                    )
+                  ? Expanded(
+                    child: Container(
+                      child: Text(
+                          _loggedUser.userName,
+                          //overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontFamily: "Raleway", fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                    ),
+                  )
                   : Container()
             ],
           ),

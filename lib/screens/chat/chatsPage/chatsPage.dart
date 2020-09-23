@@ -4,6 +4,7 @@ import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/chat/chatsPage/provider/openConnectionState.dart';
 import 'package:dorf_app/screens/chat/chatsPage/widgets/userChatDisplay.dart';
 import 'package:dorf_app/screens/chat/newChat/newChatPage.dart';
+import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/chat_service.dart';
 import 'package:dorf_app/services/user_service.dart';
@@ -33,15 +34,29 @@ class Chats extends StatelessWidget {
             return StreamBuilder<List<OpenChat>>(
               stream: ChatService().getOpenConnectionsAsStream(municipalUsers.data.loggedUser),
               builder: (context, openConnections) {
-
-
                 if(openConnections.hasData){
                   Provider.of<OpenConnectionState>(context, listen: false).setOpenConnections(openConnections.data); /// fill list with openConnections
-                  return Stack(
-                    children: [
-                      ActiveChats(),
-                      NewChatNavigation(municipal: municipalUsers.data.municipalUsers)
-                    ],
+                  if(openConnections.data.length == 0){
+                    return Stack(
+                      children: [
+                        Center(
+                          child: ShowTextIfListEmpty(
+                            iconData: Icons.chat,
+                            text: "Du hast noch nicht gechattet",
+                          ),
+                        ),
+                        NewChatNavigation(municipal: municipalUsers.data.municipalUsers)
+                      ],
+
+                    );
+                  }
+                  return Container(
+                    child: Stack(
+                      children: [
+                        ActiveChats(),
+                        NewChatNavigation(municipal: municipalUsers.data.municipalUsers)
+                      ],
+                    ),
                   );
                 } else {
                   return Center(
@@ -150,7 +165,13 @@ class ActiveChats extends StatelessWidget {
       },
         itemCount: openConnections.getOpenConnections().length,
         itemBuilder: (BuildContext context, int index){
+        if(index == 0){
+          return Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: UserDisplay(openChat: openConnections.getOpenConnections()[index]));
+        } else{
           return UserDisplay(openChat: openConnections.getOpenConnections()[index]);
+        }
         });
   }
 }

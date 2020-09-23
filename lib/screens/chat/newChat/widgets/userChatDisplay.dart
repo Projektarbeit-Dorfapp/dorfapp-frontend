@@ -24,10 +24,12 @@ class NewUserChatDisplay extends StatelessWidget {
             child: UserAvatar(height: 40, width: 40, userID: user.uid,),
           ),
           SizedBox(width: 10,),
-          Text(user.firstName + " " + user.lastName,
-          style: TextStyle(
-            fontSize: 18
-          ),),
+          Flexible(
+            child: Text(user.firstName + " " + user.lastName,
+            style: TextStyle(
+              fontSize: 18
+            ),),
+          ),
         ],
       ),
     );

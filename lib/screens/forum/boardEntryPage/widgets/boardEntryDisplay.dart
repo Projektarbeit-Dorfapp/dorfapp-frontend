@@ -1,5 +1,4 @@
 import 'package:dorf_app/models/boardEntry_Model.dart';
-import 'package:dorf_app/screens/general/userAvatarDisplay.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
@@ -37,26 +36,24 @@ class BoardEntryDisplay extends StatelessWidget {
                 Positioned(
                   left: _leftPosDistance,
                   top: 13,
-                  child: UserAvatar(height: 30, width: 30, userID: entry.createdBy,), //TODO: Fetch from storage
+                  child: UserAvatar(height: 30, width: 30, userID: entry.createdBy,),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 60, top: 10),
-                          child: ShowUserProfileText(
-                            userReference: entry.createdBy,
-                            userName: entry.userName,
-                            firstName: entry.firstName,
-                            lastName: entry.lastName,
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 60, top: 10),
+                      child: Container(
+                        child: ShowUserProfileText(
+                          userReference: entry.createdBy,
+                          userName: entry.userName,
+                          firstName: entry.firstName,
+                          lastName: entry.lastName,
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
-                      ],
+                      ),
                     ),
                     Row(
                       children: <Widget>[

@@ -16,56 +16,57 @@ class UserDisplay extends StatelessWidget {
       },
       child: Padding(
         padding: EdgeInsets.only(top: 5, bottom: 5, left: 10),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            children: [
-              Container(
-                height: 50,
-                width: 75,
-                child: Stack(
-                  children: [
-                    UserAvatar(width: 50, height: 50, userID: openChat.user.uid,),
-                    Positioned(
-                      left: 38,
-                      child: openChat.unreadMessages > 0 ? Padding(
-                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).buttonColor,
-                            borderRadius: BorderRadius.circular(50),
+        child: Row(
+          children: [
+            Container(
+              height: 50,
+              width: 75,
+              child: Stack(
+                children: [
+                  UserAvatar(width: 50, height: 50, userID: openChat.user.uid,),
+                  Positioned(
+                    left: 38,
+                    child: openChat.unreadMessages > 0 ? Padding(
+                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).buttonColor,
+                          borderRadius: BorderRadius.circular(50),
 
-                          ),
-                          child: Center(
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                openChat.unreadMessages.toString(),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17
-                                ),
+                        ),
+                        child: Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              openChat.unreadMessages.toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17
                               ),
                             ),
-
                           ),
+
                         ),
-                      ) : Container(),
-                    )
-                  ],
-                ),
+                      ),
+                    ) : Container(),
+                  )
+                ],
               ),
-              SizedBox(width: 20,),
-              Text(openChat.user.firstName + " " + openChat.user.lastName, style: TextStyle(
-                  fontSize: 20
-              ),),
-              Spacer(),
+            ),
+            Flexible(
+              child: Container(
+                child: Text(
+                  openChat.user.firstName + " " + openChat.user.lastName,
+                  style: TextStyle(
+                    fontSize: 20
+                ),),
+              ),
+            ),
 
 
-            ],
-          ),
+          ],
         ),
       ),
     );

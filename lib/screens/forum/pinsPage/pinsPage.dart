@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/models/boardEntry_Model.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:dorf_app/screens/forum/boardEntryPage/widgets/boardEntryDisplay.dart';
+import 'package:dorf_app/screens/general/empty_list_text.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:flutter/material.dart';
@@ -54,19 +55,28 @@ class _PinsPageState extends State<PinsPage> with TickerProviderStateMixin{
             builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
               if (snapshot.hasData) {
                final boardEntries = _parseToEntries(snapshot);
-                return ListView.builder(
-                  key: UniqueKey(),
-                  controller: _scrollController,
-                    itemCount: boardEntries.length,
-                    itemBuilder: (context, int index){
-                      _snapshotItemCount = boardEntries.length;
-                      _animationController.forward();
-                      return FadeScaleTransition(
-                        animation: _animationController,
-                        child: BoardEntryDisplay(
-                            entry: boardEntries[index]),
-                      );
-                    });
+               if(boardEntries.length == 0){
+                 return Center(
+                   child: ShowTextIfListEmpty(
+                     text: "Noch nichts gepinnt",
+                     iconData: Icons.bookmark_border,
+                   ),
+                 );
+               } else {
+                 return ListView.builder(
+                     key: UniqueKey(),
+                     controller: _scrollController,
+                     itemCount: boardEntries.length,
+                     itemBuilder: (context, int index){
+                       _snapshotItemCount = boardEntries.length;
+                       _animationController.forward();
+                       return FadeScaleTransition(
+                         animation: _animationController,
+                         child: BoardEntryDisplay(
+                             entry: boardEntries[index]),
+                       );
+                     });
+               }
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator(),
