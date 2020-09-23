@@ -73,9 +73,13 @@ class CommentCardState extends State<CommentCard> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text(
-                                      widget.topComment.comment.user.firstName + " " + widget.topComment.comment.user.lastName,
-                                      style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16),
+                                    Flexible(
+                                      child: Container(
+                                        child: Text(
+                                          widget.topComment.comment.user.firstName + " " + widget.topComment.comment.user.lastName,
+                                          style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16),
+                                        ),
+                                      ),
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(left: 10.0),
