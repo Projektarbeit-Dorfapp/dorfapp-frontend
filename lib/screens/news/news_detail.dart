@@ -41,7 +41,8 @@ class _NewsDetailState extends State<NewsDetail> {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _accessHandler.getUID().then((uid) {
       _userID = uid;
-      setState(() {});
+      setState(() {
+      });
     });
     super.initState();
   }
@@ -51,7 +52,10 @@ class _NewsDetailState extends State<NewsDetail> {
     return FutureBuilder<News>(
       future: _newsService.getNews(widget.newsID),
       builder: (context, AsyncSnapshot<News> snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+        return Scaffold(
+        body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
+        } else if (snapshot.hasData) {
           this.newsModel = snapshot.data;
           return Scaffold(
               appBar: AppBar(
@@ -102,9 +106,6 @@ class _NewsDetailState extends State<NewsDetail> {
                           disableAddingComment: false),
                     ],
                   )));
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-              body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
         } else {
           return Scaffold(
               body: Container(

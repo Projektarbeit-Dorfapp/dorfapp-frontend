@@ -68,19 +68,23 @@ class _CommentSectionState extends State<CommentSection> {
     var date = Timestamp.now();
     Comment newComment = Comment(
         user: User(firstName: user.firstName, lastName: user.lastName, uid: user.uid),
+        userID: user.uid,
         content: val,
         createdAt: date,
-        modifiedAt: date);
+        modifiedAt: date,
+        isDeleted: false);
 
     if (answerTo != null) {
-      commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo, widget.subscriptionType);
+      String documentID = await commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo, widget.subscriptionType);
+      newComment.id = documentID;
       _localCommentCountIncrement();
       setState(() {
         curCommentList.firstWhere((element) => element.comment.id == answerTo).answerList.add(newComment);
       });
     } else {
-      commentService.insertNewComment(widget.document, widget.collection, newComment,
+      String documentID = await commentService.insertNewComment(widget.document, widget.collection, newComment,
           Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
+      newComment.id = documentID;
       _localCommentCountIncrement();
       setState(() {
         TopComment newTopComment = TopComment(newComment, []);
@@ -91,6 +95,7 @@ class _CommentSectionState extends State<CommentSection> {
         }
       });
     }
+    //widget.emitChange();
   }
 
   _localCommentCountIncrement(){

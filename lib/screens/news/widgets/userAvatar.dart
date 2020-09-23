@@ -57,7 +57,9 @@ class UserAvatar extends StatelessWidget {
   }
   Future<User> _getUser(BuildContext context) async{
     User u;
-    u = await Provider.of<UserService>(context, listen: false).getUser(userID);
+    if(userID != null || userID != ""){
+      u = await Provider.of<UserService>(context, listen: false).getUser(userID);
+    }
     return u;
   }
 }

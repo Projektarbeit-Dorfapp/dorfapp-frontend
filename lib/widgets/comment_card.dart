@@ -1,9 +1,13 @@
 import 'package:dorf_app/models/topComment_model.dart';
+import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/widgets/userAvatar.dart';
+import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/widgets/comment_answer.dart';
+import 'package:dorf_app/widgets/delete_comment.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //Meike Nedwidek
 class CommentCard extends StatefulWidget {
@@ -14,8 +18,7 @@ class CommentCard extends StatefulWidget {
   final bool disableAddingComment;
   String answerTo;
 
-  CommentCard(
-      {this.topComment, this.collection, this.document, this.disableAddingComment, this.emitAnswerTo});
+  CommentCard({this.topComment, this.collection, this.document, this.disableAddingComment, this.emitAnswerTo});
 
   @override
   CommentCardState createState() => CommentCardState();
@@ -25,6 +28,19 @@ class CommentCardState extends State<CommentCard> {
   int numberOfAnswersShown = 1;
   bool showButtonToShowAllAnswers = true;
   bool _showDelete = false;
+  final CommentService _commentService = CommentService();
+  AccessHandler _accessHandler;
+  String _userID;
+
+  @override
+  void initState() {
+    _accessHandler = Provider.of<AccessHandler>(context, listen: false);
+    _accessHandler.getUID().then((uid) {
+      _userID = uid;
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,49 +55,48 @@ class CommentCardState extends State<CommentCard> {
                   child: UserAvatar(userID: widget.topComment.comment.userID, width: 50.0, height: 50.0),
                 ),
                 InkWell(
-                  onLongPress: ()
-                  {
-                    _
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10.0),
-                    padding: EdgeInsets.all(15.0),
-                    width: MediaQuery.of(context).size.width - 100,
-                    decoration:
-                        BoxDecoration(color: Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(10.0)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            _showUserName(),
-                            Expanded(
-                              child: Container(
-                                margin: EdgeInsets.only(left: 10.0),
-                                alignment: Alignment.topRight,
-                                child: RelativeDate(
-                                    widget.topComment.comment
-                                        .convertTimestamp(widget.topComment.comment.createdAt),
-                                    Colors.black,
-                                    12.0),
-                              ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              widget.topComment.comment.content,
-                              style:
-                                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16),
+                    onLongPress: () {
+                      setState(() {
+                        if (!widget.topComment.comment.isDeleted && widget.topComment.comment.userID == _userID) _showDelete = true;
+                      });
+                    },
+                    child: !_showDelete
+                        ? Container(
+                            margin: EdgeInsets.only(top: 10.0),
+                            padding: EdgeInsets.all(15.0),
+                            width: MediaQuery.of(context).size.width - 100,
+                            decoration: BoxDecoration(color: Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(10.0)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      widget.topComment.comment.firstName + " " + widget.topComment.comment.lastName,
+                                      style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 10.0),
+                                      alignment: Alignment.topRight,
+                                      child: RelativeDate(
+                                          widget.topComment.comment.convertTimestamp(widget.topComment.comment.createdAt), Colors.black, 12.0),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      widget.topComment.comment.content,
+                                      style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                          )
+                        : DeleteComment(_deleteComment, _cancelDeleteComment, 100.0)),
               ],
             ),
             _answerButton(widget.disableAddingComment, context),
@@ -91,7 +106,11 @@ class CommentCardState extends State<CommentCard> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: widget.topComment.answerList.length > 0
                         ? widget.topComment.answerList
-                            .map((comment) => CommentAnswer(comment: comment))
+                            .map((comment) => CommentAnswer(
+                                comment: comment,
+                                topCommentID: widget.topComment.comment.id,
+                                document: widget.document,
+                                collection: widget.collection))
                             .toList()
                             .sublist(0, numberOfAnswersShown)
                         : []),
@@ -157,21 +176,31 @@ class CommentCardState extends State<CommentCard> {
   }
 
   _showUserName() {
-    if ((widget.topComment.comment.user.firstName.length + widget.topComment.comment.user.lastName.length) >=
-        20) {
+    if ((widget.topComment.comment.user.firstName.length + widget.topComment.comment.user.lastName.length) >= 20) {
       return Text(
         widget.topComment.comment.user.firstName + "\n" + widget.topComment.comment.user.lastName,
-        style:
-            TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
+        style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
       );
     } else {
       return Text(
         widget.topComment.comment.user.firstName + " " + widget.topComment.comment.user.lastName,
-        style:
-            TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
+        style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
       );
     }
   }
 
-  _deleteButtonOnPressed() {}
+  void _deleteComment() {
+    setState(() {
+      widget.topComment.comment.content = "Dieser Kommentar wurde gelöscht.";
+      widget.topComment.comment.isDeleted = true;
+      _commentService.deleteComment(widget.document, widget.collection, widget.topComment.comment.id);
+      _showDelete = false;
+    });
+  }
+
+  void _cancelDeleteComment() {
+    setState(() {
+      _showDelete = false;
+    });
+  }
 }
