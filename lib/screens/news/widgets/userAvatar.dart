@@ -3,6 +3,7 @@ import 'package:dorf_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Hannes Hauenstein
 class UserAvatar extends StatelessWidget {
   //final String imagePath;
   final String userID;
