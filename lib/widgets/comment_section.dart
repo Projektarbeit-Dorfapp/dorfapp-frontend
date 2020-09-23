@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
+import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
@@ -20,6 +21,7 @@ import 'package:provider/provider.dart';
 class CommentSection extends StatefulWidget {
   final List<TopComment> commentList;
   final String document;
+  final String documentTitle;
   final String collection;
   final bool disableAddingComment;
   final SubscriptionType subscriptionType;
@@ -27,7 +29,7 @@ class CommentSection extends StatefulWidget {
 
   ///where is the commentsection implemented? [SubscriptionType.news] when in news or [SubscriptionType.entry] when in Forum
 
-  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment, this.sortMenuColor});
+  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment, this.sortMenuColor, this.documentTitle});
 
   @override
   _CommentSectionState createState() => _CommentSectionState();
@@ -40,16 +42,18 @@ class _CommentSectionState extends State<CommentSection> {
   FocusNode myFocusNode;
   List<TopComment> curCommentList;
   String sortMode = MenuButtons.SORT_DESCENDING;
+  AccessHandler _accessHandler;
 
   function(TopComment topComment) {
     setState(() {
       answerTo = topComment.comment.id;
       myFocusNode.requestFocus();
-      _controller.text = topComment.comment.firstName.toString() + " " + topComment.comment.lastName.toString() + " ";
+      _controller.text = topComment.comment.user.firstName.toString() + " " + topComment.comment.user.lastName.toString() + " ";
     });
   }
 
   void initState() {
+    _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     super.initState();
     curCommentList = widget.commentList;
     _controller = TextEditingController();
@@ -63,24 +67,27 @@ class _CommentSectionState extends State<CommentSection> {
   }
 
   Future<void> _addNewComment(String val, String answerTo) async {
-    AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     var user = await _accessHandler.getUser();
     var date = Timestamp.now();
     Comment newComment = Comment(
         user: User(firstName: user.firstName, lastName: user.lastName, uid: user.uid),
+        userID: user.uid,
         content: val,
         createdAt: date,
-        modifiedAt: date);
+        modifiedAt: date,
+        isDeleted: false);
 
     if (answerTo != null) {
-      commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo, widget.subscriptionType);
+      String documentID = await commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo, widget.subscriptionType);
+      newComment.id = documentID;
       _localCommentCountIncrement();
       setState(() {
         curCommentList.firstWhere((element) => element.comment.id == answerTo).answerList.add(newComment);
       });
     } else {
-      commentService.insertNewComment(widget.document, widget.collection, newComment,
+      String documentID = await commentService.insertNewComment(widget.document, widget.collection, newComment,
           Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
+      newComment.id = documentID;
       _localCommentCountIncrement();
       setState(() {
         TopComment newTopComment = TopComment(newComment, []);

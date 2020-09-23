@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
@@ -66,7 +67,7 @@ class NewsService {
             startTime: dataSnapshot.data['startTime'],
             endTime: dataSnapshot.data['endTime'],
             address: convertSnapshotToAddress(dataSnapshot),
-            imagePath: null,
+            imagePath: dataSnapshot.data['imagePath'],
             comments: List(),
             likes: List(),
             isNews: dataSnapshot.data['isNews'],
@@ -100,7 +101,7 @@ class NewsService {
         }
       });
 
-      await _newsCollectionReference.document(newsID).collection("Kommentare").getDocuments().then((dataSnapshot) {
+     /* await _newsCollectionReference.document(newsID).collection("Kommentare").getDocuments().then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {
           var commentList = List<TopComment>();
           for (var document in dataSnapshot.documents) {
@@ -118,7 +119,10 @@ class NewsService {
           }
           newsModel.comments = commentList;
         }
-      });
+      })
+      */
+     newsModel.comments = await _commentService.getComments(newsID, CollectionNames.EVENT);
+
     } catch (err) {
       print(err.toString());
     }

@@ -12,9 +12,9 @@ import 'package:flutter/cupertino.dart';
 class CommentService extends ChangeNotifier {
   SubscriptionService _subscriptionService = SubscriptionService();
 
-  void insertNewComment(String documentID, String collection, Comment comment, AlertService alertService, SubscriptionType subscriptionType) async {
+  Future<String> insertNewComment(String documentID, String collection, Comment comment, AlertService alertService, SubscriptionType subscriptionType) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).add({
+    DocumentReference documentReference = await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).add({
       "firstName": comment.user.firstName,
       "lastName": comment.user.lastName,
       "userID": comment.user.uid,
@@ -28,6 +28,7 @@ class CommentService extends ChangeNotifier {
     }
     _notifySubscriber(comment, documentID, collection, subscriptionType, alertService);
     _incrementCommentCount(documentID, collection);
+    return documentReference.documentID;
   }
 
   _setEntryActivityDate(String documentID){
@@ -47,7 +48,7 @@ class CommentService extends ChangeNotifier {
     DocumentSnapshot snapshot = await Firestore.instance.collection(collection).document(documentID).get();
     Alert alert = Alert(
       additionalMessage: '${comment.user.firstName} ${comment.user.lastName} hat eine Nachricht in "${snapshot.data["title"]}" verfasst',
-      alertType: subscriptionType == SubscriptionType.entry ? AlertType.boardMessage : AlertType.eventMessage,
+      alertType: subscriptionType == SubscriptionType.entry ? AlertType.boardMessage : AlertType.news,
       documentReference: documentID,
       creationDate: comment.createdAt,
       fromFirstName: comment.user.firstName,
@@ -57,9 +58,9 @@ class CommentService extends ChangeNotifier {
     alertService.insertAlerts(subscriber, alert);
   }
 
-  Future<void> insertAnswerComment(String documentID, String collection, Comment comment, String answerTo, SubscriptionType subscriptionType) async {
+  Future<String> insertAnswerComment(String documentID, String collection, Comment comment, String answerTo, SubscriptionType subscriptionType) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(answerTo).collection(CollectionNames.ANSWERS).add({
+    DocumentReference documentReference = await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(answerTo).collection(CollectionNames.ANSWERS).add({
       "firstName": comment.user.firstName,
       "lastName": comment.user.lastName,
       "userID": comment.user.uid,
@@ -68,11 +69,12 @@ class CommentService extends ChangeNotifier {
       "modifiedAt": comment.modifiedAt,
       "isDeleted": false
     });
+
     if(subscriptionType == SubscriptionType.entry){
       _setEntryActivityDate(documentID);
     }
     _incrementCommentCount(documentID, collection);
-
+    return documentReference.documentID;
   }
 
   void updateComment(String documentID, String collection, String newContent, String commentID) async {
@@ -84,16 +86,34 @@ class CommentService extends ChangeNotifier {
   }
 
   void deleteComment(String documentID, String collection, String commentID) async {
-    CollectionReference _collectionReference = Firestore.instance.collection(collection);
-    await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(commentID).updateData({
-      "firstName": "",
-      "lastName": "",
-      "userID": "",
-      "isDeleted": true,
-      "modifiedAt": DateTime.now(),
-      "content": "Diese Nachricht wurde gelöscht."
-    });
+    try{
+      CollectionReference _collectionReference = Firestore.instance.collection(collection);
+      await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(commentID).updateData({
+        "isDeleted": true,
+        "modifiedAt": DateTime.now(),
+        "content": "Diese Nachricht wurde gelöscht."
+      });
+    }
+    catch(err){
+      print(err.toString());
+    }
   }
+
+  void deleteAnswer(String documentID, String collection, String commentID, String topCommentID) async {
+    try{
+      CollectionReference _collectionReference = Firestore.instance.collection(collection);
+      await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(topCommentID).collection(CollectionNames.ANSWERS).document(commentID).updateData({
+        "isDeleted": true,
+        "modifiedAt": DateTime.now(),
+        "content": "Diese Nachricht wurde gelöscht."
+      });
+    }
+    catch(err){
+      print(err.toString());
+    }
+  }
+
+
   Future<int> getCommentQuantity (String documentID, String collection) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS);
     QuerySnapshot snapshot = await _collectionReference.getDocuments();

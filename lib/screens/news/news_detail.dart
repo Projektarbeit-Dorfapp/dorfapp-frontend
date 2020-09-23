@@ -8,6 +8,7 @@ import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
 import 'package:dorf_app/screens/news/news_edit.dart';
+import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/widgets/comment_section.dart';
 import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
@@ -22,7 +23,9 @@ import 'package:provider/provider.dart';
 
 class NewsDetail extends StatefulWidget {
   final newsID;
+
   NewsDetail(this.newsID);
+
   @override
   _NewsDetailState createState() => _NewsDetailState();
 }
@@ -33,22 +36,26 @@ class _NewsDetailState extends State<NewsDetail> {
   String _userID;
   final _newsService = NewsService();
 
-
   @override
   void initState() {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
-    _accessHandler.getUID().then((uid){
+    _accessHandler.getUID().then((uid) {
       _userID = uid;
-      setState(() {});
+      setState(() {
+      });
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<News>(
       future: _newsService.getNews(widget.newsID),
       builder: (context, AsyncSnapshot<News> snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+        return Scaffold(
+        body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
+        } else if (snapshot.hasData) {
           this.newsModel = snapshot.data;
           return Scaffold(
               appBar: AppBar(
@@ -77,9 +84,15 @@ class _NewsDetailState extends State<NewsDetail> {
                   child: ListView(
                     shrinkWrap: true,
                     children: <Widget>[
-                      ImageTitleDisplay(title: newsModel.title, imagePath: newsModel.imagePath,),
+                      ImageTitleDisplay(
+                        title: newsModel.title,
+                        imagePath: newsModel.imagePath,
+                      ),
                       _getEventInfo(),
-                      DescriptionDisplay(description: newsModel.description,), //umgeschrieben in eigenes Widget, siehe unten - Matthias
+                      DescriptionDisplay(
+                        description: newsModel.description,
+                      ),
+                      //umgeschrieben in eigenes Widget, siehe unten - Matthias
                       Row(
                         children: <Widget>[
                           LikeSection(newsModel.likes, widget.newsID, CollectionNames.EVENT, _userID),
@@ -88,29 +101,30 @@ class _NewsDetailState extends State<NewsDetail> {
                         ],
                       ),
                       CustomBorder(),
-                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news, disableAddingComment: false),
+                      CommentSection(
+                          newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news,
+                          disableAddingComment: false, documentTitle: newsModel.title),
                     ],
                   )));
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
         } else {
           return Scaffold(
               body: Container(
-                color: Colors.white,
-                child: Center(
-                  child: Text(
-                    'keine Daten ...',
-                    style: TextStyle(
-                        fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 40.0, color: Colors.black),
-                  ),
-                ),
-              ));
+            color: Colors.white,
+            child: Center(
+              child: Text(
+                'keine Daten ...',
+                style: TextStyle(
+                    fontFamily: 'Raleway',
+                    fontWeight: FontWeight.normal,
+                    fontSize: 40.0,
+                    color: Colors.black),
+              ),
+            ),
+          ));
         }
       },
     );
-}
-
-
+  }
 
   bool _getPopupMenuButton(String uid) {
     if (uid == this.newsModel.createdBy) {
@@ -118,44 +132,6 @@ class _NewsDetailState extends State<NewsDetail> {
     }
     return false;
   }
-
-  ///diese Methode wurde unten in ein Stateless Widget umgewandelt
-  /*
-  _getImageAndTitle() {
-    if (newsModel.imagePath == null) {
-      return Container(
-          margin: EdgeInsets.only(top: 20.0),
-          child: Center(
-              child: Text(newsModel.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 22, color: Colors.black54))));
-    }
-    return Stack(
-      children: <Widget>[
-        Container(
-            child: Image.asset(newsModel.imagePath, fit: BoxFit.cover),
-            constraints: BoxConstraints.expand(height: 300.0)),
-        Container(
-          margin: EdgeInsets.only(top: 200.0),
-          height: 100.0,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.white]),
-          ),
-          child: Container(
-              margin: EdgeInsets.only(top: 70.0),
-              child: Center(
-                  child: Text(newsModel.title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Raleway', fontWeight: FontWeight.w600, fontSize: 22, color: Colors.black54)))),
-        )
-      ],
-    );
-  }
-
-   */
 
   Container _getEventInfo() {
     if (newsModel.isNews == false) {
@@ -165,10 +141,10 @@ class _NewsDetailState extends State<NewsDetail> {
         decoration: BoxDecoration(color: Color(0xFF141e3e), borderRadius: BorderRadius.circular(10.0)),
         child: Column(
           children: <Widget>[
-            DateDetailView(
-                newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
-            TimeDetailView(
-                newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
+            DateDetailView(newsModel.convertTimestamp(newsModel.startTime),
+                newsModel.convertTimestamp(newsModel.endTime)),
+            TimeDetailView(newsModel.convertTimestamp(newsModel.startTime),
+                newsModel.convertTimestamp(newsModel.endTime)),
             AddressDetailView(newsModel.address)
           ],
         ),
@@ -194,7 +170,9 @@ class _NewsDetailState extends State<NewsDetail> {
 class ImageTitleDisplay extends StatelessWidget {
   final String imagePath;
   final String title;
+
   ImageTitleDisplay({this.imagePath, @required this.title});
+
   @override
   Widget build(BuildContext context) {
     if (imagePath == null) {
@@ -204,37 +182,38 @@ class ImageTitleDisplay extends StatelessWidget {
               child: Text(title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 22, color: Colors.black54))));
+                      fontFamily: 'Raleway',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      color: Colors.black54))));
     }
     return Stack(
       children: <Widget>[
         Container(
-            child: Image.asset(imagePath, fit: BoxFit.cover),
-            constraints: BoxConstraints.expand(height: 300.0)),
+            child: FadeInImage.assetNetwork(
+                placeholder: "assets/placeholder.png", image: imagePath, fit: BoxFit.cover),
+            constraints: BoxConstraints.expand(height: 250.0)),
         Container(
-          margin: EdgeInsets.only(top: 200.0),
-          height: 100.0,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.white]),
-          ),
-          child: Container(
-              margin: EdgeInsets.only(top: 70.0),
-              child: Center(
-                  child: Text(title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Raleway', fontWeight: FontWeight.w600, fontSize: 22, color: Colors.black54)))),
-        )
+            margin: EdgeInsets.only(top: 265.0),
+            child: Center(
+                child: Text(title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Raleway',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        color: Colors.black54)))),
       ],
     );
   }
-
 }
+
 //als eigenes Widget umgelagert, damit wir mit dem forum synchron bleiben - Matthias
 class DescriptionDisplay extends StatelessWidget {
   final String description;
+
   DescriptionDisplay({@required this.description});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -242,11 +221,7 @@ class DescriptionDisplay extends StatelessWidget {
         child: Text(
           description,
           style: TextStyle(
-              fontFamily: 'Raleway',
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-              color: Colors.black),
+              fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16, color: Colors.black),
         ));
   }
 }
-
