@@ -83,28 +83,15 @@ class CreateChatDialog extends StatelessWidget {
                 String chatID = await _createChat(context, selectedUser);
                 Navigator.pop(context);
                 if(chatID == null){
-                  Flushbar(
-                    messageText: const Text("Etwas ist schief gelaufen, versuche es später erneut"),
-                    duration: const Duration(seconds: 2),
-                  )..show(context);
+                  _showErrorMessage(context);
                 } else {
                   _dismiss(context);
                   Navigator.push(context, CupertinoPageRoute(builder: (context) => ChatRoom(selectedUser: selectedUser, chatID: chatID, role: null,)));
                 }
               }
             } on SocketException catch (_) {
-              Flushbar(
-                messageText: Center(
-                  child: const Text("Etwas ist schief gelaufen, versuche es später erneut", style: TextStyle(
-                    fontFamily: "Raleway",
-                    color: Colors.white,
-                    fontSize: 17
-                  ),),
-                ),
-                duration: const Duration(seconds: 2),
-              )..show(context);
+              _showErrorMessage(context);
             }
-
           },
         ),
         FlatButton(
@@ -115,6 +102,18 @@ class CreateChatDialog extends StatelessWidget {
         ),
       ],
     );
+  }
+  _showErrorMessage(BuildContext context){
+    Flushbar(
+      messageText: Center(
+        child: const Text("Etwas ist schief gelaufen, versuche es später erneut", style: TextStyle(
+            fontFamily: "Raleway",
+            color: Colors.white,
+            fontSize: 17
+        ),),
+      ),
+      duration: const Duration(seconds: 2),
+    )..show(context);
   }
   _dismiss(BuildContext context){
     Navigator.pop(context);
