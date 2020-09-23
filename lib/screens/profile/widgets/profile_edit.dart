@@ -181,6 +181,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           _firstNameController = TextEditingController(text: _currentUser.firstName);
           _lastNameController = TextEditingController(text: _currentUser.lastName);
           _streetController = TextEditingController(text: _currentUser.street);
+          _ageController = TextEditingController(text: _currentUser.age.toString());
           _houseNumberController = TextEditingController(text: _currentUser.houseNumber);
           _zipController = TextEditingController(text: _currentUser.plz);
           _uploadedFileURL = _currentUser.imagePath;
