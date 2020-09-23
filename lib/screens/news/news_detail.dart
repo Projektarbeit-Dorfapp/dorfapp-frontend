@@ -103,7 +103,7 @@ class _NewsDetailState extends State<NewsDetail> {
                       CustomBorder(),
                       CommentSection(
                           newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news,
-                          disableAddingComment: false),
+                          disableAddingComment: false, documentTitle: newsModel.title),
                     ],
                   )));
         } else {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/menu_buttons.dart';
+import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/models/comment_model.dart';
 import 'package:dorf_app/models/topComment_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/provider/messageQuantity.dart';
@@ -20,6 +21,7 @@ import 'package:provider/provider.dart';
 class CommentSection extends StatefulWidget {
   final List<TopComment> commentList;
   final String document;
+  final String documentTitle;
   final String collection;
   final bool disableAddingComment;
   final SubscriptionType subscriptionType;
@@ -27,7 +29,7 @@ class CommentSection extends StatefulWidget {
 
   ///where is the commentsection implemented? [SubscriptionType.news] when in news or [SubscriptionType.entry] when in Forum
 
-  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment, this.sortMenuColor});
+  CommentSection(this.commentList, this.document, this.collection, this.subscriptionType, {this.disableAddingComment, this.sortMenuColor, this.documentTitle});
 
   @override
   _CommentSectionState createState() => _CommentSectionState();
@@ -40,6 +42,7 @@ class _CommentSectionState extends State<CommentSection> {
   FocusNode myFocusNode;
   List<TopComment> curCommentList;
   String sortMode = MenuButtons.SORT_DESCENDING;
+  AccessHandler _accessHandler;
 
   function(TopComment topComment) {
     setState(() {
@@ -50,6 +53,7 @@ class _CommentSectionState extends State<CommentSection> {
   }
 
   void initState() {
+    _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     super.initState();
     curCommentList = widget.commentList;
     _controller = TextEditingController();
@@ -63,7 +67,6 @@ class _CommentSectionState extends State<CommentSection> {
   }
 
   Future<void> _addNewComment(String val, String answerTo) async {
-    AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     var user = await _accessHandler.getUser();
     var date = Timestamp.now();
     Comment newComment = Comment(
@@ -95,7 +98,6 @@ class _CommentSectionState extends State<CommentSection> {
         }
       });
     }
-    //widget.emitChange();
   }
 
   _localCommentCountIncrement(){

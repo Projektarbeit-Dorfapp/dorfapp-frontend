@@ -1,5 +1,6 @@
 import 'package:dorf_app/models/alert_model.dart';
 import 'package:dorf_app/screens/forum/boardMessagePage/boardMessagePage.dart';
+import 'package:dorf_app/screens/news/news_detail.dart';
 import 'package:dorf_app/services/alert_service.dart';
 import 'package:dorf_app/services/boardEntry_service.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
@@ -32,6 +33,10 @@ class AlertDisplay extends StatelessWidget {
       Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMessagePage(
         entryDocumentID: alert.documentReference, boardCategoryColor: alert.alertColor, boardCategoryHeadline: alert.secondHeadline,)));
       BoardEntryService().incrementWatchCount(alert.documentReference);
+    }
+    if(alertService.getAlerts()[builderIndex].alertType == AlertType.news) {
+      Alert alert = alertService.getAlerts()[builderIndex];
+      Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetail(alert.documentReference)));
     }
   }
   
