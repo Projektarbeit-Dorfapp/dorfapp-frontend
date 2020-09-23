@@ -9,12 +9,14 @@ import '../news_detail.dart';
 class NewsCard extends StatelessWidget {
   News newsCard = new News();
 
-  NewsCard(id, title, description, imagePath, startTime, endTime) {
+  NewsCard(id, title, description, imagePath, startTime, endTime, createdAt, isNews) {
     this.newsCard.title = title;
     this.newsCard.id = id;
     this.newsCard.description = description;
     this.newsCard.imagePath = imagePath;
     this.newsCard.startTime = endTime;
+    this.newsCard.createdAt = createdAt;
+    this.newsCard.isNews = isNews;
   }
 
   @override
@@ -59,15 +61,24 @@ class NewsCard extends StatelessWidget {
                       ),
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0), child: createDateString())
+                      ],
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                            child: Text(
-                              createDateString(),
-                              style: TextStyle(color: Colors.white),
-                            )),
+                          padding:
+                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                          child: RelativeDate(
+                              this
+                                  .newsCard
+                                  .convertTimestamp(this.newsCard.createdAt),
+                              Colors.white,
+                              12.0),
+                        ),
                       ],
                     )
                   ],
@@ -80,14 +91,16 @@ class NewsCard extends StatelessWidget {
     );
   }
 
-  String createDateString() {
+  Widget createDateString() {
     String startTime =
         this.newsCard.convertTimestamp(this.newsCard.startTime).toString();
     String endTime =
         this.newsCard.convertTimestamp(this.newsCard.endTime).toString();
-    if (endTime == 'null') {
-      return "Vom " + startTime.split('.')[0];
-    } 
-    return "Von " + startTime.split('.')[0] + " bis " + endTime.split('.')[0];
+    if (this.newsCard.isNews) {
+      return Text('');
+    } else if (endTime == 'null') {
+      return Text("Am " + startTime.split('.')[0].split(' ')[0], style: TextStyle(fontSize: 12, color: Colors.white));
+    }
+    return Text("Von " + startTime.split('.')[0] + " bis " + endTime.split('.')[0],style: TextStyle(fontSize: 12, color: Colors.white) );
   }
 }

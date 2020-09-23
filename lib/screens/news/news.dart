@@ -248,7 +248,7 @@ class _NewsOverviewState extends State<NewsOverview> {
   }
 
   prepareNewsCards(News newsModel) {
-    return new NewsCard(newsModel.id, newsModel.title, newsModel.description, newsModel.imagePath, newsModel.startTime, newsModel.endTime);
+    return new NewsCard(newsModel.id, newsModel.title, newsModel.description, newsModel.imagePath, newsModel.startTime, newsModel.endTime, newsModel.createdAt, newsModel.isNews);
   }
 
   Container _getTextIfNewsListEmpty() {
