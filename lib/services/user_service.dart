@@ -63,10 +63,6 @@ class UserService extends ChangeNotifier{
           var fetchedUser = User.fromJson(snapshot.documents[0].data, snapshot.documents[0].documentID);
           user = fetchedUser;
         })
-        .timeout(_timeout, onTimeout: (){
-          print("Developermessage ERROR: timeout on Service: [UserService] in: [getUser()]");
-          throw Exception();
-        })
         .catchError((error){
           print("Developermessage ERROR: " + error);
         });
