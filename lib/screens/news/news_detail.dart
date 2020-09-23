@@ -8,7 +8,6 @@ import 'package:dorf_app/screens/home/home.dart';
 import 'package:dorf_app/screens/login/loginPage/provider/accessHandler.dart';
 import 'package:dorf_app/screens/news/widgets/address_detailview.dart';
 import 'package:dorf_app/screens/news/news_edit.dart';
-import 'package:dorf_app/services/comment_service.dart';
 import 'package:dorf_app/services/subscription_service.dart';
 import 'package:dorf_app/widgets/comment_section.dart';
 import 'package:dorf_app/screens/news/widgets/date_detailview.dart';
@@ -21,6 +20,7 @@ import 'package:flutter/widgets.dart';
 import 'package:dorf_app/services/news_service.dart';
 import 'package:provider/provider.dart';
 
+/// Hannes Hauenstein & Kilian Berthold
 class NewsDetail extends StatefulWidget {
   final newsID;
 

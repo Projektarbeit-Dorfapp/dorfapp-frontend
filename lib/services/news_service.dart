@@ -10,12 +10,12 @@ import 'package:flutter/material.dart';
 
 import 'comment_service.dart';
 
-  //Hannes Hauenstein,
-
+  ///Hannes Hauenstein, Kilian Berthold, Meike Nedwidek
 class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
   final CommentService _commentService = CommentService();
 
+  ///Kilian Berthold
   void insertNews(News news) async {
     await _newsCollectionReference.add({
       'title': news.title,
@@ -35,6 +35,7 @@ class NewsService {
     });
   }
 
+  ///Kilian Berthold
   Future<void> updateNews(News news) async{
     await _newsCollectionReference.document(news.id).updateData({
       'title': news.title,
@@ -55,6 +56,7 @@ class NewsService {
     );
   }
 
+  ///Kilian Berthold
   Future<News> getNews(String newsID) async {
     News newsModel;
 
@@ -139,6 +141,7 @@ class NewsService {
   })),
    */
 
+  ///Kilian Berthold
   Future<List<News>> getAllNews(String sortMode, String searchTerm) async {
     List<News> news = [];
     try {
@@ -212,7 +215,8 @@ class NewsService {
     return news;
   }
 
-  Future<List<News>>getPinnedNews(AsyncSnapshot<List<DocumentSnapshot>> snapshot) async {
+  //Philipp Hellwich
+  Future<List<News>> getPinnedNews(AsyncSnapshot<List<DocumentSnapshot>> snapshot) async {
     List<News> pinnedNews = [];
     try {
       for(DocumentSnapshot doc in snapshot.data){
@@ -224,6 +228,7 @@ class NewsService {
     return pinnedNews;
   }
 
+  ///Meike Nedwidek
   Address convertSnapshotToAddress(DocumentSnapshot ds) {
     Address address;
     if (ds.data['address'] != null) {

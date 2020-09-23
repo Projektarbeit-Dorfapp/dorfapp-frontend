@@ -16,7 +16,7 @@ import '../../models/news_model.dart';
 import '../../services/news_service.dart';
 import 'widgets/news_card.dart';
 
-// Philipp Hellwich
+// Philipp Hellwich & Kilian Berthold
 class NewsOverview extends StatefulWidget {
   final double safeAreaHeight;
 

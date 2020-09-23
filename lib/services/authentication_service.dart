@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
-///Matthias Maxelon
+///Matthias Maxelon & Kilian Berthold
 enum AuthStatus{NOT_LOGGED_IN, LOGGED_IN}
 
 abstract class Auth {
