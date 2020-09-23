@@ -9,12 +9,12 @@ import '../news_detail.dart';
 class NewsCard extends StatelessWidget {
   News newsCard = new News();
 
-  NewsCard(id, title, description, imagePath, createdAt) {
+  NewsCard(id, title, description, imagePath, startTime, endTime) {
     this.newsCard.title = title;
     this.newsCard.id = id;
     this.newsCard.description = description;
     this.newsCard.imagePath = imagePath;
-    this.newsCard.createdAt = createdAt;
+    this.newsCard.startTime = endTime;
   }
 
   @override
@@ -36,7 +36,7 @@ class NewsCard extends StatelessWidget {
                 height: 130,
                 margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFF141e3e),
+                  color: Theme.of(context).primaryColor,
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -62,12 +62,12 @@ class NewsCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                          child: RelativeDate(
-                              this.newsCard.convertTimestamp(this.newsCard.createdAt),
-                              Colors.white,
-                              12.0),
-                        ),
+                            padding:
+                                const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                            child: Text(
+                              createDateString(),
+                              style: TextStyle(color: Colors.white),
+                            )),
                       ],
                     )
                   ],
@@ -78,5 +78,16 @@ class NewsCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String createDateString() {
+    String startTime =
+        this.newsCard.convertTimestamp(this.newsCard.startTime).toString();
+    String endTime =
+        this.newsCard.convertTimestamp(this.newsCard.endTime).toString();
+    if (endTime == 'null') {
+      return "Vom " + startTime.split('.')[0];
+    } 
+    return "Von " + startTime.split('.')[0] + " bis " + endTime.split('.')[0];
   }
 }
