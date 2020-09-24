@@ -237,12 +237,20 @@ class _NewsOverviewState extends State<NewsOverview> {
                 ],
               )
             : SizedBox.shrink(),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit()));
-            },
-            child: Icon(Icons.add),
-            backgroundColor: Color(0xFF548c58)),
+        floatingActionButton: Container(
+          width: 71,
+          height: 71,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 10, right: 10),
+            child: FloatingActionButton(
+
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit()));
+                },
+                child: Icon(Icons.add, size: 23,),
+                backgroundColor: Theme.of(context).buttonColor),
+          ),
+        ),
       ),
     );
   }
