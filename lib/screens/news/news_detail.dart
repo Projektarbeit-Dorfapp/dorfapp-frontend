@@ -54,7 +54,7 @@ class _NewsDetailState extends State<NewsDetail> {
       builder: (context, AsyncSnapshot<News> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
         return Scaffold(
-        body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
+          body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
         } else if (snapshot.hasData) {
           this.newsModel = snapshot.data;
           return Scaffold(
@@ -110,8 +110,8 @@ class _NewsDetailState extends State<NewsDetail> {
           return Scaffold(
               body: Container(
             color: Colors.white,
-            child: Center(
-              child: Text(
+                child: Center(
+                  child: Text(
                 'keine Daten ...',
                 style: TextStyle(
                     fontFamily: 'Raleway',
