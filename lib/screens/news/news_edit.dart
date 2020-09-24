@@ -283,7 +283,10 @@ class _NewsEditState extends State<NewsEdit> {
     AccessHandler _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     if (newsID != null){
       return RaisedButton(
-        child: Text('Aktualisieren'),
+        child: Text('Aktualisieren',
+        style: TextStyle(
+          color: Colors.white
+        ),),
         onPressed: () async {
           if (_formKey.currentState.validate()) {
             news.title = _titleController.text;
@@ -297,7 +300,6 @@ class _NewsEditState extends State<NewsEdit> {
             news.endTime = Timestamp.fromDate(endDateTime);
             news.isNews = this.isNews;
             news.createdBy = await _accessHandler.getUID();
-            ///Noch eigene Funktion 'updateNews' draus machen
             news.imagePath = _uploadedFileURL;
             _newsService.updateNews(news);
 
@@ -311,7 +313,10 @@ class _NewsEditState extends State<NewsEdit> {
     }
     else {
       return RaisedButton(
-        child: Text('Erstellen'),
+        child: Text('Erstellen',
+          style: TextStyle(
+              color: Colors.white
+          ),),
         onPressed: () async {
           if (_formKey.currentState.validate()) {
             news.title = _titleController.text;
