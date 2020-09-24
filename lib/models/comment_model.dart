@@ -9,7 +9,7 @@ class Comment{
   String firstName;
   String lastName;
   String userID;
-  User user; //firstName, lastName, userID in DB speichern
+  User user; //firstName, lastName, userID
   Timestamp createdAt;
   Timestamp modifiedAt;
   bool isDeleted;

@@ -90,33 +90,63 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _currentUser.firstName != "" ? Container(
-                      child: Text(
-                        _currentUser.firstName,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                      ),
-                    ) : SizedBox.shrink(),
-                    _currentUser.lastName != "" ? Container(
-                      child: Text(
-                        _currentUser.lastName,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                      ),
-                    ) : SizedBox.shrink(),
-                    _currentUser.age > 0 ? Container(
-                      child: Text(
-                        _currentUser.age.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                      ),
-                    ) : SizedBox.shrink(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        Text('Vorname: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
+                        ),
+                        _currentUser.firstName != "" ? Container(
+                          child: Text(
+                            _currentUser.firstName,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                          ),
+                        ) : SizedBox.shrink(),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Nachname: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
+                        _currentUser.lastName != "" ? Container(
+                          child: Text(
+                            _currentUser.lastName,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                          ),
+                        ) : SizedBox.shrink(),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Alter: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
+                        _currentUser.age > 0 ? Container(
+                          child: Text(
+                            _currentUser.age.toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                          ),
+                        ) : SizedBox.shrink(),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Straße: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
                         _currentUser.street != "" ? Container(
                           child: Text(
                             _currentUser.street,
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                           ),
                         ) : SizedBox.shrink(),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Hausnummer: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
                         _currentUser.houseNumber != "" ? Container(
                           child: Text(
                             _currentUser.houseNumber,
@@ -126,14 +156,22 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        Text('Postleitzahl: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
                         _currentUser.plz != "" ? Container(
                           child: Text(
                             _currentUser.plz,
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                           ),
                         ) : SizedBox.shrink(),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Ort: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
                         _currentUser.municipalReference != "" ? Container(
                           child: Text(
                             _currentUser.municipalReference,

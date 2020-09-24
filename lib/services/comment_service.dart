@@ -83,7 +83,7 @@ class CommentService extends ChangeNotifier {
     return documentReference.documentID;
   }
 
-  ///Kilian Berthold
+  ///Kilian Berthold & Meike Nedwidek
   void updateComment(String documentID, String collection, String newContent, String commentID) async {
     CollectionReference _collectionReference = Firestore.instance.collection(collection);
     await _collectionReference.document(documentID).collection(CollectionNames.COMMENTS).document(commentID).updateData({
@@ -92,7 +92,7 @@ class CommentService extends ChangeNotifier {
     });
   }
 
-  ///Kilian Berthold
+  ///Kilian Berthold & Meike Nedwidek
   void deleteComment(String documentID, String collection, String commentID) async {
     try{
       CollectionReference _collectionReference = Firestore.instance.collection(collection);
@@ -130,9 +130,7 @@ class CommentService extends ChangeNotifier {
 }
 
 
-  ///Matthias Maxelon
-  //Ich brauche die Kommentarliste um das CommentSection Widget mit Daten zu befüllen. Meike zieht das aus dem newsModel raus. Im Forum hab ich hier
-  //eine ganz andere Umgebung. Deshalb muss ich die Kommentare mit der function hier holen. Wenns eine andere Möglichkeit gibt, bitte bescheid geben - Matthias
+  ///Meike Nedwidek
   Future<List<TopComment>> getComments(String documentID, String collection) async {
     List<TopComment> comments = [];
     CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS);
@@ -160,7 +158,7 @@ class CommentService extends ChangeNotifier {
     return comments;
   }
 
-  ///Matthias Maxelon
+  ///Meike Nedwidek
   Future<List<Comment>> getAnswers(String topCommentId, String collection, String documentID) async {
     List<Comment> answerList = [];
     CollectionReference _collectionReference = Firestore.instance.collection(collection).document(documentID).collection(CollectionNames.COMMENTS).document(topCommentId).collection(CollectionNames.ANSWERS);

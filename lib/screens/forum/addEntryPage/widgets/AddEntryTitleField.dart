@@ -13,6 +13,7 @@ class AddEntryTitleField extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width * 0.9,
           child: TextFormField(
+            maxLength: 100,
             onChanged: (title){
               entryState.title = title;
             },
@@ -22,7 +23,7 @@ class AddEntryTitleField extends StatelessWidget {
               else return null;
             },
             decoration: const InputDecoration(
-                labelText: "Titel"
+                labelText: "Titel",
             ),
           ),
         ),

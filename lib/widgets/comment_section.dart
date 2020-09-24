@@ -77,6 +77,7 @@ class _CommentSectionState extends State<CommentSection> {
         modifiedAt: date,
         isDeleted: false);
 
+    //add answer in db
     if (answerTo != null) {
       String documentID = await commentService.insertAnswerComment(widget.document, widget.collection, newComment, answerTo, widget.subscriptionType);
       newComment.id = documentID;
@@ -84,7 +85,9 @@ class _CommentSectionState extends State<CommentSection> {
       setState(() {
         curCommentList.firstWhere((element) => element.comment.id == answerTo).answerList.add(newComment);
       });
-    } else {
+    }
+    //add normal comment in db
+    else {
       String documentID = await commentService.insertNewComment(widget.document, widget.collection, newComment,
           Provider.of<AlertService>(context, listen: false), widget.subscriptionType);
       newComment.id = documentID;

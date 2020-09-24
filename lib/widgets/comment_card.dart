@@ -179,20 +179,6 @@ class CommentCardState extends State<CommentCard> {
     }
   }
 
-  _showUserName() {
-    if ((widget.topComment.comment.user.firstName.length + widget.topComment.comment.user.lastName.length) >= 20) {
-      return Text(
-        widget.topComment.comment.user.firstName + "\n" + widget.topComment.comment.user.lastName,
-        style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
-      );
-    } else {
-      return Text(
-        widget.topComment.comment.user.firstName + " " + widget.topComment.comment.user.lastName,
-        style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
-      );
-    }
-  }
-
   void _deleteComment() {
     setState(() {
       widget.topComment.comment.content = "Dieser Kommentar wurde gelöscht.";

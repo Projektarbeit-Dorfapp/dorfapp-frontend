@@ -15,7 +15,7 @@ class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
   final CommentService _commentService = CommentService();
 
-  ///Kilian Berthold
+  ///Hannes Hauenstein & Kilian Berthold
   void insertNews(News news) async {
     await _newsCollectionReference.add({
       'title': news.title,
@@ -54,7 +54,7 @@ class NewsService {
       'createdBy': news.createdBy
     });
   }
-
+  
   ///Kilian Berthold
   // void deleteNews(String newsID) async {
   //   DocumentReference _docReference = Firestore.instance.collection(CollectionNames.EVENT).document(newsID);
@@ -91,7 +91,7 @@ class NewsService {
   //   //Alle Subcollections des Dokuments löschen!
   // }
 
-  ///Kilian Berthold
+  ///Meike Nedwidek & Kilian Berthold
   Future<News> getNews(String newsID) async {
     News newsModel;
 
@@ -132,43 +132,13 @@ class NewsService {
           newsModel.bookmarks = pinnedList;
         }
       });
-
-      /* await _newsCollectionReference.document(newsID).collection("Kommentare").getDocuments().then((dataSnapshot) {
-        if (dataSnapshot.documents.length > 0) {
-          var commentList = List<TopComment>();
-          for (var document in dataSnapshot.documents) {
-            commentList.add(new TopComment(
-              new Comment(
-                id: document.documentID,
-                content: document.data["content"],
-                createdAt: document.data["createdAt"],
-                modifiedAt: document.data["modifiedAt"],
-                isDeleted: document.data["isDeleted"],
-                user: new User(
-                    uid: document.data["userID"],
-                    firstName: document.data["firstName"],
-                    lastName: document.data["lastName"])), []));
-          }
-          newsModel.comments = commentList;
-        }
-      })
-      */
-      newsModel.comments = await _commentService.getComments(newsID, CollectionNames.EVENT);
+     newsModel.comments = await _commentService.getComments(newsID, CollectionNames.EVENT);
     } catch (err) {
       print(err.toString());
     }
 
     return newsModel;
   }
-
-  /*
-  likes: List<User>.from(dataSnapshot.data['likes'].map((item) {
-  return new User(
-  uid: item["uid"],
-  firstName: item["firstName"],
-  lastName: item["lastName"]);
-  })),
-   */
 
   ///Kilian Berthold
   Future<List<News>> getAllNews(String sortMode, String searchTerm, DateTime searchDate) async {

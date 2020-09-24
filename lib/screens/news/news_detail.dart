@@ -20,7 +20,7 @@ import 'package:flutter/widgets.dart';
 import 'package:dorf_app/services/news_service.dart';
 import 'package:provider/provider.dart';
 
-/// Hannes Hauenstein & Kilian Berthold
+/// Meike Nedwidek
 class NewsDetail extends StatefulWidget {
   final newsID;
 
@@ -41,8 +41,7 @@ class _NewsDetailState extends State<NewsDetail> {
     _accessHandler = Provider.of<AccessHandler>(context, listen: false);
     _accessHandler.getUID().then((uid) {
       _userID = uid;
-      setState(() {
-      });
+      setState(() {});
     });
     super.initState();
   }
@@ -53,8 +52,7 @@ class _NewsDetailState extends State<NewsDetail> {
       future: _newsService.getNews(widget.newsID),
       builder: (context, AsyncSnapshot<News> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-        return Scaffold(
-        body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
+          return Scaffold(body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
         } else if (snapshot.hasData) {
           this.newsModel = snapshot.data;
           return Scaffold(
@@ -73,9 +71,9 @@ class _NewsDetailState extends State<NewsDetail> {
                     },
                   )
                       : IconButton(
-                    icon: Icon(null),
-                    onPressed: null,
-                  ),
+                          icon: Icon(null),
+                          onPressed: null,
+                        ),
                 ],
               ),
               body: Container(
@@ -101,26 +99,22 @@ class _NewsDetailState extends State<NewsDetail> {
                         ],
                       ),
                       CustomBorder(),
-                      CommentSection(
-                          newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news,
+                      CommentSection(newsModel.comments, widget.newsID, CollectionNames.EVENT, SubscriptionType.news,
                           disableAddingComment: false, documentTitle: newsModel.title),
                     ],
                   )));
         } else {
           return Scaffold(
               body: Container(
-            color: Colors.white,
-            child: Center(
-              child: Text(
-                'keine Daten ...',
-                style: TextStyle(
-                    fontFamily: 'Raleway',
-                    fontWeight: FontWeight.normal,
-                    fontSize: 40.0,
-                    color: Colors.black),
-              ),
-            ),
-          ));
+                color: Colors.white,
+                child: Center(
+                  child: Text(
+                    'keine Daten ...',
+                    style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 40.0, color: Colors.black),
+                  ),
+                ),
+              )
+          );
         }
       },
     );
@@ -142,9 +136,9 @@ class _NewsDetailState extends State<NewsDetail> {
         child: Column(
           children: <Widget>[
             DateDetailView(newsModel.convertTimestamp(newsModel.startTime),
-                newsModel.convertTimestamp(newsModel.endTime)),
+                newsModel.convertTimestamp(newsModel.endTime), 20),
             TimeDetailView(newsModel.convertTimestamp(newsModel.startTime),
-                newsModel.convertTimestamp(newsModel.endTime)),
+                newsModel.convertTimestamp(newsModel.endTime), 20),
             AddressDetailView(newsModel.address)
           ],
         ),
@@ -164,7 +158,6 @@ class _NewsDetailState extends State<NewsDetail> {
   }
 }
 
-//Ist umgeschrieben zum eigenem Widget, damit ich es im Forum verwenden kann und wir synchron bleiben - Matthias
 class ImageTitleDisplay extends StatelessWidget {
   final String imagePath;
   final String title;
@@ -179,34 +172,24 @@ class ImageTitleDisplay extends StatelessWidget {
           child: Center(
               child: Text(title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                      color: Colors.black54))));
+                  style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold, fontSize: 22, color: Colors.black54))));
     }
     return Stack(
       children: <Widget>[
         Container(
-            child: FadeInImage.assetNetwork(
-                placeholder: "assets/placeholder.png", image: imagePath, fit: BoxFit.cover),
+            child: FadeInImage.assetNetwork(placeholder: "assets/placeholder.png", image: imagePath, fit: BoxFit.cover),
             constraints: BoxConstraints.expand(height: 250.0)),
         Container(
             margin: EdgeInsets.only(top: 265.0),
             child: Center(
                 child: Text(title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        color: Colors.black54)))),
+                    style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.w600, fontSize: 22, color: Colors.black54)))),
       ],
     );
   }
 }
 
-//als eigenes Widget umgelagert, damit wir mit dem forum synchron bleiben - Matthias
 class DescriptionDisplay extends StatelessWidget {
   final String description;
 
@@ -218,8 +201,7 @@ class DescriptionDisplay extends StatelessWidget {
         padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
         child: Text(
           description,
-          style: TextStyle(
-              fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16, color: Colors.black),
+          style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal, fontSize: 16, color: Colors.black),
         ));
   }
 }
