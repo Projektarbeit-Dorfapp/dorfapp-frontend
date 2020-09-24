@@ -67,7 +67,7 @@ class _NewsDetailState extends State<NewsDetail> {
                     onSelected: (value) => _choiceAction(value, context),
                     color: Colors.white,
                     itemBuilder: (BuildContext context) {
-                      return MenuButtons.EditDelete.map((String choice) {
+                      return MenuButtons.Edit.map((String choice) {
                         return PopupMenuItem<String>(value: choice, child: Text(choice));
                       }).toList();
                     },
@@ -156,13 +156,11 @@ class _NewsDetailState extends State<NewsDetail> {
   void _choiceAction(String choice, BuildContext context) {
     if (choice == MenuButtons.EDIT) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit(widget.newsID)));
-    } else if (choice == MenuButtons.DELETE) {
-      Firestore.instance.collection('Veranstaltung').document(widget.newsID).delete();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home(PageIndexes.NEWSINDEX)));
-    } else if (choice == MenuButtons.LOGOUT) {
-      final accessHandler = Provider.of<AccessHandler>(context, listen: false);
-      accessHandler.logout();
     }
+    // else if (choice == MenuButtons.DELETE) {
+    //   _newsService.deleteNews(widget.newsID);
+    //   Navigator.push(context, MaterialPageRoute(builder: (context) => Home(PageIndexes.NEWSINDEX)));
+    // }
   }
 }
 

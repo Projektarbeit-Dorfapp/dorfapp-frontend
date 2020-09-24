@@ -141,7 +141,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       RaisedButton(
                           child: Text(
-                              "Änderungen speichern"
+                              "Änderungen speichern", style: TextStyle(color: Colors.white)
                           ),
                           onPressed: () {
                             _currentUser.imagePath = _uploadedFileURL;
