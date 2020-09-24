@@ -7,8 +7,9 @@ class DateDetailView extends StatelessWidget {
 
   final DateTime start;
   final DateTime end;
+  final double fontSize;
 
-  DateDetailView(this.start, this.end);
+  DateDetailView(this.start, this.end, this.fontSize);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class DateDetailView extends StatelessWidget {
             style: TextStyle(
                 fontFamily: 'Raleway',
                 fontWeight: FontWeight.w400,
-                fontSize: 20,
+                fontSize: this.fontSize,
                 color: Colors.white
             ),
           )

@@ -135,8 +135,10 @@ class _NewsDetailState extends State<NewsDetail> {
         decoration: BoxDecoration(color: Color(0xFF141e3e), borderRadius: BorderRadius.circular(10.0)),
         child: Column(
           children: <Widget>[
-            DateDetailView(newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
-            TimeDetailView(newsModel.convertTimestamp(newsModel.startTime), newsModel.convertTimestamp(newsModel.endTime)),
+            DateDetailView(newsModel.convertTimestamp(newsModel.startTime),
+                newsModel.convertTimestamp(newsModel.endTime), 20),
+            TimeDetailView(newsModel.convertTimestamp(newsModel.startTime),
+                newsModel.convertTimestamp(newsModel.endTime), 20),
             AddressDetailView(newsModel.address)
           ],
         ),
