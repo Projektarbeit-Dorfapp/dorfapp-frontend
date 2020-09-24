@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/user_model.dart';
 
+///Kilian Berthold & Meike Nedwidek
 class LikeService {
   
   void insertLike(User user, String documentID, String collection) async {

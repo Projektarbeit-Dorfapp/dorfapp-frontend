@@ -10,12 +10,12 @@ import 'package:flutter/material.dart';
 
 import 'comment_service.dart';
 
-  //Hannes Hauenstein,
-
+  ///Hannes Hauenstein, Kilian Berthold, Meike Nedwidek
 class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
   final CommentService _commentService = CommentService();
 
+  ///Hannes Hauenstein & Kilian Berthold
   void insertNews(News news) async {
     await _newsCollectionReference.add({
       'title': news.title,
@@ -35,6 +35,7 @@ class NewsService {
     });
   }
 
+  ///Kilian Berthold
   Future<void> updateNews(News news) async{
     await _newsCollectionReference.document(news.id).updateData({
       'title': news.title,
@@ -55,6 +56,7 @@ class NewsService {
     );
   }
 
+  ///Meike Nedwidek & Kilian Berthold
   Future<News> getNews(String newsID) async {
     News newsModel;
 
@@ -100,27 +102,6 @@ class NewsService {
           newsModel.bookmarks = pinnedList;
         }
       });
-
-     /* await _newsCollectionReference.document(newsID).collection("Kommentare").getDocuments().then((dataSnapshot) {
-        if (dataSnapshot.documents.length > 0) {
-          var commentList = List<TopComment>();
-          for (var document in dataSnapshot.documents) {
-            commentList.add(new TopComment(
-              new Comment(
-                id: document.documentID,
-                content: document.data["content"],
-                createdAt: document.data["createdAt"],
-                modifiedAt: document.data["modifiedAt"],
-                isDeleted: document.data["isDeleted"],
-                user: new User(
-                    uid: document.data["userID"],
-                    firstName: document.data["firstName"],
-                    lastName: document.data["lastName"])), []));
-          }
-          newsModel.comments = commentList;
-        }
-      })
-      */
      newsModel.comments = await _commentService.getComments(newsID, CollectionNames.EVENT);
 
     } catch (err) {
@@ -130,15 +111,7 @@ class NewsService {
     return newsModel;
   }
 
-  /*
-  likes: List<User>.from(dataSnapshot.data['likes'].map((item) {
-  return new User(
-  uid: item["uid"],
-  firstName: item["firstName"],
-  lastName: item["lastName"]);
-  })),
-   */
-
+  ///Kilian Berthold & Phillip Hellwich
   Future<List<News>> getAllNews(String sortMode, String searchTerm) async {
     List<News> news = [];
     try {
@@ -212,7 +185,8 @@ class NewsService {
     return news;
   }
 
-  Future<List<News>>getPinnedNews(AsyncSnapshot<List<DocumentSnapshot>> snapshot) async {
+  //Philipp Hellwich
+  Future<List<News>> getPinnedNews(AsyncSnapshot<List<DocumentSnapshot>> snapshot) async {
     List<News> pinnedNews = [];
     try {
       for(DocumentSnapshot doc in snapshot.data){
@@ -224,6 +198,7 @@ class NewsService {
     return pinnedNews;
   }
 
+  ///Meike Nedwidek
   Address convertSnapshotToAddress(DocumentSnapshot ds) {
     Address address;
     if (ds.data['address'] != null) {

@@ -5,6 +5,7 @@ import 'package:dorf_app/models/user_model.dart';
 
 ///Kilian Berthold & Matthias Maxelon
 class ChatService {
+  ///Kilian Berthold & Matthias Maxelon
   Stream<List<OpenChat>> getOpenConnectionsAsStream(User user) {
     CollectionReference _chatroomsCollectionReference =
         Firestore.instance.collection(CollectionNames.USER).document(user.documentID).collection(CollectionNames.CHATS);
@@ -31,6 +32,7 @@ class ChatService {
     });
   }
 
+  ///Kilian Berthold & Matthias Maxelon
   Stream<List<ChatMessage>> getMessages(String chatID) {
     CollectionReference _chatMessagesCollectionReference =
         Firestore.instance.collection(CollectionNames.CHAT).document(chatID).collection(CollectionNames.CHAT_MESSAGES);
@@ -46,14 +48,13 @@ class ChatService {
     });
   }
 
+  ///Kilian Berthold
   Future<String> createChat(User currentUser, User targetUser) async {
     try {
       var newChatReference = await Firestore.instance
           .collection(CollectionNames.CHAT)
           .add({"isCreatorOnline": true, "isPartnerOnline": false});
       var newChatID = newChatReference.documentID;
-
-      ///TODO Kann eventuell zu "(await Firestore.instance.collection(CollectionNames.CHAT).add({})).documentID" verkürzt werden, testen.
 
       CollectionReference _userCollectionReference = Firestore.instance.collection(CollectionNames.USER);
 
@@ -70,6 +71,7 @@ class ChatService {
     return null;
   }
 
+  ///Kilian Berthold
   Future<void> addNewChatToUser(
       CollectionReference _userCollectionReference, String newChatID, User fromUser, User toUser, String role) async {
     await _userCollectionReference
@@ -87,6 +89,7 @@ class ChatService {
     });
   }
 
+  ///Kilian Berthold
   void sendMessage(String chatID, ChatMessage message) async {
     await Firestore.instance
         .collection(CollectionNames.CHAT)
@@ -95,6 +98,7 @@ class ChatService {
         .add(message.toJson());
   }
 
+  ///Matthias Maxelon
   Future<String> getChatRoomID(User loggedUser, User selectedUser) async {
     QuerySnapshot snapshot = await Firestore.instance
         .collection(CollectionNames.USER)
@@ -109,6 +113,7 @@ class ChatService {
       return "";
   }
 
+  ///Kilian Berthold
   void goOnline(User loggedUser, User selectedUser, String chatID, String role) {
     Firestore.instance
         .collection(CollectionNames.USER)
@@ -129,6 +134,7 @@ class ChatService {
     }
   }
 
+  ///Kilian Berthold
   void goOffline(User loggedUser, User selectedUser, String chatID, String role) {
     switch (role) {
       case "partner":
@@ -142,7 +148,7 @@ class ChatService {
     }
   }
 
-  ///Matthias
+  ///Matthias Maxelon
   Stream<DocumentSnapshot> chatDocumentStream(String chatID){
     return Firestore.instance.collection(CollectionNames.CHAT).document(chatID).snapshots();
   }
@@ -150,6 +156,7 @@ class ChatService {
   ///returns "partner" or "creator" which are the defined roles that two [User]s can potentially have when they chat with each other. An empty String means there is no partner defined which happens when
   ///there is no existing [ChatRoom] for the combination or [User]s. This function is returning the role of the [selectedUser] and not the role from the current client. Note: If [selectedUser] is "partner",
   ///then the current client will always be "creator"
+  ///Matthias Maxelon
   Future<String> findRoleOfSelectedUser(User selectedUser, String chatID) async{
 
     ///The ChatRoom might be opened without a chatID (Not existing at that time) which means there is no defined partner role

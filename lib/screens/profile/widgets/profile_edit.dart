@@ -84,17 +84,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        child: Text(
-                          "Vorname: "
-                        ),
-                      ),
                       TextFormField(
                         controller: _firstNameController,
                       ),
                       Container(
                         child: Text(
-                            "Nachname: "
+                            "Vorname "
                         ),
                       ),
                       TextFormField(
@@ -102,7 +97,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       Container(
                         child: Text(
-                            "Alter: "
+                            "Nachname "
                         ),
                       ),
                       TextField(
@@ -117,7 +112,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       Container(
                         child: Text(
-                            "Straße: "
+                            "Alter "
                         ),
                       ),
                       TextFormField(
@@ -125,7 +120,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       Container(
                         child: Text(
-                            "Hausnummer: "
+                            "Straße "
                         ),
                       ),
                       TextFormField(
@@ -133,11 +128,16 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       Container(
                         child: Text(
-                            "Postleitzahl: "
+                            "Hausnummer "
                         ),
                       ),
                       TextFormField(
                         controller: _zipController,
+                      ),
+                      Container(
+                        child: Text(
+                            "Postleitzahl "
+                        ),
                       ),
                       RaisedButton(
                           child: Text(
@@ -181,6 +181,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           _firstNameController = TextEditingController(text: _currentUser.firstName);
           _lastNameController = TextEditingController(text: _currentUser.lastName);
           _streetController = TextEditingController(text: _currentUser.street);
+          _ageController = TextEditingController(text: _currentUser.age.toString());
           _houseNumberController = TextEditingController(text: _currentUser.houseNumber);
           _zipController = TextEditingController(text: _currentUser.plz);
           _uploadedFileURL = _currentUser.imagePath;

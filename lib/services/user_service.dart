@@ -3,7 +3,7 @@ import 'package:dorf_app/constants/collection_names.dart';
 import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
-///Matthias Maxelon
+///Matthias Maxelon & Kilian Berthold
 class UserService extends ChangeNotifier{
 
   final CollectionReference _ref = Firestore.instance.collection(CollectionNames.USER);

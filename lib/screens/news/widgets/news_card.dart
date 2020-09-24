@@ -1,4 +1,5 @@
 import 'package:dorf_app/models/news_model.dart';
+import 'package:dorf_app/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
@@ -10,6 +11,7 @@ import 'time_detailview.dart';
 
 class NewsCard extends StatelessWidget {
   News newsCard = new News();
+  User _currentUser = new User();
 
   NewsCard(id, title, description, imagePath, startTime, endTime, createdAt,
       isNews) {
@@ -21,7 +23,8 @@ class NewsCard extends StatelessWidget {
     this.newsCard.endTime = endTime;
     this.newsCard.createdAt = createdAt;
     this.newsCard.isNews = isNews;
-    
+    this.newsCard.createdBy = createdBy;
+    this._currentUser = currentUser;
   }
 
   @override
@@ -51,19 +54,24 @@ class NewsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Container(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 10.0),
-                        child: Text(
-                          this.newsCard.title,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                    Row(
+                      mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 10.0),
+                            child: Text(
+                              this.newsCard.title,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
