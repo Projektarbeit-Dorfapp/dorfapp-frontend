@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dorf_app/screens/news/news_detail.dart';
+import 'package:dorf_app/screens/login/rootPage/rootPage.dart';
 import 'package:dorf_app/models/address_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,12 +28,12 @@ class NewsEdit extends StatefulWidget {
 
 class _NewsEditState extends State<NewsEdit> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _zipCodeController = TextEditingController();
-  final _houseNumberController = TextEditingController();
-  final _districtController = TextEditingController();
-  final _streetController = TextEditingController();
+  TextEditingController _titleController;
+  TextEditingController _descriptionController;
+  TextEditingController _zipCodeController;
+  TextEditingController _houseNumberController;
+  TextEditingController _districtController;
+  TextEditingController _streetController;
   final _newsService = NewsService();
 
   News news = new News();
@@ -49,28 +49,49 @@ class _NewsEditState extends State<NewsEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF6178a3),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text('Edit News'),
-      ),
-      body: StreamBuilder<Object>(
-        stream: Firestore.instance.collection("Veranstaltung").snapshots(),
-        builder: (context, snapshot) {
-          return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 200,
-                  child: _image == null
-                      ? Center(
+    return FutureBuilder<News>(
+      future: _newsService.getNews(widget.newsID),
+      builder: (context, AsyncSnapshot<News> snapshot) {
+        if(snapshot.connectionState == ConnectionState.waiting) {
+          Scaffold(
+              body: Container(color: Colors.white, child: Center(child: CircularProgressIndicator())));
+        } else if(snapshot.hasData) this.news = snapshot.data;
+        _titleController = new TextEditingController(text: this.news.title);
+        _descriptionController = new TextEditingController(text: this.news.description);
+        this.news.address != null
+            ? _zipCodeController = new TextEditingController(text: this.news.address.zipCode)
+            : _zipCodeController = new TextEditingController();
+        this.news.address != null
+            ? _houseNumberController = new TextEditingController(text: this.news.address.houseNumber)
+            : _houseNumberController = new TextEditingController();
+        this.news.address != null
+            ? _districtController = new TextEditingController(text: this.news.address.district)
+            : _districtController = new TextEditingController();
+        this.news.address != null
+            ? _streetController = new TextEditingController(text: this.news.address.street)
+            : _streetController = new TextEditingController();
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            backgroundColor: Color(0xFF6178a3),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Text('Edit News'),
+          ),
+          body: StreamBuilder<Object>(
+              stream: Firestore.instance.collection("Veranstaltung").snapshots(),
+              builder: (context, snapshot) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 200,
+                        child: _image == null
+                            ? Center(
                           child: InkWell(
                             child: Container(
                                 child: Image.asset('assets/placeholder.png')
@@ -80,159 +101,161 @@ class _NewsEditState extends State<NewsEdit> {
                             },
                           ),
                         )
-                      : Center(
+                            : Center(
                           child: Image.file(_image, fit: BoxFit.cover),
                         ),
-                ),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        title: Text('Start: ' + f.format(startDateTime)),
-                        onTap:  () {
-                          DatePicker.showDateTimePicker(context,
-                            showTitleActions: true,
-                            minTime: DateTime.now(),
-                            maxTime: DateTime(2022, 6, 7), onChanged: (date) {
-                            }, onConfirm: (date) {
-                            setState(() {
-                              startDateTime = date;
-                            });
-                            }, currentTime: DateTime.now(), locale: LocaleType.de);
-                          },
-                        trailing: Icon(Icons.keyboard_arrow_down),
                       ),
-                      ListTile(
-                        title: Text('Ende: ' +  f.format(endDateTime)),
-                        onTap:  () {
-                          DatePicker.showDateTimePicker(context,
-                              showTitleActions: true,
-                              minTime: DateTime.now(),
-                              maxTime: DateTime(2022, 6, 7), onChanged: (date) {
-                              }, onConfirm: (date) {
-                                setState(() {
-                                  endDateTime = date;
-                                });
-                              }, currentTime: DateTime.now(), locale: LocaleType.de);
-                        },
-                        trailing: Icon(Icons.keyboard_arrow_down),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        CheckboxListTile(
-                          title: const Text('News?'),
-                          value: isNews,
-                          onChanged: (bool newValue) {
-                            setState(() {
-                              isNews = newValue;
-                            });
-                            print(newValue);
-                            print(isNews);
-                          },
-                        ),
-                        TextFormField(
-                          controller: _titleController,
-                          decoration: const InputDecoration(
-                              hintText: 'Titel eingeben', labelText: 'Titel'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Bitte einen Titel eingeben';
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          controller: _descriptionController,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                              hintText: 'Beschreibung eingeben',
-                              labelText: 'Beschreibung'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Beschreibung eingeben';
-                            }
-                            return null;
-                          },
-                        ),
-                        Row(
+                      Container(
+                        child: Column(
                           children: <Widget>[
-                            Flexible(
-                              flex: 4,
-                              child: TextFormField(
-                                controller: _streetController,
-                                maxLines: null,
-                                decoration: const InputDecoration(
-                                    hintText: 'Straßennamen eingeben',
-                                    labelText: 'Straßennamen'),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Straßennamen eingeben';
-                                  }
-                                  return null;
-                                },
-                              ),
+                            ListTile(
+                              title: Text('Start: ' + f.format(startDateTime)),
+                              onTap:  () {
+                                DatePicker.showDateTimePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime.now(),
+                                    maxTime: DateTime(2022, 6, 7), onChanged: (date) {
+                                    }, onConfirm: (date) {
+                                      setState(() {
+                                        startDateTime = date;
+                                      });
+                                    }, currentTime: DateTime.now(), locale: LocaleType.de);
+                              },
+                              trailing: Icon(Icons.keyboard_arrow_down),
                             ),
-                            Flexible(
-                              flex: 2,
-                              child: TextFormField(
-                                controller: _houseNumberController,
-                                maxLines: null,
-                                decoration: const InputDecoration(
-                                    hintText: 'Hausnummer eingeben',
-                                    labelText: 'Hausnummer'),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Hausnummer eingeben';
-                                  }
-                                  return null;
-                                },
-                              ),
+                            ListTile(
+                              title: Text('Ende: ' +  f.format(endDateTime)),
+                              onTap:  () {
+                                DatePicker.showDateTimePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime.now(),
+                                    maxTime: DateTime(2022, 6, 7), onChanged: (date) {
+                                    }, onConfirm: (date) {
+                                      setState(() {
+                                        endDateTime = date;
+                                      });
+                                    }, currentTime: DateTime.now(), locale: LocaleType.de);
+                              },
+                              trailing: Icon(Icons.keyboard_arrow_down),
                             ),
                           ],
                         ),
-                        TextFormField(
-                          controller: _zipCodeController,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                              hintText: 'Postleitzahl eingeben',
-                              labelText: 'Postleitzahl'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Postleitzahl eingeben';
-                            }
-                            return null;
-                          },
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: <Widget>[
+                              CheckboxListTile(
+                                title: const Text('News?'),
+                                value: isNews,
+                                onChanged: (bool newValue) {
+                                  setState(() {
+                                    isNews = newValue;
+                                  });
+                                  print(newValue);
+                                  print(isNews);
+                                },
+                              ),
+                              TextFormField(
+                                controller: _titleController,
+                                decoration: const InputDecoration(
+                                    hintText: 'Titel eingeben', labelText: 'Titel'),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Bitte einen Titel eingeben';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              TextFormField(
+                                controller: _descriptionController,
+                                maxLines: null,
+                                decoration: const InputDecoration(
+                                    hintText: 'Beschreibung eingeben',
+                                    labelText: 'Beschreibung'),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Beschreibung eingeben';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Flexible(
+                                    flex: 4,
+                                    child: TextFormField(
+                                      controller: _streetController,
+                                      maxLines: null,
+                                      decoration: const InputDecoration(
+                                          hintText: 'Straßennamen eingeben',
+                                          labelText: 'Straßennamen'),
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Straßennamen eingeben';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    child: TextFormField(
+                                      controller: _houseNumberController,
+                                      maxLines: null,
+                                      decoration: const InputDecoration(
+                                          hintText: 'Hausnummer eingeben',
+                                          labelText: 'Hausnummer'),
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Hausnummer eingeben';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TextFormField(
+                                controller: _zipCodeController,
+                                maxLines: null,
+                                decoration: const InputDecoration(
+                                    hintText: 'Postleitzahl eingeben',
+                                    labelText: 'Postleitzahl'),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Postleitzahl eingeben';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              TextFormField(
+                                controller: _districtController,
+                                maxLines: null,
+                                decoration: const InputDecoration(
+                                    hintText: 'Ort eingeben',
+                                    labelText: 'Ort'),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Ort eingeben';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              _addNewsButton(widget.newsID),
+                            ],
+                          ),
                         ),
-                        TextFormField(
-                          controller: _districtController,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                              hintText: 'Ort eingeben',
-                              labelText: 'Ort'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Ort eingeben';
-                            }
-                            return null;
-                          },
-                        ),                        
-                        _addNewsButton(widget.newsID),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          );
-        }
-      ),
+                );
+              }
+          ),
+        );
+      }
     );
   }
   Future _pickImage() async {
@@ -276,12 +299,12 @@ class _NewsEditState extends State<NewsEdit> {
             news.createdBy = await _accessHandler.getUID();
             ///Noch eigene Funktion 'updateNews' draus machen
             news.imagePath = _uploadedFileURL;
-            _newsService.insertNews(news);
+            _newsService.updateNews(news);
 
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NewsDetail(newsID)));
+                    builder: (context) =>  RootPage()));
           }
         },
       );
@@ -304,6 +327,10 @@ class _NewsEditState extends State<NewsEdit> {
             news.createdBy = await _accessHandler.getUID();
             news.imagePath = _uploadedFileURL;
             _newsService.insertNews(news);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RootPage()));
           }
         },
       );
