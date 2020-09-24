@@ -303,10 +303,8 @@ class _NewsEditState extends State<NewsEdit> {
             news.imagePath = _uploadedFileURL;
             _newsService.updateNews(news);
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>  RootPage()));
+            Navigator.pop(context);
+            Navigator.pop(context);
           }
         },
       );
@@ -332,10 +330,7 @@ class _NewsEditState extends State<NewsEdit> {
             news.createdBy = await _accessHandler.getUID();
             news.imagePath = _uploadedFileURL;
             _newsService.insertNews(news);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => RootPage()));
+            Navigator.pop(context);
           }
         },
       );

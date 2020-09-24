@@ -23,8 +23,6 @@ class NewsCard extends StatelessWidget {
     this.newsCard.endTime = endTime;
     this.newsCard.createdAt = createdAt;
     this.newsCard.isNews = isNews;
-    this.newsCard.createdBy = createdBy;
-    this._currentUser = currentUser;
   }
 
   @override
@@ -57,17 +55,19 @@ class NewsCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment : MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 10.0),
-                            child: Text(
-                              this.newsCard.title,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontFamily: 'Raleway',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                        Flexible(
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 10.0),
+                              child: Text(
+                                this.newsCard.title,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontFamily: 'Raleway',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
                         ),

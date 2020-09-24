@@ -243,7 +243,6 @@ class _NewsOverviewState extends State<NewsOverview> {
           child: Padding(
             padding: EdgeInsets.only(bottom: 10, right: 10),
             child: FloatingActionButton(
-
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => NewsEdit()));
                 },
