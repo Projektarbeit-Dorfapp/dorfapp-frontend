@@ -162,6 +162,8 @@ class _NewsEditState extends State<NewsEdit> {
                                 controller: _titleController,
                                 decoration: const InputDecoration(
                                     hintText: 'Titel eingeben', labelText: 'Titel'),
+                                maxLines: 1,
+                                maxLength: 200,
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'Bitte einen Titel eingeben';
@@ -171,7 +173,7 @@ class _NewsEditState extends State<NewsEdit> {
                               ),
                               TextFormField(
                                 controller: _descriptionController,
-                                maxLines: null,
+                                maxLength: 1000,
                                 decoration: const InputDecoration(
                                     hintText: 'Beschreibung eingeben',
                                     labelText: 'Beschreibung'),
@@ -188,7 +190,8 @@ class _NewsEditState extends State<NewsEdit> {
                                     flex: 4,
                                     child: TextFormField(
                                       controller: _streetController,
-                                      maxLines: null,
+                                      maxLines: 1,
+                                      maxLength: 50,
                                       decoration: const InputDecoration(
                                           hintText: 'Straßennamen eingeben',
                                           labelText: 'Straßennamen'),
@@ -204,7 +207,8 @@ class _NewsEditState extends State<NewsEdit> {
                                     flex: 2,
                                     child: TextFormField(
                                       controller: _houseNumberController,
-                                      maxLines: null,
+                                      maxLines: 1,
+                                      maxLength: 5,
                                       decoration: const InputDecoration(
                                           hintText: 'Hausnummer eingeben',
                                           labelText: 'Hausnummer'),
@@ -220,7 +224,8 @@ class _NewsEditState extends State<NewsEdit> {
                               ),
                               TextFormField(
                                 controller: _zipCodeController,
-                                maxLines: null,
+                                maxLines: 1,
+                                maxLength: 5,
                                 decoration: const InputDecoration(
                                     hintText: 'Postleitzahl eingeben',
                                     labelText: 'Postleitzahl'),
@@ -233,7 +238,8 @@ class _NewsEditState extends State<NewsEdit> {
                               ),
                               TextFormField(
                                 controller: _districtController,
-                                maxLines: null,
+                                maxLines: 1,
+                                maxLength: 30,
                                 decoration: const InputDecoration(
                                     hintText: 'Ort eingeben',
                                     labelText: 'Ort'),

@@ -86,6 +86,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                     children: <Widget>[
                       TextFormField(
                         controller: _firstNameController,
+                        maxLength: 10,
                       ),
                       Container(
                         child: Text(
@@ -94,6 +95,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       TextFormField(
                         controller: _lastNameController,
+                        maxLength: 15,
                       ),
                       Container(
                         child: Text(
