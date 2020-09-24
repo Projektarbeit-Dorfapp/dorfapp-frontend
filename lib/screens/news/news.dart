@@ -10,6 +10,8 @@ import 'package:dorf_app/services/alert_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/services/authentication_service.dart';
 import 'package:dorf_app/services/user_service.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/news_model.dart';
@@ -35,6 +37,7 @@ class _NewsOverviewState extends State<NewsOverview> {
   TextEditingController _searchController;
   String _searchTerm;
   String _sortMode = MenuButtons.SORT_DESCENDING;
+  DateTime _searchDate = null;
 
   void dispose() {
     _searchController.dispose();
@@ -83,7 +86,10 @@ class _NewsOverviewState extends State<NewsOverview> {
                                         child: Padding(
                                           padding: EdgeInsets.only(right: 10, top: 10),
                                           child: UserAvatar(
-                                            width: 70, height: 70, userID: _currentUser.uid,),
+                                            width: 70,
+                                            height: 70,
+                                            userID: _currentUser.uid,
+                                          ),
                                         ),
                                         onTap: () {
                                           _showDrawer(context);
@@ -149,9 +155,74 @@ class _NewsOverviewState extends State<NewsOverview> {
                           color: Colors.white,
                           margin: EdgeInsets.only(bottom: 10.0),
                           padding: EdgeInsets.only(left: 15.0, right: 10.0, bottom: 10.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                        margin: EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
+                                        padding: EdgeInsets.only(left: 10.0),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black12),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text("Nach Datum filtern: ", style: TextStyle(fontSize: 14)),
+                                            Text(_searchDate == null ? "..." : DateFormat('dd.MM.yyyy').format(_searchDate),
+                                                style: TextStyle(fontSize: 14)),
+                                            Spacer(),
+                                            IconButton(
+                                                icon: Icon(Icons.calendar_today, color: Theme.of(context).primaryColor),
+                                                onPressed: () {
+                                                  FocusManager.instance.primaryFocus.unfocus();
+                                                  showDatePicker(
+                                                    context: context,
+                                                    initialDate: _searchDate ?? DateTime.now(),
+                                                    firstDate: DateTime(2020, 1, 1),
+                                                    lastDate: DateTime(2029, 12, 31),
+                                                    locale: const Locale('de', ''),
+                                                  ).then((date) {
+                                                    setState(() {
+                                                      _searchDate = date;
+                                                    });
+                                                  });
+                                                }),
+                                            IconButton(
+                                              icon: Icon(Icons.delete, color: Theme.of(context).primaryColor),
+                                              onPressed: () {
+                                                FocusManager.instance.primaryFocus.unfocus();
+                                                setState(() {
+                                                  _searchDate = null;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        )),
+                                  ),
+                                  PopupMenuButton(
+                                    icon: Icon(Icons.tune, color: Theme.of(context).primaryColor),
+                                    onSelected: (value) {
+                                      FocusManager.instance.primaryFocus.unfocus();
+                                      setState(() {
+                                        _sortMode = value;
+                                      });
+                                    },
+                                    color: Colors.white,
+                                    itemBuilder: (BuildContext context) {
+                                      return MenuButtons.NewsSorting.map((String choice) {
+                                        return PopupMenuItem<String>(
+                                          value: choice,
+                                          child: Text(choice),
+                                        );
+                                      }).toList();
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0, right: 5.0),
                                 child: TextField(
                                   autofocus: false,
                                   decoration: InputDecoration(
@@ -166,24 +237,6 @@ class _NewsOverviewState extends State<NewsOverview> {
                                     });
                                   },
                                 ),
-                              ),
-                              PopupMenuButton(
-                                icon: Icon(Icons.tune, color: Theme.of(context).primaryColor),
-                                onSelected: (value) {
-                                  FocusManager.instance.primaryFocus.unfocus();
-                                  setState(() {
-                                    _sortMode = value;
-                                  });
-                                },
-                                color: Colors.white,
-                                itemBuilder: (BuildContext context) {
-                                  return MenuButtons.NewsSorting.map((String choice) {
-                                    return PopupMenuItem<String>(
-                                      value: choice,
-                                      child: Text(choice),
-                                    );
-                                  }).toList();
-                                },
                               ),
                             ],
                           ))),
@@ -204,7 +257,7 @@ class _NewsOverviewState extends State<NewsOverview> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                       return FutureBuilder(
-                        future: _newsService.getAllNews(_sortMode, _searchTerm?.toLowerCase()),
+                        future: _newsService.getAllNews(_sortMode, _searchTerm?.toLowerCase(), _searchDate),
                         builder: (context, AsyncSnapshot<List<News>> snapshot) {
                           if (snapshot.connectionState != ConnectionState.done) {
                             return Container(padding: EdgeInsets.all(100.0), child: Center(child: CircularProgressIndicator()));

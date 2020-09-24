@@ -35,6 +35,7 @@ class NewsCard extends StatelessWidget {
           new Expanded(
             child: GestureDetector(
               onTap: () {
+                FocusManager.instance.primaryFocus.unfocus();
                 Navigator.push(
                     context,
                     MaterialPageRoute(

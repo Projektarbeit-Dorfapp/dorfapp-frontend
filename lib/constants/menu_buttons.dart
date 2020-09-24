@@ -36,6 +36,10 @@ class MenuButtons {
     DELETE
   ];
 
+  static const List<String> Edit = <String>[
+    EDIT
+  ];
+
   //logout (calendar...?)
   static const List<String> HomePopUpMenu = <String> [
     LOGOUT

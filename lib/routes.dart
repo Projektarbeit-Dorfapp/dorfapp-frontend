@@ -19,10 +19,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class Application {
-
   static const String SPLASH_SCREEN_PATH = 'assets/dorf_intro.flr';
 
   final routes = <String, WidgetBuilder>{
@@ -34,32 +33,52 @@ class Application {
     '/passwordReset': (BuildContext context) => PasswordResetPage(),
     '/rootPage': (BuildContext context) => RootPage(),
     '/boardEntryPage': (BuildContext context) => BoardEntryPage(),
-    '/addEntryPage' : (BuildContext context) => AddEntryPage(),
-    '/profile' : (BuildContext context) => Profile(),
-    '/profile_edit' : (BuildContext context) => ProfileEdit(),
-    '/alertPage' : (BuildContext context) => AlertPage(),
+    '/addEntryPage': (BuildContext context) => AddEntryPage(),
+    '/profile': (BuildContext context) => Profile(),
+    '/profile_edit': (BuildContext context) => ProfileEdit(),
+    '/alertPage': (BuildContext context) => AlertPage(),
   };
 
   void main() {
     runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Authentication(),),
-        ChangeNotifierProvider(create: (context) => UserService(),),
-        ChangeNotifierProvider(create: (context) => AccessHandler(),),
-        ChangeNotifierProvider(create: (context) => AlertService(),),
-        ChangeNotifierProvider(create: (context) => OpenConnectionState(),),
-        ChangeNotifierProvider(create: (context) => CommentService(),)
+        ChangeNotifierProvider(
+          create: (context) => Authentication(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AccessHandler(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AlertService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OpenConnectionState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CommentService(),
+        )
       ],
       child: MaterialApp(
         theme: basicTheme,
         routes: routes,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('de', ''),
+        ],
         home: SplashScreen.navigate(
           name: SPLASH_SCREEN_PATH,
           until: () => Future.delayed(Duration(seconds: 1)),
           startAnimation: 'Animation',
           backgroundColor: Colors.white,
           next: (context) => RootPage(),
-
         ),
       ),
     ));

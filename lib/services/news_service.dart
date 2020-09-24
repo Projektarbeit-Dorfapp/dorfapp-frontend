@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'comment_service.dart';
 
-  ///Hannes Hauenstein, Kilian Berthold, Meike Nedwidek
+///Hannes Hauenstein, Kilian Berthold, Meike Nedwidek
 class NewsService {
   CollectionReference _newsCollectionReference = Firestore.instance.collection("Veranstaltung");
   final CommentService _commentService = CommentService();
@@ -36,7 +36,7 @@ class NewsService {
   }
 
   ///Kilian Berthold
-  Future<void> updateNews(News news) async{
+  Future<void> updateNews(News news) async {
     await _newsCollectionReference.document(news.id).updateData({
       'title': news.title,
       'description': news.description,
@@ -52,9 +52,44 @@ class NewsService {
       'isNews': news.isNews,
       'imagePath': news.imagePath,
       'createdBy': news.createdBy
-    }
-    );
+    });
   }
+  
+  ///Kilian Berthold
+  // void deleteNews(String newsID) async {
+  //   DocumentReference _docReference = Firestore.instance.collection(CollectionNames.EVENT).document(newsID);
+  //
+  //   List<String> uids = List();
+  //   await _docReference.collection(CollectionNames.PIN).getDocuments().then((snapshot) {
+  //     for (var doc in snapshot.documents) {
+  //       uids.add(doc.documentID);
+  //     }
+  //   });
+  //
+  //   List<String> users = List();
+  //   CollectionReference _users = Firestore.instance.collection(CollectionNames.USER);
+  //   await _users.getDocuments().then((snapshot) {
+  //     for (var doc in snapshot.documents) {
+  //       if (uids.contains(doc.data['uid'])) {
+  //         users.add(doc.documentID);
+  //       }
+  //     }
+  //   });
+  //
+  //   List<String> pins = List();
+  //   for (var user in users) {
+  //     await _users.document(user).collection(CollectionNames.PIN).where("DocumentReference", isEqualTo: newsID).getDocuments().then((snapshot) async {
+  //       for (var doc in snapshot.documents) {
+  //         await _users.document(user).collection(CollectionNames.PIN).document(doc.documentID).delete();
+  //       }
+  //
+  //     });
+  //
+  //   }
+  //       //Alle User durchgehen
+  //       .delete();
+  //   //Alle Subcollections des Dokuments löschen!
+  // }
 
   ///Meike Nedwidek & Kilian Berthold
   Future<News> getNews(String newsID) async {
@@ -82,18 +117,13 @@ class NewsService {
         if (dataSnapshot.documents.length > 0) {
           var userList = List<User>();
           for (var document in dataSnapshot.documents) {
-            userList.add(new User(
-                uid: document.documentID, firstName: document.data['firstName'], lastName: document.data['lastName']));
+            userList.add(new User(uid: document.documentID, firstName: document.data['firstName'], lastName: document.data['lastName']));
           }
           newsModel.likes = userList;
         }
       });
 
-      await _newsCollectionReference
-          .document(newsID)
-          .collection("Gepinnt")
-          .getDocuments()
-          .then((dataSnapshot) {
+      await _newsCollectionReference.document(newsID).collection("Gepinnt").getDocuments().then((dataSnapshot) {
         if (dataSnapshot.documents.length > 0) {
           var pinnedList = List<User>();
           for (var document in dataSnapshot.documents) {
@@ -103,7 +133,6 @@ class NewsService {
         }
       });
      newsModel.comments = await _commentService.getComments(newsID, CollectionNames.EVENT);
-
     } catch (err) {
       print(err.toString());
     }
@@ -111,9 +140,10 @@ class NewsService {
     return newsModel;
   }
 
-  ///Kilian Berthold & Phillip Hellwich
-  Future<List<News>> getAllNews(String sortMode, String searchTerm) async {
+  ///Kilian Berthold
+  Future<List<News>> getAllNews(String sortMode, String searchTerm, DateTime searchDate) async {
     List<News> news = [];
+    News newsObject = News();
     try {
       QuerySnapshot querySnapshot;
       switch (sortMode) {
@@ -137,9 +167,20 @@ class NewsService {
         if (searchTerm != null) {
           var lowerString = document.data['title'].toString().toLowerCase();
           if (!lowerString.contains(searchTerm)) {
-              continue;
+            continue;
           }
         }
+
+        if (searchDate != null && document.data['startTime'] != null) {
+          var tempDate = newsObject.convertTimestamp(document.data['startTime']);
+          if (tempDate.year != searchDate.year ||
+              tempDate.month != searchDate.month ||
+              tempDate.day != searchDate.day ||
+              document.data['isNews'] == true) {
+            continue;
+          }
+        }
+
         News newsModel = new News(
             id: document.documentID,
             title: document.data['title'].toString(),
@@ -189,7 +230,7 @@ class NewsService {
   Future<List<News>> getPinnedNews(AsyncSnapshot<List<DocumentSnapshot>> snapshot) async {
     List<News> pinnedNews = [];
     try {
-      for(DocumentSnapshot doc in snapshot.data){
+      for (DocumentSnapshot doc in snapshot.data) {
         pinnedNews.add(await getNews(doc.data["DocumentReference"]));
       }
     } catch (error) {
