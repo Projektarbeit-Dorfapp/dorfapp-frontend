@@ -149,12 +149,12 @@ class NewsService {
       switch (sortMode) {
         case MenuButtons.SORT_ASCENDING:
           {
-            querySnapshot = await _newsCollectionReference.orderBy("startTime", descending: false).getDocuments();
+            querySnapshot = await _newsCollectionReference.orderBy("createdAt", descending: false).getDocuments();
           }
           break;
         case MenuButtons.SORT_DESCENDING:
           {
-            querySnapshot = await _newsCollectionReference.orderBy("startTime", descending: true).getDocuments();
+            querySnapshot = await _newsCollectionReference.orderBy("createdAt", descending: true).getDocuments();
           }
           break;
         default:
