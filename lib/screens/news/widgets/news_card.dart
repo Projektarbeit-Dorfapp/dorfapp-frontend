@@ -3,20 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dorf_app/widgets/relative_date.dart';
 import '../news_detail.dart';
+import 'date_detailview.dart';
+import 'time_detailview.dart';
 
 // Philipp Hellwich
 
 class NewsCard extends StatelessWidget {
   News newsCard = new News();
 
-  NewsCard(id, title, description, imagePath, startTime, endTime, createdAt, isNews) {
+  NewsCard(id, title, description, imagePath, startTime, endTime, createdAt,
+      isNews) {
     this.newsCard.title = title;
     this.newsCard.id = id;
     this.newsCard.description = description;
     this.newsCard.imagePath = imagePath;
-    this.newsCard.startTime = endTime;
+    this.newsCard.startTime = startTime;
+    this.newsCard.endTime = endTime;
     this.newsCard.createdAt = createdAt;
     this.newsCard.isNews = isNews;
+    
   }
 
   @override
@@ -35,7 +40,7 @@ class NewsCard extends StatelessWidget {
                         builder: (context) => NewsDetail(this.newsCard.id)));
               },
               child: Container(
-                height: 130,
+                height: 200,
                 margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
@@ -54,7 +59,7 @@ class NewsCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontFamily: 'Raleway',
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -63,11 +68,41 @@ class NewsCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0), child: createDateString())
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                              child: RichText(
+                                overflow: TextOverflow.ellipsis,
+                                strutStyle: StrutStyle(fontSize: 16.0),
+                                text: TextSpan(
+                                    style: TextStyle(color: Colors.white, fontSize: 16),
+                                    text: this.newsCard.description),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                            child: DateDetailView(this.newsCard.convertTimestamp(this.newsCard.startTime),
+                this.newsCard.convertTimestamp(this.newsCard.endTime), 14),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0), child: TimeDetailView(this.newsCard.convertTimestamp(this.newsCard.startTime),
+                this.newsCard.convertTimestamp(this.newsCard.endTime), 14)
+                )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Padding(
                           padding:
@@ -89,18 +124,5 @@ class NewsCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget createDateString() {
-    String startTime =
-        this.newsCard.convertTimestamp(this.newsCard.startTime).toString();
-    String endTime =
-        this.newsCard.convertTimestamp(this.newsCard.endTime).toString();
-    if (this.newsCard.isNews) {
-      return Text('');
-    } else if (endTime == 'null') {
-      return Text("Am " + startTime.split('.')[0].split(' ')[0], style: TextStyle(fontSize: 12, color: Colors.white));
-    }
-    return Text("Von " + startTime.split('.')[0] + " bis " + endTime.split('.')[0],style: TextStyle(fontSize: 12, color: Colors.white) );
   }
 }

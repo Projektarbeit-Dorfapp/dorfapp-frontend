@@ -142,9 +142,9 @@ class _NewsDetailState extends State<NewsDetail> {
         child: Column(
           children: <Widget>[
             DateDetailView(newsModel.convertTimestamp(newsModel.startTime),
-                newsModel.convertTimestamp(newsModel.endTime)),
+                newsModel.convertTimestamp(newsModel.endTime), 20),
             TimeDetailView(newsModel.convertTimestamp(newsModel.startTime),
-                newsModel.convertTimestamp(newsModel.endTime)),
+                newsModel.convertTimestamp(newsModel.endTime), 20),
             AddressDetailView(newsModel.address)
           ],
         ),

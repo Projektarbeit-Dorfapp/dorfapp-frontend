@@ -88,7 +88,7 @@ class _PinnedNewsState extends State<PinnedNews> {
                   },
                 );
                 }  else {
-                  return FittedBox(fit: BoxFit.scaleDown,child: Container( child: Center(child: ShowTextIfListEmpty(text: "Du hast noch keine gepinntent Neuigkieten", iconData: Icons.bookmark_border))));
+                  return FittedBox(fit: BoxFit.scaleDown,child: Container( child: Center(child: ShowTextIfListEmpty(text: "Du hast noch keine gepinnten Neuigkeiten", iconData: Icons.bookmark_border))));
                 }
               } else {
                 return Container(
